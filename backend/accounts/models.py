@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class TaxType(models.Model):
     name = models.CharField(max_length=100) 
@@ -14,6 +15,16 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class Discount(models.Model):
+    name = models.CharField(max_length=100)
+    discount = models.DecimalField(decimal_places=2, max_digits=5)
+
+class Warehouse(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
@@ -21,23 +32,23 @@ class Product(models.Model):
     brand = models.CharField(max_length=100)
     net_cost = models.DecimalField(max_digits=12, decimal_places=2)
     selling_price_without_tax = models.DecimalField(max_digits=12, decimal_places=2)
-    discount_rate = models.DecimalField(max_digits=4, decimal_places=2, default=0)
-    warehouse = models.CharField(max_length=200)
+    discount = models.ForeignKey(Discount, related_name="products", on_delete=models.PROTECT, null=True, blank=True)
     current_stock = models.PositiveIntegerField(default=0)
     minimum_stock_level = models.PositiveIntegerField(default=0)
     image = models.ImageField()
     barcode_number = models.CharField(max_length=15, unique=True, blank=True, null=True)
     taxes = models.ManyToManyField(TaxType, blank=True, related_name='products')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.PROTECT, related_name="products")
     
     def get_total_taxrate(self):
         total = 0
         for tax in self.taxes.all():
-            total+=tax.rate
+            total+= tax.rate
         return total
         
     def get_actual_sale_price(self):
-        discount_amount = self.selling_price_without_tax * self.discount_rate/100
+        discount_amount = self.selling_price_without_tax * self.discount/100
         total_tax_amount = self.get_total_taxrate()/100 * self.selling_price_without_tax
         sale_price = self.selling_price_without_tax - discount_amount + total_tax_amount
         return sale_price
@@ -50,10 +61,7 @@ class Supplier(models.Model):
     address = models.CharField(max_length=1000)
     contact_person = models.CharField(max_length=100, blank=True)
     tax_number = models.CharField(max_length=20)
-
     
-  
-
 class PurchaseOrder(models.Model):
     supplier = models.ForeignKey(Supplier,on_delete=models.PROTECT, related_name="purchase_orders")
     items = models.ManyToManyField(Product,related_name="purchase_orders")
@@ -70,18 +78,149 @@ class PurchaseOrder(models.Model):
         default='Draft'
     )
 
-
-
 class Customer(models.Model):
-    name = models.CharField(max_length=150)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="customers")
+    reward_points = models.DecimalField(decimal_places=0, max_digits=15)
+    credit_balance = models.DecimalField(decimal_places=2, max_digits=15)
+    
+
+    def __str__(self):
+        return self.user.username
+    
+class OrderHistory(models.Model):
+    customer = models.ForeignKey(Customer, related_name="orders", on_delete=models.PROTECT, blank=True, null=True)
+    time_of_purchase = models.DateTimeField(auto_now_add=True)
+
+    def get_total_items(self):
+        data = {}
+        for item in self.items.all():
+            data[item.product] = item.amount_bought
+        return data
+
+    def __str__(self):
+        return f"OH-{self.customer}-{self.time_of_purchase}"
+    
+class QuantityOfAnItemBought(models.Model):
+    order = models.ForeignKey('OrderHistory', on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    #just in case the store using this application is like not a major supermarket, and lowkey be selling things in fractions, ill allow for decimals but hide it with react unless necassary for prettiness
+    amount_bought = models.DecimalField(decimal_places=2, max_digits=5)
+    
+
+    def get_net_price_at_time_of_sale(self):
+        return self.product.selling_price_without_tax
+    def get_active_discount_rate_at_sale_time(self):
+        return self.product.discount / 100
+    def get_taxes_on_individual_item(self):
+        return self.product.get_total_taxrate()/100
+    def __str__(self):
+        return f"{self.amount_bought} x {self.product.name}"
+
+class Branch(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
     def __str__(self):
         return self.name
 
+class Cashier(models.Model):
+    user = models.OneToOneField(User, related_name="cashier", on_delete=models.SET_NULL, null=True, blank=True)
+    date_employed = models.DateField()
+        #Cashiers could be customers too, so lemme add a customers foreign key
+    customer = models.OneToOneField(Customer, related_name="cashier", on_delete=models.SET_NULL, null=True, blank=True)
+    branch_stationed_at = models.ForeignKey(Branch, on_delete=models.PROTECT, related_name="cashiers")
 
 
-class OrderHistory(models.Model):
-    products = models.ManyToManyField(Product, related_name="orders")
-    customer = models.ForeignKey(Customer, related_name="orders", on_delete=models.PROTECT)
-    time_of_purchase = models.DateTimeField(auto_now_add=True)
+
+
+class Settings(models.Model):
+    business_name = models.CharField(max_length=100)
+    store_logo = models.ImageField(default="")
+    currency = models.CharField(max_length=7)
+    receipt_footer = models.CharField(max_length=500)
+    timezone = models.CharField(max_length=15)
+    #i think this would be a path to maybe some place online or multiple paths, preferably one offline at a different location and one synced. On second thought, the backup will be online nvm
+    backup_database = models.CharField(max_length=500)
+
     def __str__(self):
-        return f"OH-{self.customer}-{self.time_of_purchase}"
+        return self.business_name
+
+class Notification(models.Model):
+    POSSIBLE_NOTIFICATION = [
+        ('Low Stock', 'Low Stock'),
+        ('Pending Purchase', 'Pending Purchase'),
+        ('New Supplier', 'New Supplier'),
+        ('Large Sale', 'Large Sale'),
+        ('Failed Payment','Failed Payment'),
+        ('New User', 'New User')
+    ]
+
+    notification_type = models.CharField(
+        max_length=100,
+        choices=POSSIBLE_NOTIFICATION,
+        default='Low Stock')
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.notification_type}- {self.created_at}"
+    
+class Announcement(models.Model):
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    TARGET_CHOICES = [
+        ('all', 'Everyone (Staff + Customers)'),
+        ('staff', 'Staff Only (Admins, Cashiers)'),
+        ('customers', 'Customers Only'),
+        ('admins', 'Admins Only'),
+    ]
+    target_audience = models.CharField(max_length=20, choices=TARGET_CHOICES, default='all')
+
+    excluded_users = models.ManyToManyField(User, blank=True, related_name='excluded_announcements')   
+
+    def __str__(self):
+        return f"{self.title} ({self.target_audience})"
+
+class AnnouncementReadStatus(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, related_name='read_by')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='read_announcements')
+    read_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('announcement', 'user')
+
+    def __str__(self):
+        return f"{self.user.username} read {self.announcement.title}"
+    
+class AuditLog(models.Model):
+    user = models.ForeignKey(User, related_name="audit_logs", on_delete=models.SET_NULL)
+    ALL_POSSIBLE_ACTIONS = [
+        #I think, i jave to detail every single possible action and later set triggeres later, bloody heck, thats going to take forver!!!
+    ]
+    actions = models.CharField(max_length=100, choices=ALL_POSSIBLE_ACTIONS, default=f"")
+
+class Receipt(models.Model):
+    order_history = models.ForeignKey(OrderHistory,related_name="receipts",on_delete=models.PROTECT)
+    receipt_number = models.CharField(max_length=50)
+    cashier = models.ForeignKey(Cashier, related_name="receipts", on_delete=models.PROTECT)
+    settings = models.ForeignKey(Settings, on_delete=models.PROTECT, related_name="receipts")
+
+class StockMovement(models.Model):
+    product = models.ForeignKey(Product, related_name="stock_movements", on_delete=models.PROTECT)
+    quantity = models.IntegerField() # Positive for incoming, negative for outgoing
+    movement_type = models.CharField(max_length=50) #sale, damaged, etc
+    date = models.DateTimeField(auto_now_add=True)
+    performed_by = models.ForeignKey(Cashier, on_delete=models.PROTECT,related_name="cashier")
+    reason = models.CharField(max_length=10000, blank=True)
+
+    def __str__(self):
+        return f"{self.product}-{self.movement_type}-({self.quantity}"
+
+class Returns(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="returns")
+    customer = models.ForeignKey(Customer, related_name="returns", on_delete=models.PROTECT, blank=True)
+    stock_movement = models.OneToOneField(StockMovement, related_name="returns")
+
+    
