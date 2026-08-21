@@ -1,3 +1,48 @@
 from django.contrib import admin
+from .models import (
+    TaxType,
+    Category,
+    Discount,
+    Warehouse,
+    Product,
+    Supplier,
+    PurchaseOrder,
+    PurchaseOrderItem,
+    Customer,
+    OrderHistory,
+    QuantityOfAnItemBought,
+    Branch,
+    Cashier,
+    Settings,
+    Notification,
+    Announcement,
+    AnnouncementReadStatus,
+    AuditLog,
+    Receipt,
+    StockMovement,
+    Returns,
+    Payment,
+)
 
-# Register your models here.
+admin.site.register(TaxType)
+admin.site.register(Category)
+admin.site.register(Discount)
+admin.site.register(Warehouse)
+admin.site.register(Product)
+admin.site.register(Supplier)
+admin.site.register(PurchaseOrder)
+admin.site.register(PurchaseOrderItem)
+admin.site.register(Customer)
+admin.site.register(OrderHistory)
+admin.site.register(QuantityOfAnItemBought)
+admin.site.register(Branch)
+admin.site.register(Cashier)
+admin.site.register(Settings)
+admin.site.register(Notification)
+admin.site.register(Announcement)
+admin.site.register(AnnouncementReadStatus)
+admin.site.register(AuditLog)
+admin.site.register(Receipt)
+admin.site.register(StockMovement)
+admin.site.register(Returns)
+admin.site.register(Payment)
