@@ -24,6 +24,19 @@ from .models import (
     Payment,
 )
 
+class SettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Settings
+        fields = [
+            "id",
+            "business_name",
+            "store_logo",
+            "currency",
+            "receipt_footer",
+            "timezone",
+            "backup_enabled",
+            "backup_provider",
+        ]
 
 class TaxTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,7 +59,21 @@ class DiscountSerializer(serializers.ModelSerializer):
 class WarehouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Warehouse
-        fields = ["id", "name", "location"]
+        fields = [
+            "id",
+            "name",
+            "location",
+        ]
+
+
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discount
+        fields = [
+            "id",
+            "name",
+            "discount",
+        ]
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -161,21 +188,6 @@ class CashierSerializer(serializers.ModelSerializer):
             "second_name",
             "date_employed",
             "branch_stationed_at",
-        ]
-
-
-class SettingsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Settings
-        fields = [
-            "id",
-            "business_name",
-            "store_logo",
-            "currency",
-            "receipt_footer",
-            "timezone",
-            "backup_enabled",
-            "backup_provider",
         ]
 
 
