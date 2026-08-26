@@ -1,1 +1,2 @@
 1. Write more APIs
+2. Connect APIs to react frontend
