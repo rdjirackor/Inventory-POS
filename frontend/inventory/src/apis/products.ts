@@ -85,3 +85,203 @@ export async function createProduct(
     return data;
 }
 
+export async function getProduct(product_id: number) {
+    const token = localStorage.getItem("access_token");
+
+    const response = await fetch(
+        `${API_URL}/products/${product_id}/`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Get Product Failed");
+    }
+
+    return data;
+}
+
+export async function updateProduct(
+    product_id: number,
+    name: string,
+    sku: string,
+    brand: string,
+    net_cost: number,
+    selling_price_without_tax: number,
+    discount: number | null,
+    current_stock: number,
+    minimum_stock_level: number,
+    image: File | null,
+    barcode_number: string,
+    taxes: number[],
+    category: number,
+    warehouse: number
+) {
+    const token = localStorage.getItem("access_token");
+
+    const formData = new FormData();
+
+    formData.append("name", name);
+    formData.append("sku", sku);
+    formData.append("brand", brand);
+    formData.append("net_cost", net_cost.toString());
+    formData.append(
+        "selling_price_without_tax",
+        selling_price_without_tax.toString()
+    );
+
+    if (discount !== null) {
+        formData.append("discount", discount.toString());
+    }
+
+    formData.append("current_stock", current_stock.toString());
+    formData.append(
+        "minimum_stock_level",
+        minimum_stock_level.toString()
+    );
+
+    if (image !== null) {
+        formData.append("image", image);
+    }
+
+    formData.append("barcode_number", barcode_number);
+
+    taxes.forEach((tax) => {
+        formData.append("taxes", tax.toString());
+    });
+
+    formData.append("category", category.toString());
+    formData.append("warehouse", warehouse.toString());
+
+    const response = await fetch(
+        `${API_URL}/products/${product_id}/`,
+        {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Update Product Failed");
+    }
+
+    return data;
+}
+
+export async function deleteProduct(product_id: number) {
+    const token = localStorage.getItem("access_token");
+
+    const response = await fetch(
+        `${API_URL}/products/${product_id}/`,
+        {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Delete Product Failed");
+    }
+}
+export async function patchProduct(
+    product_id: number,
+    fields: {
+        name?: string;
+        sku?: string;
+        brand?: string;
+        net_cost?: number;
+        selling_price_without_tax?: number;
+        discount?: number | null;
+        current_stock?: number;
+        minimum_stock_level?: number;
+        image?: File;
+        barcode_number?: string;
+        taxes?: number[];
+        category?: number;
+        warehouse?: number;
+    }
+) {
+    const token = localStorage.getItem("access_token");
+
+    const formData = new FormData();
+
+    if (fields.name !== undefined)
+        formData.append("name", fields.name);
+
+    if (fields.sku !== undefined)
+        formData.append("sku", fields.sku);
+
+    if (fields.brand !== undefined)
+        formData.append("brand", fields.brand);
+
+    if (fields.net_cost !== undefined)
+        formData.append("net_cost", fields.net_cost.toString());
+
+    if (fields.selling_price_without_tax !== undefined)
+        formData.append(
+            "selling_price_without_tax",
+            fields.selling_price_without_tax.toString()
+        );
+
+    if (fields.discount !== undefined && fields.discount !== null)
+        formData.append("discount", fields.discount.toString());
+
+    if (fields.current_stock !== undefined)
+        formData.append("current_stock", fields.current_stock.toString());
+
+    if (fields.minimum_stock_level !== undefined)
+        formData.append(
+            "minimum_stock_level",
+            fields.minimum_stock_level.toString()
+        );
+
+    if (fields.image !== undefined)
+        formData.append("image", fields.image);
+
+    if (fields.barcode_number !== undefined)
+        formData.append("barcode_number", fields.barcode_number);
+
+    if (fields.taxes !== undefined) {
+        fields.taxes.forEach((tax) => {
+            formData.append("taxes", tax.toString());
+        });
+    }
+
+    if (fields.category !== undefined)
+        formData.append("category", fields.category.toString());
+
+    if (fields.warehouse !== undefined)
+        formData.append("warehouse", fields.warehouse.toString());
+
+    const response = await fetch(
+        `${API_URL}/products/${product_id}/`,
+        {
+            method: "PATCH",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Patch Product Failed");
+    }
+
+    return data;
+}

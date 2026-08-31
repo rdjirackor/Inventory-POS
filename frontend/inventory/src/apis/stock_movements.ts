@@ -60,3 +60,23 @@ export async function createStockMovement(
 
     return data;
 }
+export async function getStockMovement(stock_movement_id: number) {
+    const token = localStorage.getItem("access_token");
+
+    const response = await fetch(
+        `${API_URL}/stock-movements/${stock_movement_id}/`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Get Stock Movement Failed");
+    }
+
+    return data;
+}

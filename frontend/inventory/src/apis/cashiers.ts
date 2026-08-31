@@ -1,9 +1,9 @@
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getSettings() {
+export async function getCashiers() {
     const token = localStorage.getItem("access_token");
 
-    const response = await fetch(`${API_URL}/settings/`, {
+    const response = await fetch(`${API_URL}/cashiers/`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -12,52 +12,152 @@ export async function getSettings() {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Get Settings Failed");
+        throw new Error(data.message || "Get Cashiers Failed");
     }
 
     return data;
 }
 
-export async function updateSettings(
-    business_name: string,
-    currency: string,
-    receipt_footer: string,
-    timezone: string,
-    backup_enabled: boolean,
-    backup_provider: string,
-    store_logo: File | null
+export async function createCashier(
+    user: number,
+    first_name: string,
+    second_name: string,
+    date_employed: string,
+    branch_stationed_at: number
 ) {
     const token = localStorage.getItem("access_token");
 
-    const formData = new FormData();
-
-    formData.append("business_name", business_name);
-    formData.append("currency", currency);
-    formData.append("receipt_footer", receipt_footer);
-    formData.append("timezone", timezone);
-    formData.append(
-        "backup_enabled",
-        backup_enabled ? "true" : "false"
-    );
-    formData.append("backup_provider", backup_provider);
-
-    if (store_logo) {
-        formData.append("store_logo", store_logo);
-    }
-
-    const response = await fetch(`${API_URL}/settings/`, {
-        method: "PATCH",
+    const response = await fetch(`${API_URL}/cashiers/`, {
+        method: "POST",
         headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
         },
-        body: formData,
+        body: JSON.stringify({
+            user,
+            first_name,
+            second_name,
+            date_employed,
+            branch_stationed_at,
+        }),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Update Settings Failed");
+        throw new Error(data.message || "Create Cashier Failed");
     }
 
     return data;
+}
+export async function getCashier(cashier_id: number) {
+    const token = localStorage.getItem("access_token");
+
+    const response = await fetch(
+        `${API_URL}/cashiers/${cashier_id}/`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Get Cashier Failed");
+    }
+
+    return data;
+}
+
+export async function updateCashier(
+    cashier_id: number,
+    user: number,
+    first_name: string,
+    second_name: string,
+    date_employed: string,
+    branch_stationed_at: number
+) {
+    const token = localStorage.getItem("access_token");
+
+    const response = await fetch(
+        `${API_URL}/cashiers/${cashier_id}/`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                user,
+                first_name,
+                second_name,
+                date_employed,
+                branch_stationed_at,
+            }),
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Update Cashier Failed");
+    }
+
+    return data;
+}
+
+export async function patchCashier(
+    cashier_id: number,
+    first_name?: string,
+    second_name?: string,
+    date_employed?: string,
+    branch_stationed_at?: number
+) {
+    const token = localStorage.getItem("access_token");
+
+    const response = await fetch(
+        `${API_URL}/cashiers/${cashier_id}/`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                ...(first_name !== undefined && { first_name }),
+                ...(second_name !== undefined && { second_name }),
+                ...(date_employed !== undefined && { date_employed }),
+                ...(branch_stationed_at !== undefined && { branch_stationed_at }),
+            }),
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Patch Cashier Failed");
+    }
+
+    return data;
+}
+
+export async function deleteCashier(cashier_id: number) {
+    const token = localStorage.getItem("access_token");
+
+    const response = await fetch(
+        `${API_URL}/cashiers/${cashier_id}/`,
+        {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Delete Cashier Failed");
+    }
 }
