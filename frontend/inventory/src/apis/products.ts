@@ -1,6 +1,8 @@
+import type { Product } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api"
 
-export async function getProducts(){
+export async function getProducts(): Promise<Product[]>{
     const token = localStorage.getItem("access_token");
 
     const response = await fetch (`${API_URL}/products/`,{
@@ -85,7 +87,7 @@ export async function createProduct(
     return data;
 }
 
-export async function getProduct(product_id: number) {
+export async function getProduct(product_id: number): Promise<Product> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

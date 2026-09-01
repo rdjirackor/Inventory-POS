@@ -1,6 +1,8 @@
+import type { Discount } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getDiscounts() {
+export async function getDiscounts(): Promise<Discount[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(`${API_URL}/discounts/`, {
@@ -46,7 +48,7 @@ export async function createDiscount(
     return data;
 }
 
-export async function getDiscount(discount_id: number) {
+export async function getDiscount(discount_id: number): Promise<Discount> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

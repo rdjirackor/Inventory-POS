@@ -1,6 +1,8 @@
+import type { TaxType } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api"
 
-export async function getTaxes(){
+export async function getTaxes(): Promise<TaxType[]>{
     const token = localStorage.getItem("access_token");
 
     const response = await fetch (`${API_URL}/taxes/`,{
@@ -48,7 +50,7 @@ if (!response.ok){
 return data;
 }
 
-export async function getTax(tax_id: number) {
+export async function getTax(tax_id: number): Promise<TaxType> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

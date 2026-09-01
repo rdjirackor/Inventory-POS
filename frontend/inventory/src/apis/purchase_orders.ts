@@ -1,6 +1,8 @@
+import type { PurchaseOrder } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getPurchaseOrders() {
+export async function getPurchaseOrders(): Promise<PurchaseOrder[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(`${API_URL}/purchase-orders/`, {
@@ -49,7 +51,7 @@ export async function createPurchaseOrder(
     return data;
 }
 
-export async function getPurchaseOrder(purchase_order_id: number) {
+export async function getPurchaseOrder(purchase_order_id: number): Promise<PurchaseOrder> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

@@ -1,6 +1,8 @@
+import type { AuditLog } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getAuditLogs() {
+export async function getAuditLogs(): Promise<AuditLog[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(`${API_URL}/audit-logs/`, {
@@ -19,7 +21,7 @@ export async function getAuditLogs() {
 
     return data;
 }
-export async function getAuditLog(audit_log_id: number) {
+export async function getAuditLog(audit_log_id: number): Promise<AuditLog> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

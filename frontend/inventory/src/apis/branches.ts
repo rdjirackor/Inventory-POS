@@ -1,6 +1,8 @@
+import type { Branch } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getBranches() {
+export async function getBranches(): Promise<Branch[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(`${API_URL}/branches/`, {
@@ -44,7 +46,7 @@ export async function createBranch(
 
     return data;
 }
-export async function getBranch(branch_id: number) {
+export async function getBranch(branch_id: number): Promise<Branch> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

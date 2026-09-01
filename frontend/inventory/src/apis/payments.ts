@@ -1,6 +1,8 @@
+import type { Payment } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getPayments() {
+export async function getPayments(): Promise<Payment[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(`${API_URL}/payments/`, {
@@ -46,7 +48,7 @@ export async function createPayment(
 
     return data;
 }
-export async function getPayment(payment_id: number) {
+export async function getPayment(payment_id: number): Promise<Payment> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

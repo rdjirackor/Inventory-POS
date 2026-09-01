@@ -1,6 +1,8 @@
+import type { Announcement } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getAnnouncements() {
+export async function getAnnouncements(): Promise<Announcement[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(`${API_URL}/announcements/`, {
@@ -62,7 +64,7 @@ export async function createAnnouncement(
 
     return data;
 }
-export async function getAnnouncement(announcement_id: number) {
+export async function getAnnouncement(announcement_id: number): Promise<Announcement> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

@@ -1,6 +1,8 @@
+import type { StockMovement } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getStockMovements() {
+export async function getStockMovements(): Promise<StockMovement[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(
@@ -60,7 +62,7 @@ export async function createStockMovement(
 
     return data;
 }
-export async function getStockMovement(stock_movement_id: number) {
+export async function getStockMovement(stock_movement_id: number): Promise<StockMovement> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

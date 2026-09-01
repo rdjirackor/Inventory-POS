@@ -1,6 +1,8 @@
+import type { Return } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getReturns() {
+export async function getReturns(): Promise<Return[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(`${API_URL}/returns/`, {
@@ -47,7 +49,7 @@ export async function createReturn(
     return data;
 }
 
-export async function getReturn(return_id: number) {
+export async function getReturn(return_id: number): Promise<Return> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

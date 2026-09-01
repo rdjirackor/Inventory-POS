@@ -1,6 +1,8 @@
+import type { Cashier } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getCashiers() {
+export async function getCashiers(): Promise<Cashier[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(`${API_URL}/cashiers/`, {
@@ -50,7 +52,7 @@ export async function createCashier(
 
     return data;
 }
-export async function getCashier(cashier_id: number) {
+export async function getCashier(cashier_id: number): Promise<Cashier> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(

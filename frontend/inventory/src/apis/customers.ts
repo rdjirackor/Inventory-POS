@@ -1,6 +1,8 @@
+import type { Customer } from "../interfaces/interfaces";
+
 const API_URL = "http://127.0.0.1:8000/api";
 
-export async function getCustomers() {
+export async function getCustomers(): Promise<Customer[]> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(`${API_URL}/customers/`, {
@@ -50,7 +52,7 @@ export async function createCustomer(
 
     return data;
 }
-export async function getCustomer(customer_id: number) {
+export async function getCustomer(customer_id: number): Promise<Customer> {
     const token = localStorage.getItem("access_token");
 
     const response = await fetch(
