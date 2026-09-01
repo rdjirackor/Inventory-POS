@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { login } from '../apis/auth';
+import { getCategories } from '../apis/categories';
 
 function LoginPage(){
     const [username, setUsername] = useState("");
@@ -22,6 +23,8 @@ function LoginPage(){
 
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token",data.refresh);
+      const cat = await getCategories();
+      console.log("Categories: ", cat);
 
     }
 
