@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 function Navbar() {
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
+    
 
 
     useEffect(() => {
@@ -25,16 +26,17 @@ function Navbar() {
     }
 
     return (
-        <>
+        
         <header>
+            <h2>Inventory POS</h2>
             <button onClick={handleLogout}>
             <p className="details">
                 <em>Current User: <i>{user?.username}</i></em>
-                <em>Role: <i>{user?.role}</i></em>
+                <em>Role: <i>{user?.role ?? "No role"}</i></em>
                 </p>
                 </button>
         </header>
-    </>);
+    );
 }
 
 export default Navbar;

@@ -2,8 +2,8 @@ import { NavLink} from "react-router-dom";
 function Sidebar(){
     return(
         <>
-                    <h2>Inventory POS</h2>
-
+            
+            <aside className="sidebar">
                     <nav>
                         <NavLink to="/dashboard">
                             Dashboard
@@ -25,6 +25,7 @@ function Sidebar(){
                             Suppliers
                         </NavLink>
                     </nav>
+            </aside>
                     </>
     );
 }

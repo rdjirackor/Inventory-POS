@@ -6,11 +6,30 @@ import Sidebar from "./Sidebar";
 function AppLayout() {
     return (
         <div>
-
             <Navbar />
-            <aside className="sidebar">
-                <Sidebar/>
-                </aside>
+            <Sidebar/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             <div className="app-body">
 
