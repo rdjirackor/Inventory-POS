@@ -21,6 +21,21 @@ export async function login(username:string, password: string) {
         return data;    
 }
 
+export async function getCurrentUser() {
+    const token = localStorage.getItem("access_token");
+
+    const response = await fetch(`${API_URL}/me/`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to get current user");
+    }
+
+    return response.json();
+}
 
 
     

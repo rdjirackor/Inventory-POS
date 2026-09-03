@@ -1,37 +1,25 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import "../App.css";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
 function AppLayout() {
     return (
         <div>
-            <aside>
-                <h2>Inventory POS</h2>
 
-                <nav>
-                    <NavLink to="/dashboard">
-                        Dashboard
-                    </NavLink>
+            <Navbar />
+            <aside className="sidebar">
+                <Sidebar/>
+                </aside>
 
-                    <NavLink to="/products">
-                        Products
-                    </NavLink>
+            <div className="app-body">
 
-                    <NavLink to="/categories">
-                        Categories
-                    </NavLink>
+                <main>
+                    <Outlet />
+                </main>
 
-                    <NavLink to="/cashiers">
-                        Cashiers
-                    </NavLink>
+            </div>
 
-                    <NavLink to="/suppliers">
-                        Suppliers
-                    </NavLink>
-                </nav>
-            </aside>
-
-            <main>
-                <Outlet />
-            </main>
         </div>
     );
 }

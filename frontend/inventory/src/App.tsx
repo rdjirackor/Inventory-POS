@@ -4,6 +4,10 @@ import LoginPage from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/AppLayout";
+import Products from "./pages/Products";
+import Categories from "./pages/Categories";
+import Suppliers from "./pages/Suppliers";
+import Cashiers from "./pages/Cashiers";
 
 function App() {
     return (
@@ -22,6 +26,10 @@ function App() {
                     }
                 >
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/categories" element={<Categories />} />
+                    <Route path="/suppliers" element={<Suppliers />} />
+                    <Route path="/cashiers" element={<Cashiers />} />
                 </Route>
 
             </Routes>

@@ -182,3 +182,44 @@
     border-right-color: var(--border);
   }
 }
+
+.app-layout {
+    min-height: 100vh;
+}
+
+.header {
+    height: 60px;
+}
+
+.app-body {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar {
+    width: 220px;
+    min-height: 100vh;
+    padding: 20px;
+    border-right: 1px solid black;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sidebar a {
+    text-decoration: none;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.main-content {
+    flex: 1;
+}

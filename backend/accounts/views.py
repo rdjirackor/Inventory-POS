@@ -30,11 +30,18 @@ def login(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def me(request):
+    if request.user.is_superuser:
+        role = "Admin"
+    elif hasattr(request.user, "cashier"):
+        role = "Cashier"
+    else:
+        role = None
+
     return Response({
         "id": request.user.id,
         "username": request.user.username,
         "email": request.user.email,
-
+        "role": role,
     })
 #okay now lemme write the setting api first, seems the most straightforward one
 
