@@ -25,18 +25,19 @@ function Navbar() {
         }
     }
 
-    return (
+    return(
         
-        <header>
-            <h2>Inventory POS</h2>
-            <button onClick={handleLogout}>
-            <p className="details">
-                <em>Current User: <i>{user?.username}</i></em>
-                <em>Role: <i>{user?.role ?? "No role"}</i></em>
+        <div className="navbar">
+           <h2 className="store_name">Inventory POS</h2>
+            <button className="logout" onClick={handleLogout}>    
+                            
+                <p className="details">
+                    <em>Current User: <i>{user?.username}</i></em>
+                    <em>Role: <i>{user?.role ?? "No role"}</i></em>
                 </p>
+
                 </button>
-        </header>
-    );
+            </div>);
 }
 
 export default Navbar;

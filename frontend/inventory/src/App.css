@@ -213,6 +213,16 @@
     text-decoration: none;
 }
 
+
+.navbar {
+  display: flex; 
+}
+.store_name {
+  width: fit-content;
+  }
+
+
+
 .details {
   display: flex;
   flex-direction: column;
