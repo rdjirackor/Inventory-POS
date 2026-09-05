@@ -17,7 +17,7 @@ function Navbar() {
     }, []);
 
     function handleLogout() {
-        const confirm_logout = window.confirm("Do you want to logout?");
+        const confirm_logout = window.confirm("Sign out?");
         if (confirm_logout){
             localStorage.removeItem("access_token");
             localStorage.removeItem("refresh_token");
