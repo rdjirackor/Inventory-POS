@@ -9,28 +9,6 @@ function AppLayout() {
             <Navbar />
             <Sidebar/>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div className="app-body">
 
                 <main>
