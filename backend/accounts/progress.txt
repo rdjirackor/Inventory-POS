@@ -1,2 +1,3 @@
 1. Write more APIs
 2. Connect APIs to react frontend
+3. Format incoming json start with products page, use Lunacy design.
