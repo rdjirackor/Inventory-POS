@@ -5,7 +5,7 @@ import type { Supplier } from "../interfaces/interfaces";
 function Suppliers() {
     const [loading, setLoading] = useState(false);
     const [error, setError] =useState("");
-    const [Suppliers, setSuppliers] = useState<Supplier[]>([]);
+    const [suppliers, setSuppliers] = useState<Supplier[]>([]);
     
 
 

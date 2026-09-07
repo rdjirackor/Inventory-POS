@@ -5,7 +5,7 @@ import type { Cashier } from "../interfaces/interfaces";
 function Cashiers() {
     const [loading, setLoading] = useState(false);
     const [error, setError] =useState("");
-    const [Cashiers, setCashiers] = useState<Cashier[]>([]);
+    const [cashiers, setCashiers] = useState<Cashier[]>([]);
     
 
 

@@ -5,7 +5,7 @@ import type { Category } from "../interfaces/interfaces";
 function Categories() {
     const [loading, setLoading] = useState(false);
     const [error, setError] =useState("");
-    const [Categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     
 
 
