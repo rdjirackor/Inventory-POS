@@ -28,15 +28,15 @@ def login(request):
         "refresh": str(refresh),
     })
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def me(request):
     if request.user.is_superuser:
         role = "Admin"
-    elif hasattr(request.user, "cashier"):
-        role = "Cashier"
     else:
-        role = None
+        group = request.user.groups.first()
+        role = group.name if group else None
 
     return Response({
         "id": request.user.id,
@@ -44,8 +44,6 @@ def me(request):
         "email": request.user.email,
         "role": role,
     })
-
-
 
 
 #okay now lemme write the setting api first, seems the most straightforward one
