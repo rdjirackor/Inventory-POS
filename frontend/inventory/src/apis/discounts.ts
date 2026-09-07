@@ -1,16 +1,8 @@
 import type { Discount } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getDiscounts(): Promise<Discount[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/discounts/`, {
-        headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const response = await apiFetch("/discounts/");
 
     const data = await response.json();
 
@@ -25,13 +17,10 @@ export async function createDiscount(
     name: string,
     discount: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/discounts/`, {
+    const response = await apiFetch("/discounts/", {
         method: "POST",
         headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
             name,
@@ -48,17 +37,11 @@ export async function createDiscount(
     return data;
 }
 
-export async function getDiscount(discount_id: number): Promise<Discount> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/discounts/${discount_id}/`,
-        {
-            headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getDiscount(
+    discount_id: number
+): Promise<Discount> {
+    const response = await apiFetch(
+        `/discounts/${discount_id}/`
     );
 
     const data = await response.json();
@@ -75,15 +58,12 @@ export async function updateDiscount(
     name: string,
     discount: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/discounts/${discount_id}/`,
+    const response = await apiFetch(
+        `/discounts/${discount_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 name,
@@ -106,15 +86,12 @@ export async function patchDiscount(
     name?: string,
     discount?: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/discounts/${discount_id}/`,
+    const response = await apiFetch(
+        `/discounts/${discount_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 ...(name !== undefined && { name }),
@@ -132,21 +109,20 @@ export async function patchDiscount(
     return data;
 }
 
-export async function deleteDiscount(discount_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/discounts/${discount_id}/`,
+export async function deleteDiscount(
+    discount_id: number
+) {
+    const response = await apiFetch(
+        `/discounts/${discount_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Discount Failed");
+        throw new Error(
+            data.message || "Delete Discount Failed"
+        );
     }
 }

@@ -1,15 +1,8 @@
 import type { Customer } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getCustomers(): Promise<Customer[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/customers/`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const response = await apiFetch("/customers/");
 
     const data = await response.json();
 
@@ -27,13 +20,10 @@ export async function createCustomer(
     reward_points: number,
     credit_balance: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/customers/`, {
+    const response = await apiFetch("/customers/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
             user,
@@ -52,16 +42,12 @@ export async function createCustomer(
 
     return data;
 }
-export async function getCustomer(customer_id: number): Promise<Customer> {
-    const token = localStorage.getItem("access_token");
 
-    const response = await fetch(
-        `${API_URL}/customers/${customer_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getCustomer(
+    customer_id: number
+): Promise<Customer> {
+    const response = await apiFetch(
+        `/customers/${customer_id}/`
     );
 
     const data = await response.json();
@@ -81,15 +67,12 @@ export async function updateCustomer(
     reward_points: number,
     credit_balance: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/customers/${customer_id}/`,
+    const response = await apiFetch(
+        `/customers/${customer_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 user,
@@ -117,15 +100,12 @@ export async function patchCustomer(
     reward_points?: number,
     credit_balance?: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/customers/${customer_id}/`,
+    const response = await apiFetch(
+        `/customers/${customer_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 ...(first_name !== undefined && { first_name }),
@@ -145,21 +125,20 @@ export async function patchCustomer(
     return data;
 }
 
-export async function deleteCustomer(customer_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/customers/${customer_id}/`,
+export async function deleteCustomer(
+    customer_id: number
+) {
+    const response = await apiFetch(
+        `/customers/${customer_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Customer Failed");
+        throw new Error(
+            data.message || "Delete Customer Failed"
+        );
     }
 }

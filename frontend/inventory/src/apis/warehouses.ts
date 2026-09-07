@@ -1,44 +1,31 @@
 import type { Warehouse } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api"
+import { apiFetch } from "./api";
 
 export async function getWarehouses(): Promise<Warehouse[]> {
-    const token = localStorage.getItem("access_token");
+    const response = await apiFetch("/warehouses/");
 
-    const response = await fetch (`${API_URL}/warehouses/`,{
-        headers:{
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
     const data = await response.json();
 
-    if(!response.ok){
+    if (!response.ok) {
         throw new Error(data.message || "Get Warehouses Failed");
     }
-    console.log(data);
+
     return data;
-    
-    
 }
 
 export async function createWarehouse(
     name: string,
-    location: string,
-){
-    const token = localStorage.getItem("access_token");
-
-    const formData = new FormData();
-
-    formData.append("name", name);
-    formData.append("location", location);
-
-    const response = await fetch(`${API_URL}/warehouses`,{
+    location: string
+) {
+    const response = await apiFetch("/warehouses/", {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
         },
-        body: formData,
+        body: JSON.stringify({
+            name,
+            location,
+        }),
     });
 
     const data = await response.json();
@@ -48,20 +35,15 @@ export async function createWarehouse(
             data.message || "Warehouse creation failed"
         );
     }
+
     return data;
-
 }
-export async function getWarehouse(warehouse_id: number): Promise<Warehouse> {
-    const token = localStorage.getItem("access_token");
 
-    const response = await fetch(
-        `${API_URL}/warehouses/${warehouse_id}/`,
-        {
-            headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getWarehouse(
+    warehouse_id: number
+): Promise<Warehouse> {
+    const response = await apiFetch(
+        `/warehouses/${warehouse_id}/`
     );
 
     const data = await response.json();
@@ -78,15 +60,12 @@ export async function updateWarehouse(
     name: string,
     location: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/warehouses/${warehouse_id}/`,
+    const response = await apiFetch(
+        `/warehouses/${warehouse_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 name,
@@ -109,15 +88,12 @@ export async function patchWarehouse(
     name?: string,
     location?: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/warehouses/${warehouse_id}/`,
+    const response = await apiFetch(
+        `/warehouses/${warehouse_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 ...(name !== undefined && { name }),
@@ -135,21 +111,21 @@ export async function patchWarehouse(
     return data;
 }
 
-export async function deleteWarehouse(warehouse_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/warehouses/${warehouse_id}/`,
+export async function deleteWarehouse(
+    warehouse_id: number
+) {
+    const response = await apiFetch(
+        `/warehouses/${warehouse_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Warehouse Failed");
+
+        throw new Error(
+            data.message || "Delete Warehouse Failed"
+        );
     }
 }

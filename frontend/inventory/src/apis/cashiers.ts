@@ -1,15 +1,8 @@
 import type { Cashier } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getCashiers(): Promise<Cashier[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/cashiers/`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const response = await apiFetch("/cashiers/");
 
     const data = await response.json();
 
@@ -27,13 +20,10 @@ export async function createCashier(
     date_employed: string,
     branch_stationed_at: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/cashiers/`, {
+    const response = await apiFetch("/cashiers/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
             user,
@@ -52,16 +42,12 @@ export async function createCashier(
 
     return data;
 }
-export async function getCashier(cashier_id: number): Promise<Cashier> {
-    const token = localStorage.getItem("access_token");
 
-    const response = await fetch(
-        `${API_URL}/cashiers/${cashier_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getCashier(
+    cashier_id: number
+): Promise<Cashier> {
+    const response = await apiFetch(
+        `/cashiers/${cashier_id}/`
     );
 
     const data = await response.json();
@@ -81,15 +67,12 @@ export async function updateCashier(
     date_employed: string,
     branch_stationed_at: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/cashiers/${cashier_id}/`,
+    const response = await apiFetch(
+        `/cashiers/${cashier_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 user,
@@ -117,21 +100,20 @@ export async function patchCashier(
     date_employed?: string,
     branch_stationed_at?: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/cashiers/${cashier_id}/`,
+    const response = await apiFetch(
+        `/cashiers/${cashier_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 ...(first_name !== undefined && { first_name }),
                 ...(second_name !== undefined && { second_name }),
                 ...(date_employed !== undefined && { date_employed }),
-                ...(branch_stationed_at !== undefined && { branch_stationed_at }),
+                ...(branch_stationed_at !== undefined && {
+                    branch_stationed_at,
+                }),
             }),
         }
     );
@@ -145,21 +127,20 @@ export async function patchCashier(
     return data;
 }
 
-export async function deleteCashier(cashier_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/cashiers/${cashier_id}/`,
+export async function deleteCashier(
+    cashier_id: number
+) {
+    const response = await apiFetch(
+        `/cashiers/${cashier_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Cashier Failed");
+        throw new Error(
+            data.message || "Delete Cashier Failed"
+        );
     }
 }

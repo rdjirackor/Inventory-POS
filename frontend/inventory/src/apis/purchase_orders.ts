@@ -1,20 +1,15 @@
 import type { PurchaseOrder } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getPurchaseOrders(): Promise<PurchaseOrder[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/purchase-orders/`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const response = await apiFetch("/purchase-orders/");
 
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Get Purchase Orders Failed");
+        throw new Error(
+            data.message || "Get Purchase Orders Failed"
+        );
     }
 
     return data;
@@ -25,13 +20,10 @@ export async function createPurchaseOrder(
     expected_delivery: string,
     status: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/purchase-orders/`, {
+    const response = await apiFetch("/purchase-orders/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
             supplier,
@@ -51,22 +43,19 @@ export async function createPurchaseOrder(
     return data;
 }
 
-export async function getPurchaseOrder(purchase_order_id: number): Promise<PurchaseOrder> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/purchase-orders/${purchase_order_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getPurchaseOrder(
+    purchase_order_id: number
+): Promise<PurchaseOrder> {
+    const response = await apiFetch(
+        `/purchase-orders/${purchase_order_id}/`
     );
 
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Get Purchase Order Failed");
+        throw new Error(
+            data.message || "Get Purchase Order Failed"
+        );
     }
 
     return data;
@@ -78,15 +67,12 @@ export async function updatePurchaseOrder(
     expected_delivery: string,
     status: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/purchase-orders/${purchase_order_id}/`,
+    const response = await apiFetch(
+        `/purchase-orders/${purchase_order_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 supplier,
@@ -99,7 +85,9 @@ export async function updatePurchaseOrder(
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Update Purchase Order Failed");
+        throw new Error(
+            data.message || "Update Purchase Order Failed"
+        );
     }
 
     return data;
@@ -111,19 +99,18 @@ export async function patchPurchaseOrder(
     expected_delivery?: string,
     status?: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/purchase-orders/${purchase_order_id}/`,
+    const response = await apiFetch(
+        `/purchase-orders/${purchase_order_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 ...(supplier !== undefined && { supplier }),
-                ...(expected_delivery !== undefined && { expected_delivery }),
+                ...(expected_delivery !== undefined && {
+                    expected_delivery,
+                }),
                 ...(status !== undefined && { status }),
             }),
         }
@@ -132,27 +119,29 @@ export async function patchPurchaseOrder(
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Patch Purchase Order Failed");
+        throw new Error(
+            data.message || "Patch Purchase Order Failed"
+        );
     }
 
     return data;
 }
 
-export async function deletePurchaseOrder(purchase_order_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/purchase-orders/${purchase_order_id}/`,
+export async function deletePurchaseOrder(
+    purchase_order_id: number
+) {
+    const response = await apiFetch(
+        `/purchase-orders/${purchase_order_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Purchase Order Failed");
+
+        throw new Error(
+            data.message || "Delete Purchase Order Failed"
+        );
     }
 }

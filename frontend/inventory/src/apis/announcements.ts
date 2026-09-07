@@ -1,15 +1,8 @@
 import type { Announcement } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getAnnouncements(): Promise<Announcement[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/announcements/`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        }, 
-    });
+    const response = await apiFetch("/announcements/");
 
     const data = await response.json();
 
@@ -28,8 +21,6 @@ export async function createAnnouncement(
     target_audience: string,
     excluded_users: number[]
 ) {
-    const token = localStorage.getItem("access_token");
-
     const formData = new FormData();
 
     formData.append("title", title);
@@ -43,16 +34,10 @@ export async function createAnnouncement(
         );
     });
 
-    const response = await fetch(
-        `${API_URL}/announcements/`,
-        {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-        }
-    );
+    const response = await apiFetch("/announcements/", {
+        method: "POST",
+        body: formData,
+    });
 
     const data = await response.json();
 
@@ -64,22 +49,20 @@ export async function createAnnouncement(
 
     return data;
 }
-export async function getAnnouncement(announcement_id: number): Promise<Announcement> {
-    const token = localStorage.getItem("access_token");
 
-    const response = await fetch(
-        `${API_URL}/announcements/${announcement_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getAnnouncement(
+    announcement_id: number
+): Promise<Announcement> {
+    const response = await apiFetch(
+        `/announcements/${announcement_id}/`
     );
 
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Get Announcement Failed");
+        throw new Error(
+            data.message || "Get Announcement Failed"
+        );
     }
 
     return data;
@@ -92,15 +75,12 @@ export async function updateAnnouncement(
     target_audience: string,
     excluded_users: number[]
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/announcements/${announcement_id}/`,
+    const response = await apiFetch(
+        `/announcements/${announcement_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 title,
@@ -114,7 +94,9 @@ export async function updateAnnouncement(
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Update Announcement Failed");
+        throw new Error(
+            data.message || "Update Announcement Failed"
+        );
     }
 
     return data;
@@ -129,15 +111,12 @@ export async function patchAnnouncement(
         excluded_users?: number[];
     }
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/announcements/${announcement_id}/`,
+    const response = await apiFetch(
+        `/announcements/${announcement_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(fields),
         }
@@ -146,27 +125,29 @@ export async function patchAnnouncement(
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Patch Announcement Failed");
+        throw new Error(
+            data.message || "Patch Announcement Failed"
+        );
     }
 
     return data;
 }
 
-export async function deleteAnnouncement(announcement_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/announcements/${announcement_id}/`,
+export async function deleteAnnouncement(
+    announcement_id: number
+) {
+    const response = await apiFetch(
+        `/announcements/${announcement_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Announcement Failed");
+
+        throw new Error(
+            data.message || "Delete Announcement Failed"
+        );
     }
 }

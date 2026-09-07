@@ -1,15 +1,8 @@
 import type { Branch } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getBranches(): Promise<Branch[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/branches/`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const response = await apiFetch("/branches/");
 
     const data = await response.json();
 
@@ -24,13 +17,10 @@ export async function createBranch(
     name: string,
     location: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/branches/`, {
+    const response = await apiFetch("/branches/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
             name,
@@ -46,16 +36,12 @@ export async function createBranch(
 
     return data;
 }
-export async function getBranch(branch_id: number): Promise<Branch> {
-    const token = localStorage.getItem("access_token");
 
-    const response = await fetch(
-        `${API_URL}/branches/${branch_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getBranch(
+    branch_id: number
+): Promise<Branch> {
+    const response = await apiFetch(
+        `/branches/${branch_id}/`
     );
 
     const data = await response.json();
@@ -72,15 +58,12 @@ export async function updateBranch(
     name: string,
     location: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/branches/${branch_id}/`,
+    const response = await apiFetch(
+        `/branches/${branch_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 name,
@@ -103,15 +86,12 @@ export async function patchBranch(
     name?: string,
     location?: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/branches/${branch_id}/`,
+    const response = await apiFetch(
+        `/branches/${branch_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 ...(name !== undefined && { name }),
@@ -129,21 +109,20 @@ export async function patchBranch(
     return data;
 }
 
-export async function deleteBranch(branch_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/branches/${branch_id}/`,
+export async function deleteBranch(
+    branch_id: number
+) {
+    const response = await apiFetch(
+        `/branches/${branch_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Branch Failed");
+        throw new Error(
+            data.message || "Delete Branch Failed"
+        );
     }
 }

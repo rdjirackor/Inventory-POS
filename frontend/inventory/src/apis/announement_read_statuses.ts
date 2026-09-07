@@ -1,20 +1,11 @@
 import type { AnnouncementReadStatus } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
-
+import { apiFetch } from "./api";
 
 export async function getAnnouncementReadStatus(
-    read_status_id: number): Promise<AnnouncementReadStatus>
- {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/announcement-read-status/${read_status_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+    read_status_id: number
+): Promise<AnnouncementReadStatus> {
+    const response = await apiFetch(
+        `/announcement-read-status/${read_status_id}/`
     );
 
     const data = await response.json();

@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
+from .permissions import require_model_permissions
 
 from .models import *
 from .serializers import *  
@@ -43,10 +44,15 @@ def me(request):
         "email": request.user.email,
         "role": role,
     })
+
+
+
+
 #okay now lemme write the setting api first, seems the most straightforward one
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Settings)
 def settings(request):
     setting = Settings.objects.first()
     serializer = SettingsSerializer(setting)
@@ -54,6 +60,7 @@ def settings(request):
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Settings)
 
 def settings(request):
     setting = Settings.objects.first()
@@ -74,6 +81,7 @@ def settings(request):
     )
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Notification)
 def notifications(request):
     notification = Notification.objects.all()
     
@@ -86,6 +94,7 @@ def notifications(request):
     )
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Category)
 def categories(request):
 
     if request.method == "GET":
@@ -120,6 +129,7 @@ def categories(request):
     
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Category)
 
 def category_detail(request, category_id):
 
@@ -185,6 +195,7 @@ def category_detail(request, category_id):
         )
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Discount)
 def discounts(request):
 
     if request.method == "GET":
@@ -215,6 +226,7 @@ def discounts(request):
         )
 @api_view(["GET","PATCH","PUT","DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Discount)
 def discount_detail(request, discount_id):
     try:
         discount = Discount.objects.get(id = discount_id)
@@ -271,6 +283,7 @@ def discount_detail(request, discount_id):
         )
 @api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(TaxType)
 def taxtypes(request):
 
     if request.method == "GET":
@@ -298,6 +311,7 @@ def taxtypes(request):
             status=400)
 @api_view(["GET","PUT","PATCH","DELETE"])   
 @permission_classes([IsAuthenticated])
+@require_model_permissions(TaxType)
 
 def taxtype_details(request, taxtype_id):
     try:
@@ -348,8 +362,8 @@ def taxtype_details(request, taxtype_id):
             status=204
         )
 @api_view(["GET", "POST"])
-@permission_classes([IsAuthenticated])      
-
+@permission_classes([IsAuthenticated])
+@require_model_permissions(Warehouse)     
 def warehouses(request):
 
     if request.method == "GET":
@@ -382,7 +396,7 @@ def warehouses(request):
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
-
+@require_model_permissions(Warehouse)
 def warehouse_detail(request, warehouse_id):
 
     try:
@@ -441,6 +455,7 @@ def warehouse_detail(request, warehouse_id):
     
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Product)
 def products(request):
 
     if request.method == "GET":
@@ -474,6 +489,7 @@ def products(request):
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Product)
 
 def product_detail(request, product_id):
 
@@ -533,6 +549,7 @@ def product_detail(request, product_id):
     
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Supplier)
 def suppliers(request):
 
     if request.method == "GET":
@@ -567,6 +584,7 @@ def suppliers(request):
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Supplier)
 
 def supplier_detail(request, supplier_id):
 
@@ -626,6 +644,7 @@ def supplier_detail(request, supplier_id):
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Branch)
 def branches(request):
 
     if request.method == "GET":
@@ -660,6 +679,7 @@ def branches(request):
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Branch)
 
 def branch_detail(request, branch_id):
 
@@ -719,6 +739,7 @@ def branch_detail(request, branch_id):
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(PurchaseOrder)
 def purchase_orders(request):
 
     if request.method == "GET":
@@ -753,6 +774,7 @@ def purchase_orders(request):
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(PurchaseOrder)
 
 def purchase_order_detail(request, purchase_order_id):
 
@@ -814,6 +836,7 @@ def purchase_order_detail(request, purchase_order_id):
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(PurchaseOrderItem)
 def purchase_order_items(request):
 
     if request.method == "GET":
@@ -849,6 +872,7 @@ def purchase_order_items(request):
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(PurchaseOrderItem)
 
 def purchase_order_item_detail(request, item_id):
 
@@ -908,6 +932,7 @@ def purchase_order_item_detail(request, item_id):
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Customer)
 def customers(request):
 
     if request.method == "GET":
@@ -942,6 +967,7 @@ def customers(request):
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Customer)
 
 def customer_detail(request, customer_id):
 
@@ -1001,6 +1027,7 @@ def customer_detail(request, customer_id):
     
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Cashier)
 def cashiers(request):
 
     if request.method == "GET":
@@ -1035,6 +1062,7 @@ def cashiers(request):
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Cashier)
 
 def cashier_detail(request, cashier_id):
 
@@ -1092,96 +1120,11 @@ def cashier_detail(request, cashier_id):
 
         return Response(status=204)
 
-@api_view(["GET", "POST"])
-@permission_classes([IsAuthenticated])
-def settings(request):
 
-    if request.method == "GET":
-
-        settings = Settings.objects.first()
-
-        if not settings:
-            return Response(
-                {"error": "Settings have not been configured"},
-                status=404
-            )
-
-        serializer = SettingsSerializer(settings)
-
-        return Response(serializer.data)
-
-    elif request.method == "POST":
-
-        serializer = SettingsSerializer(
-            data=request.data
-        )
-
-        if serializer.is_valid():
-            serializer.save()
-
-            return Response(
-                serializer.data,
-                status=201
-            )
-
-        return Response(
-            serializer.errors,
-            status=400
-        )
-
-
-@api_view(["PUT", "PATCH"])
-@permission_classes([IsAuthenticated])
-
-def settings_update(request):
-
-    settings = Settings.objects.first()
-
-    if not settings:
-        return Response(
-            {"error": "Settings have not been configured"},
-            status=404
-        )
-
-    if request.method == "PUT":
-
-        serializer = SettingsSerializer(
-            settings,
-            data=request.data
-        )
-
-    else:
-
-        serializer = SettingsSerializer(
-            settings,
-            data=request.data,
-            partial=True
-        )
-
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-
-    return Response(
-        serializer.errors,
-        status=400
-    )
-
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def notifications(request):
-
-    notifications = Notification.objects.all()
-
-    serializer = NotificationSerializer(
-        notifications,
-        many=True
-    )
-
-    return Response(serializer.data)
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Announcement)
 def announcements(request):
 
     if request.method == "GET":
@@ -1216,6 +1159,7 @@ def announcements(request):
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Announcement)
 
 def announcement_detail(request, announcement_id):
 
@@ -1274,7 +1218,8 @@ def announcement_detail(request, announcement_id):
         return Response(status=204)
     
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])  
+@permission_classes([IsAuthenticated])
+@require_model_permissions(Payment)  
 
 def payments(request):
 

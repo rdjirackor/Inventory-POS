@@ -284,3 +284,4 @@ class PaymentSerializer(serializers.ModelSerializer):
             "method",
             "paid_at",
         ]
+

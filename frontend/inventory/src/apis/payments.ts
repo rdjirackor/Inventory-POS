@@ -1,15 +1,8 @@
 import type { Payment } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getPayments(): Promise<Payment[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/payments/`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const response = await apiFetch("/payments/");
 
     const data = await response.json();
 
@@ -25,13 +18,10 @@ export async function createPayment(
     amount: number,
     method: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/payments/`, {
+    const response = await apiFetch("/payments/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
             order,
@@ -48,16 +38,12 @@ export async function createPayment(
 
     return data;
 }
-export async function getPayment(payment_id: number): Promise<Payment> {
-    const token = localStorage.getItem("access_token");
 
-    const response = await fetch(
-        `${API_URL}/payments/${payment_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getPayment(
+    payment_id: number
+): Promise<Payment> {
+    const response = await apiFetch(
+        `/payments/${payment_id}/`
     );
 
     const data = await response.json();
@@ -75,15 +61,12 @@ export async function updatePayment(
     amount: number,
     method: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/payments/${payment_id}/`,
+    const response = await apiFetch(
+        `/payments/${payment_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 order,
@@ -107,15 +90,12 @@ export async function patchPayment(
     amount?: number,
     method?: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/payments/${payment_id}/`,
+    const response = await apiFetch(
+        `/payments/${payment_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 ...(amount !== undefined && { amount }),
@@ -133,21 +113,20 @@ export async function patchPayment(
     return data;
 }
 
-export async function deletePayment(payment_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/payments/${payment_id}/`,
+export async function deletePayment(
+    payment_id: number
+) {
+    const response = await apiFetch(
+        `/payments/${payment_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Payment Failed");
+        throw new Error(
+            data.message || "Delete Payment Failed"
+        );
     }
 }

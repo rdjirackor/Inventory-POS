@@ -1,15 +1,8 @@
 import type { Return } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getReturns(): Promise<Return[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/returns/`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const response = await apiFetch("/returns/");
 
     const data = await response.json();
 
@@ -25,13 +18,10 @@ export async function createReturn(
     customer: number | null,
     stock_movement: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/returns/`, {
+    const response = await apiFetch("/returns/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
             product,
@@ -49,17 +39,10 @@ export async function createReturn(
     return data;
 }
 
-export async function getReturn(return_id: number): Promise<Return> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/returns/${return_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
-    );
+export async function getReturn(
+    return_id: number
+): Promise<Return> {
+    const response = await apiFetch(`/returns/${return_id}/`);
 
     const data = await response.json();
 
@@ -76,15 +59,12 @@ export async function updateReturn(
     customer: number | null,
     stock_movement: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/returns/${return_id}/`,
+    const response = await apiFetch(
+        `/returns/${return_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 product,
@@ -109,20 +89,19 @@ export async function patchReturn(
     customer?: number | null,
     stock_movement?: number
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/returns/${return_id}/`,
+    const response = await apiFetch(
+        `/returns/${return_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 ...(product !== undefined && { product }),
                 ...(customer !== undefined && { customer }),
-                ...(stock_movement !== undefined && { stock_movement }),
+                ...(stock_movement !== undefined && {
+                    stock_movement,
+                }),
             }),
         }
     );
@@ -137,20 +116,16 @@ export async function patchReturn(
 }
 
 export async function deleteReturn(return_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/returns/${return_id}/`,
+    const response = await apiFetch(
+        `/returns/${return_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
+
         throw new Error(data.message || "Delete Return Failed");
     }
 }

@@ -1,15 +1,8 @@
 import type { Settings } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getSettings(): Promise<Settings[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/settings/`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const response = await apiFetch("/settings/");
 
     const data = await response.json();
 
@@ -29,8 +22,6 @@ export async function updateSettings(
     backup_provider: string,
     store_logo: File | null
 ) {
-    const token = localStorage.getItem("access_token");
-
     const formData = new FormData();
 
     formData.append("business_name", business_name);
@@ -47,11 +38,8 @@ export async function updateSettings(
         formData.append("store_logo", store_logo);
     }
 
-    const response = await fetch(`${API_URL}/settings/`, {
+    const response = await apiFetch("/settings/", {
         method: "PATCH",
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
         body: formData,
     });
 

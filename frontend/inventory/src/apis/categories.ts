@@ -1,17 +1,9 @@
 import type { Category } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getCategories(): Promise<Category[]> {
-    const token = localStorage.getItem("access_token");
+    const response = await apiFetch("/categories/");
 
-    const response = await fetch(`${API_URL}/categories/`, {
-        headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    
     const data = await response.json();
 
     if (!response.ok) {
@@ -22,13 +14,10 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function createCategory(name: string) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(`${API_URL}/categories/`, {
+    const response = await apiFetch("/categories/", {
         method: "POST",
         headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
             name,
@@ -44,17 +33,11 @@ export async function createCategory(name: string) {
     return data;
 }
 
-export async function getCategory(category_id: number): Promise<Category> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/categories/${category_id}/`,
-        {
-            headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getCategory(
+    category_id: number
+): Promise<Category> {
+    const response = await apiFetch(
+        `/categories/${category_id}/`
     );
 
     const data = await response.json();
@@ -66,21 +49,16 @@ export async function getCategory(category_id: number): Promise<Category> {
     return data;
 }
 
-
-
 export async function updateCategory(
     category_id: number,
     name: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/categories/${category_id}/`,
+    const response = await apiFetch(
+        `/categories/${category_id}/`,
         {
             method: "PUT",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 name,
@@ -101,15 +79,12 @@ export async function patchCategory(
     category_id: number,
     name: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/categories/${category_id}/`,
+    const response = await apiFetch(
+        `/categories/${category_id}/`,
         {
             method: "PATCH",
             headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 name,
@@ -126,21 +101,20 @@ export async function patchCategory(
     return data;
 }
 
-export async function deleteCategory(category_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/categories/${category_id}/`,
+export async function deleteCategory(
+    category_id: number
+) {
+    const response = await apiFetch(
+        `/categories/${category_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Category Failed");
+        throw new Error(
+            data.message || "Delete Category Failed"
+        );
     }
 }

@@ -1,18 +1,8 @@
 import type { StockMovement } from "../interfaces/interfaces";
-
-const API_URL = "http://127.0.0.1:8000/api";
+import { apiFetch } from "./api";
 
 export async function getStockMovements(): Promise<StockMovement[]> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/stock-movements/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
-    );
+    const response = await apiFetch("/stock-movements/");
 
     const data = await response.json();
 
@@ -32,15 +22,12 @@ export async function createStockMovement(
     performed_by: number,
     reason: string
 ) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/stock-movements/`,
+    const response = await apiFetch(
+        "/stock-movements/",
         {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 product,
@@ -62,22 +49,20 @@ export async function createStockMovement(
 
     return data;
 }
-export async function getStockMovement(stock_movement_id: number): Promise<StockMovement> {
-    const token = localStorage.getItem("access_token");
 
-    const response = await fetch(
-        `${API_URL}/stock-movements/${stock_movement_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getStockMovement(
+    stock_movement_id: number
+): Promise<StockMovement> {
+    const response = await apiFetch(
+        `/stock-movements/${stock_movement_id}/`
     );
 
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Get Stock Movement Failed");
+        throw new Error(
+            data.message || "Get Stock Movement Failed"
+        );
     }
 
     return data;

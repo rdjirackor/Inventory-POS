@@ -1,26 +1,18 @@
 import type { Product } from "../interfaces/interfaces";
+import { apiFetch } from "./api";
 
-const API_URL = "http://127.0.0.1:8000/api"
+export async function getProducts(): Promise<Product[]> {
+    const response = await apiFetch("/products/");
 
-export async function getProducts(): Promise<Product[]>{
-    const token = localStorage.getItem("access_token");
+    const data = await response.json();
 
-    const response = await fetch (`${API_URL}/products/`,{
-        headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
-        
-        const data = await response.json();
-
-        if(!response.ok){
-            throw new Error(data.message||"Get Products Failed");
-        }
+    if (!response.ok) {
+        throw new Error(data.message || "Get Products Failed");
+    }
 
     return data;
+}
 
-    }
 export async function createProduct(
     name: string,
     sku: string,
@@ -36,22 +28,26 @@ export async function createProduct(
     category: number,
     warehouse: number
 ) {
-    const token = localStorage.getItem("access_token");
-
     const formData = new FormData();
 
     formData.append("name", name);
     formData.append("sku", sku);
     formData.append("brand", brand);
     formData.append("net_cost", net_cost.toString());
-    formData.append("selling_price_without_tax", selling_price_without_tax.toString());
+    formData.append(
+        "selling_price_without_tax",
+        selling_price_without_tax.toString()
+    );
 
     if (discount !== null) {
         formData.append("discount", discount.toString());
     }
 
     formData.append("current_stock", current_stock.toString());
-    formData.append("minimum_stock_level", minimum_stock_level.toString());
+    formData.append(
+        "minimum_stock_level",
+        minimum_stock_level.toString()
+    );
 
     if (image !== null) {
         formData.append("image", image);
@@ -68,11 +64,8 @@ export async function createProduct(
     formData.append("category", category.toString());
     formData.append("warehouse", warehouse.toString());
 
-    const response = await fetch(`${API_URL}/products/`, {
+    const response = await apiFetch("/products/", {
         method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-        },
         body: formData,
     });
 
@@ -87,16 +80,11 @@ export async function createProduct(
     return data;
 }
 
-export async function getProduct(product_id: number): Promise<Product> {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/products/${product_id}/`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+export async function getProduct(
+    product_id: number
+): Promise<Product> {
+    const response = await apiFetch(
+        `/products/${product_id}/`
     );
 
     const data = await response.json();
@@ -124,8 +112,6 @@ export async function updateProduct(
     category: number,
     warehouse: number
 ) {
-    const token = localStorage.getItem("access_token");
-
     const formData = new FormData();
 
     formData.append("name", name);
@@ -160,13 +146,10 @@ export async function updateProduct(
     formData.append("category", category.toString());
     formData.append("warehouse", warehouse.toString());
 
-    const response = await fetch(
-        `${API_URL}/products/${product_id}/`,
+    const response = await apiFetch(
+        `/products/${product_id}/`,
         {
             method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
             body: formData,
         }
     );
@@ -180,24 +163,25 @@ export async function updateProduct(
     return data;
 }
 
-export async function deleteProduct(product_id: number) {
-    const token = localStorage.getItem("access_token");
-
-    const response = await fetch(
-        `${API_URL}/products/${product_id}/`,
+export async function deleteProduct(
+    product_id: number
+) {
+    const response = await apiFetch(
+        `/products/${product_id}/`,
         {
             method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
         }
     );
 
     if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Delete Product Failed");
+
+        throw new Error(
+            data.message || "Delete Product Failed"
+        );
     }
 }
+
 export async function patchProduct(
     product_id: number,
     fields: {
@@ -216,8 +200,6 @@ export async function patchProduct(
         warehouse?: number;
     }
 ) {
-    const token = localStorage.getItem("access_token");
-
     const formData = new FormData();
 
     if (fields.name !== undefined)
@@ -230,7 +212,10 @@ export async function patchProduct(
         formData.append("brand", fields.brand);
 
     if (fields.net_cost !== undefined)
-        formData.append("net_cost", fields.net_cost.toString());
+        formData.append(
+            "net_cost",
+            fields.net_cost.toString()
+        );
 
     if (fields.selling_price_without_tax !== undefined)
         formData.append(
@@ -238,11 +223,20 @@ export async function patchProduct(
             fields.selling_price_without_tax.toString()
         );
 
-    if (fields.discount !== undefined && fields.discount !== null)
-        formData.append("discount", fields.discount.toString());
+    if (
+        fields.discount !== undefined &&
+        fields.discount !== null
+    )
+        formData.append(
+            "discount",
+            fields.discount.toString()
+        );
 
     if (fields.current_stock !== undefined)
-        formData.append("current_stock", fields.current_stock.toString());
+        formData.append(
+            "current_stock",
+            fields.current_stock.toString()
+        );
 
     if (fields.minimum_stock_level !== undefined)
         formData.append(
@@ -254,27 +248,36 @@ export async function patchProduct(
         formData.append("image", fields.image);
 
     if (fields.barcode_number !== undefined)
-        formData.append("barcode_number", fields.barcode_number);
+        formData.append(
+            "barcode_number",
+            fields.barcode_number
+        );
 
     if (fields.taxes !== undefined) {
         fields.taxes.forEach((tax) => {
-            formData.append("taxes", tax.toString());
+            formData.append(
+                "taxes",
+                tax.toString()
+            );
         });
     }
 
     if (fields.category !== undefined)
-        formData.append("category", fields.category.toString());
+        formData.append(
+            "category",
+            fields.category.toString()
+        );
 
     if (fields.warehouse !== undefined)
-        formData.append("warehouse", fields.warehouse.toString());
+        formData.append(
+            "warehouse",
+            fields.warehouse.toString()
+        );
 
-    const response = await fetch(
-        `${API_URL}/products/${product_id}/`,
+    const response = await apiFetch(
+        `/products/${product_id}/`,
         {
             method: "PATCH",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
             body: formData,
         }
     );
@@ -282,7 +285,9 @@ export async function patchProduct(
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Patch Product Failed");
+        throw new Error(
+            data.message || "Patch Product Failed"
+        );
     }
 
     return data;
