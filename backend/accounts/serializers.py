@@ -129,6 +129,14 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class SupplierSerializer(serializers.ModelSerializer):
+
+    product_names = serializers.StringRelatedField(
+        source="products",
+        many=True,
+        read_only=True
+
+    )
+
     class Meta:
         model = Supplier
         fields = [
@@ -140,6 +148,8 @@ class SupplierSerializer(serializers.ModelSerializer):
             "address",
             "contact_person",
             "tax_number",
+
+            "product_names",
         ]
 
 

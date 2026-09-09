@@ -92,7 +92,7 @@ def notifications(request):
     )
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
-@require_model_permissions(Category)
+# @require_model_permissions(Category)
 def categories(request):
 
     if request.method == "GET":

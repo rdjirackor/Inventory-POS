@@ -18,6 +18,7 @@ function Categories() {
             setCategories(data);
         }
         catch(error){
+            
             setError("Failed to load Categories");
         }
         finally{
@@ -31,6 +32,27 @@ function Categories() {
     return (
         <div>
             <h1>Categories</h1>
+            {loading && <p>Loading...</p>}
+            {error && <p>{error}</p>}
+
+            <table>
+                <thead>
+                    <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {categories.map((category)=>(
+                        <tr key={category.id}>
+                        <td>{category.id}</td>
+                        <td>{category.name}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
 
         </div>
     );

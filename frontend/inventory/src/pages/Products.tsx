@@ -31,7 +31,7 @@ function Products() {
 
 
     return (
-<div>
+        <div>
             <h1>Products</h1>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}

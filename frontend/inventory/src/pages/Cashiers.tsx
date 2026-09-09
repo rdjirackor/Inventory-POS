@@ -19,7 +19,12 @@ function Cashiers() {
             setCashiers(data);
         }
         catch(error){
-            setError("Failed to load Cashiers");
+            if(error instanceof Error && error.message == "Not Authorized"){
+                setError("You are not authorized to view Cashiers");
+                
+            }
+
+            else{setError("Failed to load Cashiers");}
         }
         finally{
             setLoading(false);
@@ -35,7 +40,8 @@ function Cashiers() {
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
 
-            <table>
+
+            {!error && (<table>
                 <thead>
                     <tr>
                     <th>ID</th>
@@ -56,7 +62,7 @@ function Cashiers() {
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </table>)}
 
         </div>
     );

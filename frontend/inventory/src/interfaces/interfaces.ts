@@ -1,3 +1,4 @@
+
 export interface Category {
     id: number;
     name: string;
@@ -34,6 +35,10 @@ export interface Warehouse {
 }
 
 export interface Product {
+    discount_name: string;
+    taxes_names: any;
+    category_name: string[];
+    warehouse_name: string[];
     id: number;
     name: string;
     sku: string;
@@ -59,6 +64,7 @@ export interface Supplier {
     address: string;
     contact_person: string;
     tax_number: string;
+    product_names: string[];
 }
 
 export interface PurchaseOrder {

@@ -6,8 +6,12 @@ export async function getCashiers(): Promise<Cashier[]> {
 
     const data = await response.json();
 
-    if (!response.ok) {
-        throw new Error(data.message || "Get Cashiers Failed");
+     if (!response.ok) {
+        if (response.status === 403) {
+            throw new Error("Not Authorized");
+        }
+
+        throw new Error(data.detail || "Failed to load Cashiers");
     }
 
     return data;
