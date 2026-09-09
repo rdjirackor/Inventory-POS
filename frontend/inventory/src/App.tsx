@@ -8,32 +8,55 @@ import Products from "./pages/Products";
 import Categories from "./pages/Categories";
 import Suppliers from "./pages/Suppliers";
 import Cashiers from "./pages/Cashiers";
+import { AuthProvider } from "./context/AuthContext";
+
+const token = localStorage.getItem("access_token")
 
 function App() {
     return (
-        <BrowserRouter>
-            <Routes>
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
 
-                <Route path="/" element={<Navigate to="/login" replace />} />
+                    <Route
+                        path="/login"
+                        element={
+                            !token ? (
+                                <LoginPage />
+                            ) : (
+                                <Navigate to="/dashboard" replace />
+                            )
+                        }
+                    />
 
-                <Route path="/login" element={<LoginPage />} />
+                    <Route
+                        path="/"
+                        element={
+                            !token ? (
+                                <Navigate to="/login" replace />
+                            ) : (
+                                <Navigate to="/dashboard" replace />
+                            )
+                        }
+                    />
 
-                <Route
-                    element={
-                        <ProtectedRoute>
-                            <AppLayout />
-                        </ProtectedRoute>
-                    }
-                >
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/categories" element={<Categories />} />
-                    <Route path="/suppliers" element={<Suppliers />} />
-                    <Route path="/cashiers" element={<Cashiers />} />
-                </Route>
+                    <Route
+                        element={
+                            <ProtectedRoute>
+                                <AppLayout />
+                            </ProtectedRoute>
+                            }
+                    >
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/products" element={<Products />} />
+                        <Route path="/categories" element={<Categories />} />
+                        <Route path="/suppliers" element={<Suppliers />} />
+                        <Route path="/cashiers" element={<Cashiers />} />
+                    </Route>    
 
-            </Routes>
-        </BrowserRouter>
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
     );
 }
 

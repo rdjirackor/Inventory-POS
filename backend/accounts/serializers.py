@@ -77,8 +77,32 @@ class DiscountSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+
+    discount_name = serializers.StringRelatedField(
+        source="discount",
+        read_only=True
+    )
+
+    taxes_names = serializers.StringRelatedField(
+        source="taxes",
+        many=True,
+        read_only=True
+    )
+
+    category_name = serializers.StringRelatedField(
+        source="category",
+        read_only=True
+    )
+
+    warehouse_name = serializers.StringRelatedField(
+        source="warehouse",
+        read_only=True
+    )
+
     class Meta:
+
         model = Product
+
         fields = [
             "id",
             "name",
@@ -86,14 +110,21 @@ class ProductSerializer(serializers.ModelSerializer):
             "brand",
             "net_cost",
             "selling_price_without_tax",
+
             "discount",
+            "taxes",
+            "category",
+            "warehouse",
+
+            "discount_name",
+            "taxes_names",
+            "category_name",
+            "warehouse_name",
+
             "current_stock",
             "minimum_stock_level",
             "image",
             "barcode_number",
-            "taxes",
-            "category",
-            "warehouse",
         ]
 
 

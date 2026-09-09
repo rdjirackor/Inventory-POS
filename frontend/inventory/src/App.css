@@ -1,3 +1,6 @@
+#root {
+    min-height: 100vh;
+}
 .counter {
   font-size: 16px;
   padding: 5px 10px;
@@ -16,6 +19,18 @@
     outline-offset: 2px;
   }
 }
+
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
 
 .hero {
   position: relative;
@@ -201,6 +216,8 @@
     min-height: 100vh;
     padding: 20px;
     border-right: 1px solid black;
+    margin: 0;
+    left: 0;
 }
 
 .sidebar nav {

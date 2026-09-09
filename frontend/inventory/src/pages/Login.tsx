@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { login } from '../apis/auth';
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login } from "../apis/auth";
+import { AuthContext } from "../context/AuthContext";
 
 function LoginPage(){
   const [username, setUsername] = useState("");
@@ -8,6 +9,8 @@ function LoginPage(){
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const auth = useContext(AuthContext);
 
   const navigate = useNavigate();
   
@@ -19,10 +22,7 @@ function LoginPage(){
     setLoading(true);
     try{
       const data = await login(username, password);
-      console.log("Login Successful: ",data);
-
-      localStorage.setItem("access_token", data.access);
-      localStorage.setItem("refresh_token",data.refresh);
+      auth?.login(data.access, data.refresh);
       navigate("/dashboard");      
     }
       catch(error){
