@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 
 class TaxType(models.Model):
@@ -49,23 +50,20 @@ class Product(models.Model):
         return total
         
     def get_actual_sale_price(self):
-        discount_amount = 0
+        discount_amount = Decimal("0")
 
         if self.discount:
             discount_amount = (
                 self.selling_price_without_tax *
-                self.discount.discount / 100
+                self.discount.discount / Decimal("100")
             )
 
         total_tax_amount = (
-            self.get_total_taxrate() / 100 *
+            self.get_total_taxrate() / Decimal("100") *
             self.selling_price_without_tax
         )
 
         return self.selling_price_without_tax - discount_amount + total_tax_amount
-    
-    def __str__(self):
-        return f"{self.name}-{self.selling_price_without_tax}"
 
 class Supplier(models.Model):
     name = models.CharField(max_length=200) 
