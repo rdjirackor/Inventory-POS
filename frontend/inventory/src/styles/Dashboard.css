@@ -1,0 +1,7 @@
+.top_dashboard_details {
+ display: flex;
+ margin: auto;
+ }
+
+ .top_dashboard_details p{
+margin-right: auto; }

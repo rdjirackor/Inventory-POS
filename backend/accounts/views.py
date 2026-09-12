@@ -7,6 +7,9 @@ from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 from .permissions import require_model_permissions
 
+from django.utils import timezone
+
+
 from .models import *
 from .serializers import *  
     
@@ -43,6 +46,29 @@ def me(request):
         "username": request.user.username,
         "email": request.user.email,
         "role": role,
+    })
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def dashboard(request):
+
+    today = timezone.localdate()
+
+    orders = OrderHistory.objects.filter(
+        time_of_purchase__date=today
+    )
+
+    todays_sales = 0
+
+    for order in orders:
+        for item in order.items.all():
+            todays_sales += (
+                item.amount_bought *
+                item.product.get_actual_sale_price()
+            )
+
+    return Response({
+        "todays_sales": todays_sales
     })
 
 

@@ -56,9 +56,6 @@ function LoginPage(){
         Login
       </button>
 
-      {/* {error && <p>{error}</p>} */}
-      {error ? <p>{error}</p>  :<p>Login Accepted</p> }
-
 
     </div>
   )

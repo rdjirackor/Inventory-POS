@@ -7,6 +7,9 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view()),
     path("me/",me),
 
+
+    path("dashboard/", dashboard),
+
     path("categories/", categories),
     path("categories/<int:category_id>/", category_detail),
 

@@ -80,7 +80,7 @@ class Supplier(models.Model):
     
 class PurchaseOrder(models.Model):
     supplier = models.ForeignKey(Supplier,on_delete=models.PROTECT, related_name="purchase_orders")
-    expected_delivery = models.DateField()
+    expected_delivery = models.DateField() 
     STATUS_CHOICES = [
         ('Draft', 'Draft'),
         ('Sent', 'Sent'),
