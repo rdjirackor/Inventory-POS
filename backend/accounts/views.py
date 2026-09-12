@@ -48,6 +48,8 @@ def me(request):
         "role": role,
     })
 
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def dashboard(request):
@@ -58,17 +60,73 @@ def dashboard(request):
         time_of_purchase__date=today
     )
 
-    todays_sales = 0
+    todays_sales = Decimal("0")
+    most_expensive_order = Decimal("0")
+    profit_generated_today = Decimal("0")
+    customers_served = 0
+
+    low_stock_items = 0
+    out_of_stock = 0
+
+    for product in Product.objects.all():
+
+        if product.current_stock <= product.minimum_stock_level:
+            low_stock_items += 1
+
+        if product.current_stock == 0:
+            out_of_stock += 1
+
+
+    for order in orders:
+
+        order_total = Decimal("0")
+        order_profit = Decimal("0")
+
+        for item in order.items.all():
+
+            sale_price = item.product.get_actual_sale_price()
+            quantity = item.amount_bought
+
+            item_total = quantity * sale_price
+
+            order_total += item_total
+
+            item_profit = quantity * (
+                sale_price - item.product.net_cost
+            )
+
+            order_profit += item_profit
+
+        todays_sales += order_total
+        profit_generated_today += order_profit
+
+        if order_total > most_expensive_order:
+            most_expensive_order = order_total
+
+        if order.customer:
+            customers_served += 1
+    top_selling_product = None
+    top_selling_quantity = Decimal("0")
 
     for order in orders:
         for item in order.items.all():
-            todays_sales += (
-                item.amount_bought *
-                item.product.get_actual_sale_price()
-            )
+
+            if item.amount_bought > top_selling_quantity:
+                top_selling_quantity = item.amount_bought
+                top_selling_product = item.product.name
+
 
     return Response({
-        "todays_sales": todays_sales
+        "todays_sales": todays_sales,
+        "most_expensive_order": most_expensive_order,
+        "profit_generated_today": profit_generated_today,
+        "low_stock_items": low_stock_items,
+        "pending_purchase_orders": PurchaseOrder.objects.filter(
+            status__in=["Draft", "Sent"]
+        ).count(),
+        "out_of_stock": out_of_stock,
+        "customers_served": customers_served,
+        "top_selling_product": top_selling_product,
     })
 
 
