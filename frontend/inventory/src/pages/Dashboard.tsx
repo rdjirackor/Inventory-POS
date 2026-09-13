@@ -10,7 +10,7 @@ function Dashboard() {
     const [lowStockItems, setLowStockItems] = useState("");
     const [pendingPurchaseOrders, setPendingPurchaseOrders] = useState("");
     const [outOfStock, setOutOfStock] = useState("");
-    const [customersServed, setCustomersServed] = useState("0");
+    const [numberOfOrders, setNumberOfOrders] = useState("0");
     const [topSeller, setTopSellingProduct] = useState("");
 
     
@@ -26,7 +26,7 @@ function Dashboard() {
                 setLowStockItems(data.low_stock_items);
                 setPendingPurchaseOrders(data.pending_purchase_orders);
                 setOutOfStock(data.out_of_stock);
-                setCustomersServed(data.customers_served);
+                setNumberOfOrders(data.number_of_orders);
                 setTopSellingProduct(data.top_selling_product);
 
             })
@@ -44,7 +44,7 @@ function Dashboard() {
                 <p>Low<br/>Stock Items<br/>{lowStockItems}</p>
                 <p>Pending<br/>Purchase Orders<br/>{pendingPurchaseOrders}</p>
                 <p>Out of<br/>Stock<br/>{outOfStock}</p>
-                <p>Customers<br/>Served<br/>{customersServed}</p>
+                <p>Number Of<br/>Orders<br/>{numberOfOrders}</p>
                 <p>Top Selling<br/>Product<br/>{topSeller}</p>
             </div>
         </div>

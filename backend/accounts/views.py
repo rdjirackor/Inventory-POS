@@ -63,7 +63,7 @@ def dashboard(request):
     todays_sales = Decimal("0")
     most_expensive_order = Decimal("0")
     profit_generated_today = Decimal("0")
-    customers_served = 0
+    number_of_orders = 0
 
     low_stock_items = 0
     out_of_stock = 0
@@ -103,8 +103,8 @@ def dashboard(request):
         if order_total > most_expensive_order:
             most_expensive_order = order_total
 
-        if order.customer:
-            customers_served += 1
+        if order:
+            number_of_orders += 1
     top_selling_product = None
     top_selling_quantity = Decimal("0")
 
@@ -125,7 +125,7 @@ def dashboard(request):
             status__in=["Draft", "Sent"]
         ).count(),
         "out_of_stock": out_of_stock,
-        "customers_served": customers_served,
+        "number_of_orders": number_of_orders,
         "top_selling_product": top_selling_product,
     })
 
