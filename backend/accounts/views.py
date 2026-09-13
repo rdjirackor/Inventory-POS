@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import require_model_permissions
 
 from django.utils import timezone
+from datetime import timedelta
 
 
 from .models import *
@@ -68,6 +69,23 @@ def dashboard(request):
     low_stock_items = 0
     out_of_stock = 0
 
+
+    today = timezone.localdate()
+
+    orders_last_7_days = []
+
+    for i in range(6, -1, -1):
+        date = today - timedelta(days=i)
+
+        count = OrderHistory.objects.filter(
+            time_of_purchase__date=date
+        ).count()
+
+        orders_last_7_days.append({
+            "date": date.strftime("%a"),
+            "orders": count,
+        })
+
     for product in Product.objects.all():
 
         if product.current_stock <= product.minimum_stock_level:
@@ -112,7 +130,7 @@ def dashboard(request):
         for item in order.items.all():
 
             if item.amount_bought > top_selling_quantity:
-                top_selling_quantity = item.amount_bought
+                top_selling_quantity = item.amount_bought   
                 top_selling_product = item.product.name
 
 
@@ -127,6 +145,8 @@ def dashboard(request):
         "out_of_stock": out_of_stock,
         "number_of_orders": number_of_orders,
         "top_selling_product": top_selling_product,
+        "orders_last_7_days": orders_last_7_days,
+
     })
 
 

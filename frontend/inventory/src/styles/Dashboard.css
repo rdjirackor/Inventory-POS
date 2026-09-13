@@ -1,7 +1,26 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: auto;
+}
+
 .top_dashboard_details {
  display: flex;
- margin: auto;
- }
+ margin-bottom: 5%;
+ 
+    
+}
 
- .top_dashboard_details p{
-margin-right: auto; }
+.top_dashboard_details p{
+margin-right: auto; 
+    }
+
+.lower_dashboard {
+    display: flex;
+}
+.seven_days_chart {
+    width: 30%;
+}
+.seven_days_chart p {
+    text-align: center;
+}
