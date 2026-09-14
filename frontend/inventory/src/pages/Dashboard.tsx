@@ -47,12 +47,37 @@ function Dashboard() {
                     <OrdersChart data={dashboard.orders_last_7_days} />
                 </div>
 
+                {dashboard.low_stock_products.length > 0 ? (
                 <div className="low_stock_items">
-                    <p><b>Low Stock (5 Lowest)</b></p>
                     
+                    <p><b>Low Stock (5 Lowest)</b></p>
 
+                    <ul>
+                        {dashboard.low_stock_products.map((product) => (
+                            <li key={product}>{product}</li>
+                        ))}
+                    </ul>
+                </div>   ):
+                
+                <p><b>Low Stock (5 Lowest)</b><br/>No product is low in stock</p>                             
+                }
 
-                    </div>            
+                <div className="recent_activity">
+                <p><b>Recent Activity (Last 5)</b></p>
+
+                {dashboard.recent_activity.length > 0 ? (
+                    <ul>
+                        {dashboard.recent_activity.map((activity) => (
+                            <li key={activity.date}>
+                                {activity.movement_type} - {activity.product} ({activity.quantity})
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No recent activity</p>
+                )}
+            </div>
+
                 </div>
         </div>
     );

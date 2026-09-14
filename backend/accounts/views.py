@@ -68,6 +68,9 @@ def dashboard(request):
 
     low_stock_items = 0
     out_of_stock = 0
+    low_stock_products = []
+    recent_activity = []
+
 
 
     today = timezone.localdate()
@@ -86,7 +89,12 @@ def dashboard(request):
             "orders": count,
         })
 
+    for product in Product.objects.all().order_by("current_stock")[:5]:
+            if product.current_stock <= product.minimum_stock_level:
+                low_stock_products.append(product.name)
+
     for product in Product.objects.all():
+        
 
         if product.current_stock <= product.minimum_stock_level:
             low_stock_items += 1
@@ -134,6 +142,19 @@ def dashboard(request):
                 top_selling_product = item.product.name
 
 
+    stock_movements = StockMovement.objects.order_by("-date")[:5]
+
+    for movement in stock_movements:
+        recent_activity.append({
+            "product": movement.product.name,
+            "quantity": movement.quantity,
+            "movement_type": movement.movement_type,
+            "date": movement.date,
+            "performed_by": movement.performed_by.user.username,
+            "reason": movement.reason,
+        })
+
+
     return Response({
         "todays_sales": todays_sales,
         "most_expensive_order": most_expensive_order,
@@ -146,6 +167,8 @@ def dashboard(request):
         "number_of_orders": number_of_orders,
         "top_selling_product": top_selling_product,
         "orders_last_7_days": orders_last_7_days,
+        "low_stock_products": low_stock_products,
+        "recent_activity": recent_activity,
 
     })
 
