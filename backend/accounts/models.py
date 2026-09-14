@@ -37,7 +37,7 @@ class Product(models.Model):
     discount = models.ForeignKey(Discount, related_name="products", on_delete=models.PROTECT, null=True, blank=True)
     current_stock = models.PositiveIntegerField(default=0)
     minimum_stock_level = models.PositiveIntegerField(default=0)
-    image = models.ImageField()
+    image = models.ImageField(blank=True, null=True)
     barcode_number = models.CharField(max_length=15, unique=True, blank=True, null=True)
     taxes = models.ManyToManyField(TaxType, blank=True, related_name='products')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")

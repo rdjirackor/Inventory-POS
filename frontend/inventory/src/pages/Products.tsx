@@ -87,11 +87,24 @@ async function DeleteProduct(product_id: number) {
                         <button onClick={() => UpdateProducts(product.id)}>Update</button>
                         <button onClick={() => DeleteProduct(product.id)}>Delete</button>     
                         </td>
+                        <td>
+    {product.image && (
+        <img
+            src={`http://127.0.0.1:8000${product.image}`}
+            alt={product.name}
+            width="80"
+            height="80"
+        />
+    )}
+</td>
                     </tr>
                 ))}
             </tbody>
         </table>
         </div>
+        <button onClick={() => navigate("/products/create")}>
+    Create Product
+</button>
         </div>
     );
 }

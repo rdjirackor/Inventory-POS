@@ -12,6 +12,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 
 import UpdatePage from "./pages/UpdatePage";
+import CreateProduct from "./pages/CreateProducts";
 
 const token = localStorage.getItem("access_token")
 
@@ -53,6 +54,8 @@ function App() {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/products" element={<Products />} />
                         <Route path="/products/:id/edit" element={<UpdatePage />} />
+                        <Route path="/products/create" element={<CreateProduct />} />
+
 
                         <Route path="/categories" element={<Categories />} />
                         <Route path="/suppliers" element={<Suppliers />} />
