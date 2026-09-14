@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getProducts } from "../apis/products";
 import type { Product } from "../interfaces/interfaces";
 import "../styles/Products.css"
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Products() {
     const [loading, setLoading] = useState(false);
