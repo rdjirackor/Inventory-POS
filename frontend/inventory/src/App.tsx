@@ -10,6 +10,9 @@ import Suppliers from "./pages/Suppliers";
 import Cashiers from "./pages/Cashiers";
 import { AuthProvider } from "./context/AuthContext";
 
+
+import UpdatePage from "./pages/UpdatePage";
+
 const token = localStorage.getItem("access_token")
 
 function App() {
@@ -49,9 +52,12 @@ function App() {
                     >
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/products" element={<Products />} />
+                        <Route path="/products/:id/edit" element={<UpdatePage />} />
+
                         <Route path="/categories" element={<Categories />} />
                         <Route path="/suppliers" element={<Suppliers />} />
                         <Route path="/cashiers" element={<Cashiers />} />
+                        <Route path="/products/:product_id" element={<UpdatePage />} />
                     </Route>    
 
                 </Routes>

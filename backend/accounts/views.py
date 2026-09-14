@@ -10,6 +10,8 @@ from .permissions import require_model_permissions
 from django.utils import timezone
 from datetime import timedelta
 
+from django.db.models.deletion import ProtectedError
+
 
 from .models import *
 from .serializers import *  
@@ -668,9 +670,18 @@ def product_detail(request, product_id):
 
     elif request.method == "DELETE":
 
-        product.delete()
+        try:
+            product.delete()
 
-        return Response(status=204)
+        except ProtectedError:
+            return Response(
+                {
+                    "error": "Protected"
+                },
+                status=400
+            )
+
+    return Response(status=204)
     
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])

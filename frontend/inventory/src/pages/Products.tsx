@@ -3,6 +3,7 @@ import { getProducts } from "../apis/products";
 import type { Product } from "../interfaces/interfaces";
 import "../styles/Products.css"
 import { useNavigate } from "react-router-dom";
+import { deleteProduct } from "../apis/products";
 
 function Products() {
     const [loading, setLoading] = useState(false);
@@ -10,6 +11,8 @@ function Products() {
     const [products, setProducts] = useState<Product[]>([]);
 
     const navigate = useNavigate();
+
+    
     
 
 
@@ -28,13 +31,30 @@ function Products() {
             setLoading(false);
         }
     }
+
+
+
+async function DeleteProduct(product_id: number) {
+    try {
+        await deleteProduct(product_id);
+        await fetchProducts();
+    } catch (error) {
+        if (error instanceof Error && error.message === "Protected") {
+            setError(
+                "Cannot delete this product because it is used in existing orders or stock movements."
+            );
+        }
+    }
+}
+
+
     useEffect(() => {
         fetchProducts()
     },[]);
 
-    function updateProducts(product_id:number){
-        navigate(`/products/${product_id}`);
-    }
+   function UpdateProducts(product_id: number){
+    navigate(`/products/${product_id}/edit`);
+   }
 
     return (
         <div>
@@ -45,23 +65,28 @@ function Products() {
                 <table className="table">
                         <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Name</th>
                 
                 
                     <th>Current Stock</th>
                     <th>Category</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
             <tbody>
                 {products.map((product) => (
+
+
+
                     <tr key={product.id}>
-                        <td>{product.id}</td>
                         <td>{product.name}</td>                                       
                         <td>{product.current_stock}</td>           
                         <td>{product.category_name}</td>
-                       <td><button onClick={() => updateProducts(product.id)}>Update {product.id}</button></td>
+                       <td>
+                        <button onClick={() => UpdateProducts(product.id)}>Update</button>
+                        <button onClick={() => DeleteProduct(product.id)}>Delete</button>     
+                        </td>
                     </tr>
                 ))}
             </tbody>

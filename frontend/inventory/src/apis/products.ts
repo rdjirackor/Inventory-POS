@@ -1,6 +1,8 @@
 import type { Product } from "../interfaces/interfaces";
 import { apiFetch } from "./api";
 
+
+
 export async function getProducts(): Promise<Product[]> {
     const response = await apiFetch("/products/");
 
@@ -157,15 +159,33 @@ export async function updateProduct(
     const data = await response.json();
 
     if (!response.ok) {
+        console.log("UPDATE PRODUCT ERROR:", data);
         throw new Error(data.message || "Update Product Failed");
     }
 
     return data;
 }
 
-export async function deleteProduct(
-    product_id: number
-) {
+// export async function deleteProduct(
+//     product_id: number
+// ) {
+//     const response = await apiFetch(
+//         `/products/${product_id}/`,
+//         {
+//             method: "DELETE",
+//         }
+//     );
+
+//     if (!response.ok) {
+//         const data = await response.json();
+
+//         throw new Error(
+//             data.message || "Delete Product Failed"
+//         );
+//     }
+// }
+
+export async function deleteProduct(product_id: number) {
     const response = await apiFetch(
         `/products/${product_id}/`,
         {
@@ -174,12 +194,14 @@ export async function deleteProduct(
     );
 
     if (!response.ok) {
-        const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
-        throw new Error(
-            data.message || "Delete Product Failed"
-        );
-    }
+    console.log("DELETE PRODUCT ERROR:", data);
+
+    throw new Error(
+        data.error || data.message || data.detail || "Delete Product Failed"
+    );
+}
 }
 
 export async function patchProduct(
@@ -285,6 +307,7 @@ export async function patchProduct(
     const data = await response.json();
 
     if (!response.ok) {
+        
         throw new Error(
             data.message || "Patch Product Failed"
         );
