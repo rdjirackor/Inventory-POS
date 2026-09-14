@@ -13,9 +13,6 @@ function Products() {
     const navigate = useNavigate();
 
     
-    
-
-
 
     async function fetchProducts(){
         setError("");
@@ -70,7 +67,8 @@ async function DeleteProduct(product_id: number) {
                 
                     <th>Current Stock</th>
                     <th>Category</th>
-                    <th>Actions</th>
+                    <th>Image</th>  
+                    <th>Actions</th>  
                 </tr>
             </thead>
 
@@ -83,20 +81,21 @@ async function DeleteProduct(product_id: number) {
                         <td>{product.name}</td>                                       
                         <td>{product.current_stock}</td>           
                         <td>{product.category_name}</td>
-                       <td>
-                        <button onClick={() => UpdateProducts(product.id)}>Update</button>
-                        <button onClick={() => DeleteProduct(product.id)}>Delete</button>     
+                       
+                        <td>
+                            {product.image && (
+                                <img
+                                    src={`http://127.0.0.1:8000${product.image}`}
+                                    alt={product.name}
+                                    width="80"
+                                    height="80"
+                                />
+                            )}
                         </td>
                         <td>
-    {product.image && (
-        <img
-            src={`http://127.0.0.1:8000${product.image}`}
-            alt={product.name}
-            width="80"
-            height="80"
-        />
-    )}
-</td>
+                            <button onClick={() => UpdateProducts(product.id)}>Update</button>
+                            <button onClick={() => DeleteProduct(product.id)}>Delete</button>     
+                        </td>
                     </tr>
                 ))}
             </tbody>

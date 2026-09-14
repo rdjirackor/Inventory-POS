@@ -13,6 +13,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 import UpdatePage from "./pages/UpdatePage";
 import CreateProduct from "./pages/CreateProducts";
+import UpdateSupplier from "./pages/UpdateSupplier";
 
 const token = localStorage.getItem("access_token")
 
@@ -59,6 +60,7 @@ function App() {
 
                         <Route path="/categories" element={<Categories />} />
                         <Route path="/suppliers" element={<Suppliers />} />
+                        <Route path="/suppliers/:id/edit" element={<UpdateSupplier />} />
                         <Route path="/cashiers" element={<Cashiers />} />
                         <Route path="/products/:product_id" element={<UpdatePage />} />
                     </Route>    

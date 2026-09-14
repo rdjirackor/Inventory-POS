@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { getSuppliers } from "../apis/suppliers";
+import { deleteSupplier, getSuppliers } from "../apis/suppliers";
 import type { Supplier } from "../interfaces/interfaces";
+import { useNavigate } from "react-router-dom";
 
 function Suppliers() {
     const [loading, setLoading] = useState(false);
     const [error, setError] =useState("");
     const [suppliers, setSuppliers] = useState<Supplier[]>([]);
     
-
+    const navigate = useNavigate();
 
 
     async function fetchSuppliers(){
@@ -25,10 +26,32 @@ function Suppliers() {
             setLoading(false);
         }
     }
+
+    async function DeleteSupplier(supplier_id: number) {
+        try {
+            await deleteSupplier(supplier_id);
+            await fetchSuppliers();
+        } catch (error) {
+            if (error instanceof Error && error.message === "Protected") {
+                setError(
+                    "Cannot delete this supplier because it is used in existing orders or stock movements."
+                );
+            }
+        }
+    }
+
+
+
+
+
     useEffect(() => {
         fetchSuppliers()
     },[]);
-    console.log(suppliers);
+
+   function UpdateSuppliers(supplier_id: number){
+    navigate(`/suppliers/${supplier_id}/edit`);
+   }
+
     return (
         <div>
             <h1>Suppliers</h1>
@@ -63,6 +86,10 @@ function Suppliers() {
                 <td>{supplier.address}</td>
                 <td>{supplier.contact_person}</td>
                 <td>{supplier.tax_number}</td>
+                <td>
+                    <button onClick={() => UpdateSuppliers(supplier.id)}>Update</button>
+                    <button onClick={() => DeleteSupplier(supplier.id)}>Delete</button>     
+                </td>
             </tr>
         ))}
     </tbody>

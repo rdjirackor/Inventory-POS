@@ -12,6 +12,8 @@ function UpdatePage() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
 
+    const [image, setImage] = useState<File | null>(null);
+
     useEffect(() => {
         async function fetchProduct() {
             try {
@@ -61,6 +63,7 @@ function UpdatePage() {
             taxes: product.taxes,
             category: product.category,
             warehouse: product.warehouse,
+            image : image || undefined,
         });
 
         navigate("/products");
@@ -118,6 +121,17 @@ function UpdatePage() {
                         onChange={(e) =>
                             handleChange("brand", e.target.value)
                         }
+                    />
+                </div>
+
+                <div>
+                    <label>Product Image</label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            setImage(e.target.files?.[0] || null);
+                        }}
                     />
                 </div>
 
