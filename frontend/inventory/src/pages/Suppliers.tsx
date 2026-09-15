@@ -61,7 +61,6 @@ function Suppliers() {
            <table>
                 <thead>
         <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Products</th>
             <th>Phone Number</th>
@@ -75,7 +74,7 @@ function Suppliers() {
     <tbody>
         {suppliers.map((supplier) => (
             <tr key={supplier.id}>
-                <td>{supplier.id}</td>
+                
                 <td>{supplier.name}</td>
                 <td>{supplier.product_names.length > 0
                     ? supplier.product_names.join(",")

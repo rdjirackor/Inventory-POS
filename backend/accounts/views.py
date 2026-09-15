@@ -53,6 +53,7 @@ def me(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+@require_model_permissions(Supplier)
 def dashboard(request):
 
     today = timezone.localdate()

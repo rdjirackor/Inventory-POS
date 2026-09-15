@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getProduct, patchProduct } from "../apis/products";
 import type { Product } from "../interfaces/interfaces";
 
-function UpdatePage() {
+function UpdateProduct() {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -217,4 +217,4 @@ function UpdatePage() {
     );
 }
 
-export default UpdatePage;
+export default UpdateProduct;

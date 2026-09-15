@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { getCashiers } from "../apis/cashiers";
 import type { Cashier } from "../interfaces/interfaces";
+import { useNavigate } from "react-router-dom";
 
 
 function Cashiers() {
     const [loading, setLoading] = useState(false);
     const [error, setError] =useState("");
     const [cashiers, setCashiers] = useState<Cashier[]>([]);
+    const navigate = useNavigate();
     
 
 
@@ -49,6 +51,7 @@ function Cashiers() {
                     <th>Second Name</th>
                     <th>Date Employed</th>
                     <th>Branch</th>
+                    <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,6 +62,12 @@ function Cashiers() {
                         <td>{cashier.second_name}</td>
                         <td>{cashier.date_employed}</td>
                         <td>{cashier.branch_stationed_at}</td>
+                        <td>
+                            <button onClick={() => navigate(`/cashiers/${cashier.id}/edit`)}>
+                                Update
+                            </button>     
+                        </td>
+
                         </tr>
                     ))}
                 </tbody>

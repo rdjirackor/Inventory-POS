@@ -42,6 +42,11 @@ class Product(models.Model):
     taxes = models.ManyToManyField(TaxType, blank=True, related_name='products')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     warehouse = models.ForeignKey(Warehouse, on_delete=models.PROTECT, related_name="products")
+
+
+    def __str__(self):
+        return self.name
+
     
     def get_total_taxrate(self):
         total = 0

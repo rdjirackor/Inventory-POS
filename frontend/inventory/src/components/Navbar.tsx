@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../apis/auth";
 import type { User } from "../interfaces/interfaces";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 function Navbar() {
     const [user, setUser] = useState<User | null>(null);
-    const navigate = useNavigate();
     const auth = useContext(AuthContext);
 
 
@@ -37,7 +36,7 @@ function Navbar() {
         const confirm_logout = window.confirm("Sign out?");
         if (confirm_logout){
             auth?.logout();
-            navigate("/login");
+            window.location.reload();
         }
     }
 

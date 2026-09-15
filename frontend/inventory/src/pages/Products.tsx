@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProducts } from "../apis/products";
+import { getProduct, getProducts } from "../apis/products";
 import type { Product } from "../interfaces/interfaces";
 import "../styles/Products.css"
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,14 @@ function Products() {
 
 async function DeleteProduct(product_id: number) {
     try {
+        const product = await getProduct(product_id);
+        const confirmed = confirm(`Delete ${product.name}?`);
+        if (!confirmed){
+            return ;
+        }
         await deleteProduct(product_id);
+
+        
         await fetchProducts();
     } catch (error) {
         if (error instanceof Error && error.message === "Protected") {
