@@ -4,12 +4,6 @@ import type { Supplier, Product } from "../interfaces/interfaces";
 import { getSupplier, patchSupplier } from "../apis/suppliers";
 import { getProducts } from "../apis/products";
 
-
-
-
-
-
-
 function UpdateSupplier() {
     const { id } = useParams();
     const navigate = useNavigate();
