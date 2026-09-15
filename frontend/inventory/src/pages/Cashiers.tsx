@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCashiers } from "../apis/cashiers";
+import { deleteCashier, getCashier, getCashiers } from "../apis/cashiers";
 import type { Cashier } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 
@@ -32,6 +32,32 @@ function Cashiers() {
             setLoading(false);
         }
     }
+
+
+    async function DeleteCashier(cashier_id: number) {
+        try {
+            const cashier = await getCashier(cashier_id);
+            const confirmed = confirm(`Delete ${cashier.first_name}?`);
+            if (!confirmed){
+                return ;
+            }
+            await deleteCashier(cashier_id);
+
+            
+            await fetchCashiers();
+        }catch (error) {
+                if (error instanceof Error && error.message === "Protected") {
+                    setError(
+                        "Cannot delete this Cashier."
+                    );
+                }
+            }
+        }
+
+
+
+
+
     useEffect(() => {
         fetchCashiers()
     },[]);
@@ -63,9 +89,8 @@ function Cashiers() {
                         <td>{cashier.date_employed}</td>
                         <td>{cashier.branch_stationed_at}</td>
                         <td>
-                            <button onClick={() => navigate(`/cashiers/${cashier.id}/edit`)}>
-                                Update
-                            </button>     
+                            <button onClick={() => navigate(`/cashiers/${cashier.id}/edit`)}>Update</button>
+                            <button onClick={() => DeleteCashier(cashier.id)}>Delete Cashier</button>
                         </td>
 
                         </tr>
