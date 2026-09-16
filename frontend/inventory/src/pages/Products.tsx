@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getProduct, getProducts } from "../apis/products";
 import type { Product } from "../interfaces/interfaces";
-import "../styles/Products.css"
+import "../styles/Pages.css"
 import { useNavigate } from "react-router-dom";
 import { deleteProduct } from "../apis/products";
 
@@ -65,48 +65,48 @@ async function DeleteProduct(product_id: number) {
             <h1>Products</h1>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
-            <div className="products_table">
+            <div className="fetch_table">
                 <table className="table">
-                        <thead>
-                <tr>
-                    <th>Name</th>
-                
-                
-                    <th>Current Stock</th>
-                    <th>Category</th>
-                    <th>Image</th>  
-                    <th>Actions</th>  
-                </tr>
-            </thead>
+                                    <thead>
+                            <tr>
+                                <th>Name</th>
+                            
+                            
+                                <th>Current Stock</th>
+                                <th>Category</th>
+                                <th>Image</th>  
+                                <th>Actions</th>  
+                            </tr>
+                        </thead>
 
-            <tbody>
-                {products.map((product) => (
+                        <tbody>
+                            {products.map((product) => (
 
 
 
-                    <tr key={product.id}>
-                        <td>{product.name}</td>                                       
-                        <td>{product.current_stock}</td>           
-                        <td>{product.category_name}</td>
-                       
-                        <td>
-                            {product.image && (
-                                <img
-                                    src={`http://127.0.0.1:8000${product.image}`}
-                                    alt={product.name}
-                                    width="80"
-                                    height="80"
-                                />
-                            )}
-                        </td>
-                        <td>
-                            <button onClick={() => UpdateProducts(product.id)}>Update</button>
-                            <button onClick={() => DeleteProduct(product.id)}>Delete</button>     
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+                                <tr key={product.id}>
+                                    <td>{product.name}</td>                                       
+                                    <td>{product.current_stock}</td>           
+                                    <td>{product.category_name}</td>
+                                
+                                    <td>
+                                        {product.image && (
+                                            <img
+                                                src={`http://127.0.0.1:8000${product.image}`}
+                                                alt={product.name}
+                                                width="80"
+                                                height="80"
+                                            />
+                                        )}
+                                    </td>
+                                    <td>
+                                        <button onClick={() => UpdateProducts(product.id)}>Update</button>
+                                        <button onClick={() => DeleteProduct(product.id)}>Delete</button>     
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                </table>
         </div>
         <button onClick={() => navigate("/products/create")}>
     Create Product

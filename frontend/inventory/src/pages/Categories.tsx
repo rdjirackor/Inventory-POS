@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { deleteCategory, getCategories, getCategory } from "../apis/categories";
 import type { Category } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
+import "../styles/Pages.css"
 
 function Categories() {
     const navigate = useNavigate();
@@ -55,6 +56,7 @@ function Categories() {
 
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
+            <div className="fetch_table">
 
             <table>
                 <thead>
@@ -77,6 +79,7 @@ function Categories() {
                     ))}
                 </tbody>
             </table>
+            </div>
         </div>
     );
 }

@@ -1,9 +1,9 @@
-.products_table{
+.fetch_table{
     border-collapse: collapse;
 }
 
-.products_table th,
-.products_table td {
+.fetch_table th,
+.fetch_table td {
     padding: 10px 20px;
     border-width:10px ;
     border: 1px solid #ccc;

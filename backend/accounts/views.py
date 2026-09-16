@@ -132,7 +132,7 @@ def dashboard(request):
 
         if order:
             number_of_orders += 1
-    top_selling_product = None
+    top_selling_product = "None"
     top_selling_quantity = Decimal("0")
 
     for order in orders:

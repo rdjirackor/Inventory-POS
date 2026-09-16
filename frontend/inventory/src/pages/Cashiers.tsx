@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { deleteCashier, getCashier, getCashiers } from "../apis/cashiers";
 import type { Cashier } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
+import "../styles/Pages.css"
+
 
 
 function Cashiers() {
@@ -67,6 +69,7 @@ function Cashiers() {
             <h1>Cashiers</h1>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
+            <div className="fetch_table">
 
 
             {!error && (<table>
@@ -97,6 +100,8 @@ function Cashiers() {
                     ))}
                 </tbody>
             </table>)}
+
+            </div>
 
         </div>
     );
