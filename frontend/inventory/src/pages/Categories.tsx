@@ -79,6 +79,10 @@ function Categories() {
                     ))}
                 </tbody>
             </table>
+
+            <div className="create_category_button">
+                <button onClick={()=>{navigate(`/categories/create`)}}>Create</button>
+            </div>
             </div>
         </div>
     );

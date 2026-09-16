@@ -216,10 +216,12 @@ export async function patchProduct(
         current_stock?: number;
         minimum_stock_level?: number;
         image?: File;
+        remove_image?: boolean;
         barcode_number?: string;
         taxes?: number[];
         category?: number;
         warehouse?: number;
+        
     }
 ) {
     const formData = new FormData();
@@ -268,6 +270,16 @@ export async function patchProduct(
 
     if (fields.image !== undefined)
         formData.append("image", fields.image);
+
+    if (fields.remove_image !== undefined) {
+    formData.append(
+        "remove_image",
+        fields.remove_image.toString()
+    );
+}
+
+    if (fields.remove_image !== undefined)
+    formData.append("remove_image", fields.remove_image.toString());
 
     if (fields.barcode_number !== undefined)
         formData.append(

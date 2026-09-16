@@ -652,6 +652,14 @@ def product_detail(request, product_id):
 
     elif request.method == "PATCH":
 
+        remove_image = request.data.get("remove_image")
+
+        if remove_image == "true":
+            if product.image:
+                product.image.delete(save=False)
+
+            product.image = None
+
         serializer = ProductSerializer(
             product,
             data=request.data,

@@ -16,6 +16,7 @@ import CreateProduct from "./pages/CreateProducts";
 import UpdateSupplier from "./pages/UpdateSupplier";
 import UpdateCashier from "./pages/UpdateCashier";
 import UpdateCategory from "./pages/UpdateCategory";
+import CreateCategory from "./pages/CreateCategory";
 
 const token = localStorage.getItem("access_token")
 
@@ -61,6 +62,7 @@ function App() {
 
 
                         <Route path="/categories" element={<Categories />} />
+                        <Route path="/categories/create" element={<CreateCategory />}/>
                         <Route path="/categories/:id/edit" element={<UpdateCategory />} /> 
                         <Route path="/suppliers" element={<Suppliers />} />
                         <Route path="/suppliers/:id/edit" element={<UpdateSupplier />} />

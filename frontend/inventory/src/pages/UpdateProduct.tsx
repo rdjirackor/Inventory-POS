@@ -13,6 +13,8 @@ function UpdateProduct() {
     const [error, setError] = useState("");
 
     const [image, setImage] = useState<File | null>(null);
+    const [removeImage, setRemoveImage] = useState(false);
+    
 
     useEffect(() => {
         async function fetchProduct() {
@@ -43,6 +45,7 @@ function UpdateProduct() {
 
     async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    
 
     if (!product) return;
 
@@ -64,6 +67,7 @@ function UpdateProduct() {
             category: product.category,
             warehouse: product.warehouse,
             image : image || undefined,
+            remove_image: removeImage,
         });
 
         navigate("/products");
@@ -72,6 +76,7 @@ function UpdateProduct() {
     } finally {
         setSaving(false);
     }
+
 }
 
     if (loading) {
@@ -125,15 +130,41 @@ function UpdateProduct() {
                 </div>
 
                 <div>
-                    <label>Product Image</label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                            setImage(e.target.files?.[0] || null);
-                        }}
-                    />
-                </div>
+                <label>Product Image</label>
+
+                {product.image && !removeImage && (
+                    <div>
+                        <img
+                            src={`http://127.0.0.1:8000${product.image}`}
+                            alt={product.name}
+                            width="150"
+                        />
+                    </div>
+                )}
+
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                        setImage(e.target.files?.[0] || null);
+                        setRemoveImage(true);
+                    }}
+                />
+
+                {product.image && !removeImage && (
+                    <div className="remove_image">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setImage(null);
+                                setRemoveImage(true);
+                            }}
+                        >
+                            Remove
+                        </button>
+                    </div>
+                )}
+            </div>
 
                 <div>
                     <label>Net Cost</label>

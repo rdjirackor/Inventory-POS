@@ -211,6 +211,18 @@ body {
     flex-direction: row;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
+a.no-href {
+  cursor: pointer;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
 .sidebar {
     width: 220px;
     min-height: 100vh;
@@ -237,10 +249,6 @@ body {
   align-items: center;
   width: 100%;}
   
-/* .store_name {
-  }
-.logout {
-} */
 
 
 
