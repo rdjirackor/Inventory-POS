@@ -116,6 +116,7 @@ export interface Cashier {
     second_name: string | null;
     date_employed: string;
     branch_stationed_at: number;
+    branch_name: string;
 }
 
 export interface Notification {

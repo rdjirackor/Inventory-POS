@@ -46,12 +46,7 @@ class TaxTypeSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
 
-    branch_name = serializers.StringRelatedField(
-        source = "branch_stationed_at",
-        many = True,
-        read_only = True,
-
-    )
+    
     class Meta:
         model = Category
         fields = ["id", "name", "branch_stationed_at"]
@@ -229,6 +224,13 @@ class BranchSerializer(serializers.ModelSerializer):
 
 
 class CashierSerializer(serializers.ModelSerializer):
+
+
+    branch_name = serializers.StringRelatedField(
+            source = "branch_stationed_at",
+            read_only = True,
+    
+        )
     class Meta:
         model = Cashier
         fields = [
@@ -238,6 +240,7 @@ class CashierSerializer(serializers.ModelSerializer):
             "second_name",
             "date_employed",
             "branch_stationed_at",
+            "branch_name"
         ]
 
 

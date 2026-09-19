@@ -90,7 +90,7 @@ function Cashiers() {
                         <td>{cashier.first_name}</td>
                         <td>{cashier.second_name}</td>
                         <td>{cashier.date_employed}</td>
-                        <td>{cashier.branch_stationed_at}</td>
+                        <td>{cashier.branch_name}</td>
                         <td>
                             <button onClick={() => navigate(`/cashiers/${cashier.id}/edit`)}>Update</button>
                             <button onClick={() => DeleteCashier(cashier.id)}>Delete</button>
