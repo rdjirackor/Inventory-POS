@@ -8,3 +8,78 @@
     border-width:10px ;
     border: 1px solid #ccc;
 }
+
+.fetch_table button {
+    color: white;
+    margin-right: 10px;
+
+
+
+  --hue: 210;
+  position: relative;
+  isolation: isolate;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font: 600 15px/1 system-ui, sans-serif;
+  letter-spacing: .02em;
+  color: #fff;
+  background: linear-gradient(135deg,
+    hsl(var(--hue) 90% 58%),
+    hsl(calc(var(--hue) + 40) 85% 50%));
+  box-shadow:
+    0 4px 14px -2px hsl(var(--hue) 90% 45% / .5),
+    inset 0 1px 0 hsl(0 0% 100% / .25);
+  transition: transform .25s cubic-bezier(.2, .9, .3, 1.4),
+              box-shadow .3s ease, filter .3s ease;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+/* Idle "breathing" pulse */
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 4px 14px -2px hsl(var(--hue) 90% 45% / .45),
+                       inset 0 1px 0 hsl(0 0% 100% / .25); }
+  50%      { box-shadow: 0 8px 28px -2px hsl(var(--hue) 95% 55% / .75),
+                       inset 0 1px 0 hsl(0 0% 100% / .25); }
+}
+
+/* Sheen sweep */
+.fetch_table button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg,
+    transparent 40%, hsl(0 0% 100% / .45) 50%, transparent 60%);
+  background-size: 250% 100%;
+  background-position: 200% 0;
+  transition: background-position .7s ease;
+  z-index: -1;
+}
+
+.fetch_table button:hover {
+  transform: translateY(-2px) scale(1.03);
+  filter: saturate(1.15) brightness(1.06);
+  animation-play-state: paused;
+  box-shadow: 0 12px 30px -4px hsl(var(--hue) 95% 55% / .8),
+              inset 0 1px 0 hsl(0 0% 100% / .3);
+}
+
+.fetch_table button:hover::before { background-position: -100% 0; }
+
+.fetch_table button:active {
+  transform: translateY(0) scale(.97);
+  transition-duration: .08s;
+}
+
+/* Focus ring for keyboard users */
+.fetch_table button:focus-visible {
+  outline: 3px solid hsl(var(--hue) 90% 70% / .6);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fetch_table button { animation: none; }
+  .fetch_table button, .fetch_table button::before { transition: none; }
+}

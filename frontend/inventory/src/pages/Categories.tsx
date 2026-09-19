@@ -61,7 +61,6 @@ function Categories() {
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Actions</th>
                     </tr>
@@ -70,7 +69,6 @@ function Categories() {
                 <tbody>
                     {categories.map((category) => (
                         <tr key={category.id}>
-                            <td>{category.id}</td>
                             <td>{category.name}</td>
                             <td>
                                 <button onClick={() => navigate(`/categories/${category.id}/edit`)}>Update</button>
