@@ -45,9 +45,18 @@ class TaxTypeSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+
+    branch_name = serializers.StringRelatedField(
+        source = "branch_stationed_at",
+        many = True,
+        read_only = True,
+
+    )
     class Meta:
         model = Category
-        fields = ["id", "name"]
+        fields = ["id", "name", "branch_stationed_at"]
+
+    
 
 
 class DiscountSerializer(serializers.ModelSerializer):
