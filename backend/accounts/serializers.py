@@ -49,7 +49,7 @@ class CategorySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Category
-        fields = ["id", "name", "branch_stationed_at"]
+        fields = ["id", "name"]
 
     
 

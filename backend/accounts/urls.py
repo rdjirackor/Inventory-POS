@@ -61,6 +61,8 @@ urlpatterns = [
     ),
 
     path("payments/", payments),
+
+    path("index",test),
   
     
 ]
