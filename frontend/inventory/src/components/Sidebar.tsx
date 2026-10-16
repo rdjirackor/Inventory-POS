@@ -23,6 +23,11 @@ function Sidebar(){
                         <NavLink to="/suppliers">
                             Suppliers
                         </NavLink>
+
+                        <NavLink to="/taxtypes">
+                            Tax Types
+                        </NavLink>
+
                     </nav>
             </aside>
                     

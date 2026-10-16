@@ -18,6 +18,7 @@ function Navbar() {
         "/products": "Products",
         "/categories": "Categories",
         "/cashiers": "Cashiers",
+        "/taxtypes": "Tax Types",
         "/suppliers": "Suppliers",
     };
 
