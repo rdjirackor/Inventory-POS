@@ -39,6 +39,8 @@ class SettingsSerializer(serializers.ModelSerializer):
         ]
 
 class TaxTypeSerializer(serializers.ModelSerializer):
+
+    
     class Meta:
         model = TaxType
         fields = ["id", "name", "rate", "active"]

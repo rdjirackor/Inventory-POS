@@ -18,7 +18,7 @@ export interface Settings {
 export interface TaxType {
     id: number;
     name: string;
-    rate: string;
+    rate: number;
     active: boolean;
 }
 
