@@ -75,7 +75,7 @@ function Taxtype (){
                                 <tr key={taxtype.id}>
                                     <td>{taxtype.name}</td>
                                     <td>{taxtype.rate}</td>
-                                    <td>{taxtype.active}</td>
+                                    <td>{taxtype.active? "Active": "Inactive"}</td>
                                     <td>
                                         <button onClick={() => navigate(`/taxtypes/${taxtype.id}/edit`)}>Update</button>
                                         <button onClick={()=> DeleteTaxes(taxtype.id)}>Delete</button></td>
