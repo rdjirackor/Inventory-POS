@@ -75,7 +75,6 @@ function Cashiers() {
             {!error && (<table>
                 <thead>
                     <tr>
-                    <th>ID</th>
                     <th>First Name</th>
                     <th>Second Name</th>
                     <th>Date Employed</th>
@@ -86,7 +85,6 @@ function Cashiers() {
                 <tbody>
                     {cashiers.map((cashier)=>(
                         <tr key={cashier.id}>
-                        <td>{cashier.id}</td>
                         <td>{cashier.first_name}</td>
                         <td>{cashier.second_name}</td>
                         <td>{cashier.date_employed}</td>
@@ -102,6 +100,10 @@ function Cashiers() {
             </table>)}
 
             </div>
+
+            <button onClick={() => navigate("/cashiers/create")}>
+    Create Cashier
+</button>
 
         </div>
     );

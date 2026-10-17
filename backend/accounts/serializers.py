@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from django.contrib.auth.models import User
 from .models import (
     TaxType,
     Category,
@@ -23,6 +25,11 @@ from .models import (
     Returns,
     Payment,
 )
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username"]
 
 class SettingsSerializer(serializers.ModelSerializer):
     class Meta:

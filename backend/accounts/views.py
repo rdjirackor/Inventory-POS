@@ -12,11 +12,19 @@ from datetime import timedelta
 from django.db.models.deletion import ProtectedError
 
 
+
+from django.contrib.auth.models import User
+
 from .models import *
 from .serializers import *  
 
-def test(request):
-    return render(request, 'index.html')
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def users(request):
+    queryset = User.objects.all().order_by("username")
+    serializer = UserSerializer(queryset, many=True)
+    return Response(serializer.data)
     
 @api_view(["POST"]) 
 def login(request):

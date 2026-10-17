@@ -128,6 +128,7 @@ function UpdateCashier() {
                         }
                     />
                 </div>
+                
 
                 <button type="submit" disabled={saving}>
                     {saving ? "Saving..." : "Save Changes"}

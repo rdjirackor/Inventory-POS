@@ -20,6 +20,7 @@ import CreateCategory from "./pages/CreateCategory";
 import Taxtype from "./pages/Taxtype";
 import CreateTax from "./pages/CreateTaxtypes";
 import UpdateTaxtype from "./pages/UpdateTaxtypes";
+import CreateCashier from "./pages/CreateCashier";
 
 const token = localStorage.getItem("access_token")
 
@@ -74,6 +75,7 @@ function App() {
 
 
                         <Route path="/cashiers" element={<Cashiers />} />
+                        <Route path="/cashiers/create" element={<CreateCashier />} />
                         <Route path="/cashiers/:id/edit" element={<UpdateCashier />} />
 
                         <Route path="/taxtypes" element={<Taxtype/>} />
