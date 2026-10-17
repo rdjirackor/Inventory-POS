@@ -28,6 +28,10 @@ function Sidebar(){
                             Tax Types
                         </NavLink>
 
+                        <NavLink to="/warehouses">
+                            Warehouses
+                        </NavLink>
+
                     </nav>
             </aside>
                     

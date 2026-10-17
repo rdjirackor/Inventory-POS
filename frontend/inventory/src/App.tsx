@@ -25,6 +25,8 @@ import CreateSupplier from "./pages/CreateSupplier";
 import CreateWarehouse from "./pages/CreateWarehouse";
 import Warehouses from "./pages/Warehouse";
 
+import UpdateWarehouse from "./pages/UpdateWarehouse";
+
 const token = localStorage.getItem("access_token")
 
 function App() {
@@ -87,6 +89,7 @@ function App() {
 
                         <Route path="/warehouses" element={<Warehouses/>} />
                         <Route path="/warehouses/create" element={<CreateWarehouse />} />
+                        <Route path="/warehouses/:id/edit" element={<UpdateWarehouse />} /> 
 
                     </Route>    
 

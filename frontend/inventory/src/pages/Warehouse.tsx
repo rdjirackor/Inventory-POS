@@ -62,6 +62,7 @@ function Warehouses() {
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Location</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -70,6 +71,7 @@ function Warehouses() {
                     {warehouses.map((warehouse) => (
                         <tr key={warehouse.id}>
                             <td>{warehouse.name}</td>
+                            <td>{warehouse.location}</td>
                             <td>
                                 <button onClick={() => navigate(`/warehouses/${warehouse.id}/edit`)}>Update</button>
                                 <button onClick={()=> DeleteWarehouse(warehouse.id)}>Delete</button></td>
