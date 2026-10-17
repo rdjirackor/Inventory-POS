@@ -22,6 +22,8 @@ import CreateTax from "./pages/CreateTaxtypes";
 import UpdateTaxtype from "./pages/UpdateTaxtypes";
 import CreateCashier from "./pages/CreateCashier";
 import CreateSupplier from "./pages/CreateSupplier";
+import CreateWarehouse from "./pages/CreateWarehouse";
+import Warehouses from "./pages/Warehouse";
 
 const token = localStorage.getItem("access_token")
 
@@ -82,6 +84,9 @@ function App() {
                         <Route path="/taxtypes" element={<Taxtype/>} />
                         <Route path="/taxtypes/create" element={<CreateTax />}/>
                         <Route path="/taxtypes/:id/edit" element={<UpdateTaxtype />} /> 
+
+                        <Route path="/warehouses" element={<Warehouses/>} />
+                        <Route path="/warehouses/create" element={<CreateWarehouse />} />
 
                     </Route>    
 
