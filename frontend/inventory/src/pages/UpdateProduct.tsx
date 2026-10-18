@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProduct, patchProduct } from "../apis/products";
-import type { Product } from "../interfaces/interfaces";
+import type { Category, TaxType, Warehouse, Discount, Product } from "../interfaces/interfaces";
+import {  getDiscounts } from "../apis/discounts";
+import { getTaxes } from "../apis/taxes";
+import { getCategories } from "../apis/categories";
+import {  getWarehouses } from "../apis/warehouses";
 
 function UpdateProduct() {
     const { id } = useParams();
@@ -14,6 +18,16 @@ function UpdateProduct() {
 
     const [image, setImage] = useState<File | null>(null);
     const [removeImage, setRemoveImage] = useState(false);
+
+    const [discounts, setDiscounts] = useState<Discount[]>([]);
+
+
+    const [taxes, setTaxes] = useState<number[]>([]);
+    const [availableTaxes, setAvailableTaxes] = useState<TaxType[]>([]);
+
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+
     
 
     useEffect(() => {
@@ -21,14 +35,30 @@ function UpdateProduct() {
             try {
                 const data = await getProduct(Number(id));
                 setProduct(data);
+
+                const discountData = await getDiscounts();
+                setDiscounts(discountData);
+
+                setTaxes(data.taxes);
+                const taxData = await getTaxes();
+                setAvailableTaxes(taxData);
+
+                const categoryData = await getCategories();
+                setCategories(categoryData);
+
+                const warehouseData = await getWarehouses();
+                setWarehouses(warehouseData);
+                
             } catch (error) {
-                setError("Failed to load product");
+                setError("Failed to load items");
             } finally {
                 setLoading(false);
             }
         }
 
         fetchProduct();
+
+       
     }, [id]);
 
     function handleChange(
@@ -231,6 +261,100 @@ function UpdateProduct() {
                         }
                     />
                 </div>
+                
+            <div>
+                <label htmlFor="discount">Discount</label>
+
+                <select
+                    id="discount"
+                    value={product.discount ?? ""}
+                    onChange={(e) =>
+                        handleChange(
+                            "discount",
+                            e.target.value === "" ? "" : Number(e.target.value)
+                        )
+                    }
+                >
+                    <option value="">No discount</option>
+
+                    {discounts.map((discount) => (
+                        <option key={discount.id} value={discount.id}>
+                            {discount.name} ({discount.discount}%)
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div>
+                <label htmlFor="tax">Taxes</label>
+
+                <select
+                multiple
+                value={taxes.map(String)}
+                onChange={(e) => {
+                    const selectedTaxes = Array.from(
+                        e.target.selectedOptions,
+                        (option) => Number(option.value)
+                    );
+
+                    setTaxes(selectedTaxes);
+                }}
+            >
+                {availableTaxes.map((tax) => (
+                    <option
+                        key={tax.id}
+                        value={tax.id}
+                    >
+                        {tax.name}
+                    </option>
+                ))}
+            </select>
+            </div>
+
+            <div>
+                <label htmlFor="warehouse">Warehouse</label>
+
+                <select
+                    id="warehouse"
+                    value={product.warehouse ?? ""}
+                    onChange={(e) =>
+                        handleChange(
+                            "warehouse",
+                            e.target.value === "" ? "" : Number(e.target.value)
+                        )
+                    }
+                >
+
+                    {warehouses.map((warehouse) => (
+                        <option key={warehouse.id} value={warehouse.id}>
+                            {warehouse.name} 
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div>
+                <label htmlFor="category">Category</label>
+
+                <select
+                    id="category"
+                    value={product.category ?? ""}
+                    onChange={(e) =>
+                        handleChange(
+                            "category",
+                            e.target.value === "" ? "" : Number(e.target.value)
+                        )
+                    }
+                >
+
+                    {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
 
                 <button type="submit" disabled={saving}>
                     {saving ? "Saving..." : "Save Changes"}

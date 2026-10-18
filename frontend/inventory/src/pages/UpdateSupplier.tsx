@@ -23,8 +23,8 @@ function UpdateSupplier() {
         try {
             const data = await getSupplier(Number(id));
             setSupplier(data);
-            setProducts(data.products);
 
+            setProducts(data.products);
             const productData = await getProducts();
             setAvailableProducts(productData);
 
