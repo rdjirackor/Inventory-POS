@@ -26,6 +26,9 @@ import CreateWarehouse from "./pages/CreateWarehouse";
 import Warehouses from "./pages/Warehouse";
 
 import UpdateWarehouse from "./pages/UpdateWarehouse";
+import Discounts from "./pages/Discount";
+import CreateDiscount from "./pages/CreateDiscount";
+import UpdateDiscount from "./pages/UpdateDiscount";
 
 const token = localStorage.getItem("access_token")
 
@@ -90,6 +93,10 @@ function App() {
                         <Route path="/warehouses" element={<Warehouses/>} />
                         <Route path="/warehouses/create" element={<CreateWarehouse />} />
                         <Route path="/warehouses/:id/edit" element={<UpdateWarehouse />} /> 
+
+                        <Route path="/discounts" element={<Discounts/>} />
+                        <Route path="/discounts/create" element={<CreateDiscount />} />
+                        <Route path="/discounts/:id/edit" element={<UpdateDiscount />} /> 
 
                     </Route>    
 

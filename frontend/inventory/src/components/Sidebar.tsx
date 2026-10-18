@@ -32,6 +32,10 @@ function Sidebar(){
                             Warehouses
                         </NavLink>
 
+                        <NavLink to="/discounts">
+                            Discounts                        
+                        </NavLink>
+
                     </nav>
             </aside>
                     
