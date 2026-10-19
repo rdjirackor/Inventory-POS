@@ -144,7 +144,6 @@ class QuantityOfAnItemBought(models.Model):
     #just in case the store using this application is like not a major supermarket, and lowkey be selling things in fractions, ill allow for decimals but hide it with react unless necassary for prettiness
     amount_bought = models.DecimalField(decimal_places=2, max_digits=5)
     
-#will be worked on later
     def get_net_price_at_time_of_sale(self):
         return self.product.selling_price_without_tax
     def get_active_discount_rate_at_sale_time(self):
