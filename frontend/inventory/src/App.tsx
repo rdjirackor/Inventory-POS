@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import LoginPage from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/AppLayout";
 import Products from "./pages/Products";
@@ -29,6 +29,7 @@ import UpdateWarehouse from "./pages/UpdateWarehouse";
 import Discounts from "./pages/Discount";
 import CreateDiscount from "./pages/CreateDiscount";
 import UpdateDiscount from "./pages/UpdateDiscount";
+import Dashboard from "./pages/Dashboard";
 
 const token = localStorage.getItem("access_token")
 
