@@ -13,6 +13,8 @@ function DashboardSales(){
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<number | "">("");
 
+    const selectedCustomerObj = customers.find((c)=> c.id===selectedCustomer);
+
 
 
     const [search, setSearch] = useState("");
@@ -150,7 +152,7 @@ function DashboardSales(){
                         
                         if (!product) return null;
 
-                        return (<>
+                        return (
                             <li key={productId} >
                                 {product.name} — Quantity: {qty}
                                 {" | "}Price: GHc {Number(product.selling_price_without_tax).toFixed(2)}
@@ -188,7 +190,7 @@ function DashboardSales(){
                                 }
                                 )}>Remove</button>
                             </li>                           
-                       </> );
+                        );
                     })}
                 </ul>
                 <p>
@@ -202,8 +204,15 @@ function DashboardSales(){
 
                         return total + Number(product.selling_price_without_tax) * qty;
                     }, 0).toFixed(2)
-                }
-            </p>
+                }            </p>
+
+                {selectedCustomerObj&&(
+                    <p>{[selectedCustomerObj.first_name, selectedCustomerObj.second_name]
+                        .filter(Boolean)
+                        .join("")
+                    
+                    }</p>
+                )}
                 </>)}
         </>
     );
