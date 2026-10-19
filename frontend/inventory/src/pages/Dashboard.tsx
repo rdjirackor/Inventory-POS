@@ -1,8 +1,8 @@
 
 import { useState } from 'react';
 import DashboardOverview from '../components/Dashboard/DashboardOverview';
-import Products from './Products';
 import "../styles/Pages.css"
+import DashboardSales from '../components/Dashboard/DashboardSales';
 
 
 export default function Dashboard() {
@@ -37,7 +37,7 @@ export default function Dashboard() {
                 {activeView === 'overview' ? (
                     <DashboardOverview />
                 ) : (
-                    <Products />
+                    <DashboardSales />
                 )}
             </main>
         </div>
