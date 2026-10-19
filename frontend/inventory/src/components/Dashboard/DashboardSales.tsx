@@ -2,10 +2,16 @@ import { useEffect, useState } from "react";
 import type { Product } from "../../interfaces/interfaces";
 import { getProducts } from "../../apis/products";
 
+import type { Customer } from "../../interfaces/interfaces";
+import { getCustomers } from "../../apis/customers";
+
 function DashboardSales(){
 
     const [loading, setLoading] = useState(false);
     const [error, setError] =useState("");
+
+    const [customers, setCustomers] = useState<Customer[]>([]);
+    const [selectedCustomer, setSelectedCustomer] = useState<number | "">("");
 
 
 
@@ -34,8 +40,18 @@ function DashboardSales(){
         }       
     }
 
+    async function fetchCustomers() {
+    try {
+        const customersData = await getCustomers();
+        setCustomers(customersData);
+    } catch (error) {
+        console.error("Could not load customers:", error);
+    }
+    }
+
     useEffect(()=>{
-        fetchProducts()
+        fetchProducts();
+        fetchCustomers();
     },[]);
 
 
@@ -96,7 +112,32 @@ function DashboardSales(){
 
                 
             </>)}
-            {console.log(saleItems)}
+
+            <label htmlFor="customer">Customer:</label>
+
+            <select
+                id="customer"
+                value={selectedCustomer}
+                onChange={(e) =>
+                    setSelectedCustomer(
+                        e.target.value === "" ? "" : Number(e.target.value)
+                    )
+                }
+            >
+                <option value="">Walk-in customer</option>
+
+                {customers.map(customer => (
+                    <option key={customer.id} value={customer.id}>
+                        {[
+                            customer.first_name,
+                            customer.second_name
+                        ].filter(Boolean).join(" ") || `Customer #${customer.id}`}
+                    </option>
+                ))}
+            </select>
+
+
+
 
             {Object.keys(saleItems).length>0 &&(<>
             <h3>Current Sale</h3>
@@ -106,16 +147,63 @@ function DashboardSales(){
                         const product = items.find(
                             item => String(item.id) === productId
                         );
-
+                        
                         if (!product) return null;
 
-                        return (
-                            <li key={productId}>
+                        return (<>
+                            <li key={productId} >
                                 {product.name} — Quantity: {qty}
-                            </li>
-                        );
+                                {" | "}Price: GHc {Number(product.selling_price_without_tax).toFixed(2)}
+                                {" | "}Subtotal: GHc {
+                                    (Number(product.selling_price_without_tax) * qty).toFixed(2)
+                                }
+                            <button
+                                    onClick={() => 
+                                    setSaleItems(prev => ({
+                                    ...prev,
+                                    [productId]: qty + 1
+                                    }))}>
+                                    +
+                                </button>
+                            
+                            <button
+                                    onClick={() =>
+                                    setSaleItems(prev =>{
+                                        const next= {... prev}
+                                        if (next[productId]>1){
+                                            next[productId] -= 1;
+                                            }
+                                        else{
+                                            delete next[productId]
+                                        }
+                                        return next;
+
+                                    })}>-</button>
+                                    
+
+                            <button onClick={()=>setSaleItems(prev=>{
+                                    const next = {...prev};
+                                    delete next[productId];
+                                    return next;
+                                }
+                                )}>Remove</button>
+                            </li>                           
+                       </> );
                     })}
                 </ul>
+                <p>
+                Total: {
+                    Object.entries(saleItems).reduce((total, [productId, qty]) => {
+                        const product = items.find(
+                            item => String(item.id) === productId
+                        );
+
+                        if (!product) return total;
+
+                        return total + Number(product.selling_price_without_tax) * qty;
+                    }, 0).toFixed(2)
+                }
+            </p>
                 </>)}
         </>
     );
