@@ -219,6 +219,9 @@ async function handleCheckout() {
                         return (
                             <li key={productId} >
                                 {product.name} — Quantity: {qty}
+                                {qty > Number(product.current_stock) && (
+                                    <span style={{ color: "red" }}> Insufficient stock!</span>
+                                )}
                                 {" | "}Price: GHc {Number(product.selling_price_without_tax).toFixed(2)}
                                 {" | "}Subtotal: GHc {
                                     (Number(product.selling_price_without_tax) * qty).toFixed(2)
