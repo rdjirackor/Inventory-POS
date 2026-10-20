@@ -156,8 +156,26 @@ async function handleCheckout() {
                     setQuantity(1);}}>
                     X
                 </button>
-                <button type="submit" onClick={()=>setSaleItems(prev => ({ ...prev, [selectedProduct.id]: quantity }))}>Proceed</button>
+                
 
+                <button
+                    type="button"
+                    disabled={
+                        !Number.isFinite(quantity) ||
+                        quantity <= 0 ||
+                        Math.round(quantity * 100) !== quantity * 100
+                    }
+                    onClick={() => {
+                        setSaleItems(prev => ({
+                            ...prev,
+                            [selectedProduct.id]: quantity
+                        }));
+                        setSelectedProduct(null);
+                        setQuantity(1);
+                    }}
+                >
+                    Proceed
+                </button>
                 
             </>)}
 
