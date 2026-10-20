@@ -74,7 +74,6 @@ def checkout(request):
     items = request.data.get("items")
     customer_id = request.data.get("customer_id")
     payment_method = request.data.get("payment_method")
-    amount_paid = request.data.get("amount_paid")
 
     if not isinstance(items, list) or not items:
         return Response(
@@ -117,14 +116,7 @@ def checkout(request):
 
             quantities[product_id] = quantity
 
-        amount_paid = Decimal(str(amount_paid))
-
-        if (
-            not amount_paid.is_finite()
-            or amount_paid < 0
-            or amount_paid != amount_paid.quantize(Decimal("0.01"))
-        ):
-            raise ValueError("Invalid payment amount.")
+        
 
     except (KeyError, TypeError, ValueError, InvalidOperation):
         return Response(
@@ -167,14 +159,7 @@ def checkout(request):
 
             total = total.quantize(Decimal("0.01"))
 
-            if amount_paid != total:
-                return Response(
-                    {
-                        "error": "Payment must equal the sale total.",
-                        "total": str(total)
-                    },
-                    status=400
-                )
+            
 
             customer = None
 
@@ -217,9 +202,9 @@ def checkout(request):
 
             payment = Payment.objects.create(
                 order=order,
-                amount=amount_paid,
+                amount=total,
                 method=payment_method
-            )
+                )
 
             return Response(
                 {
