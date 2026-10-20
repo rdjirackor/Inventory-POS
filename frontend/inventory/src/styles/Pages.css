@@ -112,6 +112,9 @@
 .dashboard-content {
     margin-top: 16px;
 }
+li{
+  cursor: pointer;
+}
 
 
 @media (prefers-reduced-motion: reduce) {

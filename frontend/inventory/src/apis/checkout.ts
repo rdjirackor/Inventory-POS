@@ -17,8 +17,7 @@ export interface CheckoutResponse {
 export async function checkout(
     items: CheckoutItem[],
     customer_id: number | null,
-    payment_method: string,
-    amount_paid: string
+    payment_method: string
 ): Promise<CheckoutResponse> {
     const response = await apiFetch("/checkout/", {
         method: "POST",
@@ -29,14 +28,15 @@ export async function checkout(
             items,
             customer_id,
             payment_method,
-            amount_paid,
         }),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.error || data.message || "Checkout failed");
+        throw new Error(
+            data.error || data.message || "Checkout failed"
+        );
     }
 
     return data;

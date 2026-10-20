@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import type { Product } from "../../interfaces/interfaces";
 import { getProducts } from "../../apis/products";
-
+import "../../styles/Pages.css"
 import type { Customer } from "../../interfaces/interfaces";
 import { getCustomers } from "../../apis/customers";
+import { checkout } from "../../apis/checkout";
 
 function DashboardSales(){
 
@@ -15,6 +16,9 @@ function DashboardSales(){
 
     const selectedCustomerObj = customers.find((c)=> c.id===selectedCustomer);
 
+    const [paymentMethod, setPaymentMethod] = useState("Cash");
+    const [checkingOut, setCheckingOut] = useState(false);
+    const [checkoutMessage, setCheckoutMessage] = useState("");
 
 
     const [search, setSearch] = useState("");
@@ -50,6 +54,48 @@ function DashboardSales(){
         console.error("Could not load customers:", error);
     }
     }
+
+
+async function handleCheckout() {
+    setError("");
+    setCheckoutMessage("");
+    setCheckingOut(true);
+
+    try {
+        const checkoutItems = Object.entries(saleItems).map(
+            ([productId, qty]) => ({
+                product_id: Number(productId),
+                quantity: String(qty),
+            })
+        );
+
+        const result = await checkout(
+            checkoutItems,
+            selectedCustomer === "" ? null : selectedCustomer,
+            paymentMethod
+        );
+
+        setCheckoutMessage(
+            `Sale completed! Order #${result.order_id} — Total: GH₵ ${Number(result.total).toFixed(2)}`
+        );
+
+        setSaleItems({});
+        setSelectedProduct(null);
+        setQuantity(1);
+        setSelectedCustomer("");
+        
+
+    } catch (error) {
+        setError(
+            error instanceof Error
+                ? error.message
+                : "Checkout failed. Please try again."
+        );
+    } finally {
+        setCheckingOut(false);
+    }
+}
+
 
     useEffect(()=>{
         fetchProducts();
@@ -213,7 +259,33 @@ function DashboardSales(){
                     
                     }</p>
                 )}
-                </>)}
+
+            <label htmlFor="payment-method">Payment method:</label>
+
+            <select
+                id="payment-method"
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+            >
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="Mobile Money">Mobile Money</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+
+            <button
+                type="button"
+                onClick={handleCheckout}
+                disabled={checkingOut || Object.keys(saleItems).length === 0}
+            >
+                {checkingOut ? "Processing..." : "Complete Sale"}
+
+            </button>
+
+
+                </>)
+                }
+                {checkoutMessage && <p>{checkoutMessage}</p>}
         </>
     );
 
