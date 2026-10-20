@@ -64,6 +64,7 @@ urlpatterns = [
 
     path("payments/", payments),
 
+    path("checkout/", checkout),
   
     
 ]

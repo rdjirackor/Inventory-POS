@@ -35,13 +35,18 @@ class Product(models.Model):
     net_cost = models.DecimalField(max_digits=12, decimal_places=2)
     selling_price_without_tax = models.DecimalField(max_digits=12, decimal_places=2)
     discount = models.ForeignKey(Discount, related_name="products", on_delete=models.PROTECT, null=True, blank=True)
-    current_stock = models.PositiveIntegerField(default=0)
     minimum_stock_level = models.PositiveIntegerField(default=0)
     image = models.ImageField(blank=True, null=True)
     barcode_number = models.CharField(max_length=15, unique=True, blank=True, null=True)
     taxes = models.ManyToManyField(TaxType, blank=True, related_name='products')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     warehouse = models.ForeignKey(Warehouse, on_delete=models.PROTECT, related_name="products")
+
+    current_stock = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
 
 
     def __str__(self):
@@ -254,11 +259,18 @@ class Receipt(models.Model):
 
 class StockMovement(models.Model):
     product = models.ForeignKey(Product, related_name="stock_movements", on_delete=models.PROTECT)
-    quantity = models.IntegerField() # Positive for incoming, negative for outgoing
     movement_type = models.CharField(max_length=50) #sale, damaged, etc
     date = models.DateTimeField(auto_now_add=True)
     performed_by = models.ForeignKey(Cashier, on_delete=models.PROTECT,related_name="stock_movements")
     reason = models.CharField(max_length=10000, blank=True)
+
+
+
+    quantity = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
 
     def __str__(self):
         return f"{self.product}-{self.movement_type}-{self.quantity}"

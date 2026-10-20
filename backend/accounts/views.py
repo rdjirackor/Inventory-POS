@@ -11,6 +11,9 @@ from datetime import timedelta
 
 from django.db.models.deletion import ProtectedError
 
+from decimal import Decimal, InvalidOperation
+from django.db import transaction
+
 
 
 from django.contrib.auth.models import User
@@ -60,6 +63,184 @@ def me(request):
         "email": request.user.email,
         "role": role,
     })
+
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@require_model_permissions(OrderHistory)
+def checkout(request):
+
+    items = request.data.get("items")
+    customer_id = request.data.get("customer_id")
+    payment_method = request.data.get("payment_method")
+    amount_paid = request.data.get("amount_paid")
+
+    if not isinstance(items, list) or not items:
+        return Response(
+            {"error": "The cart cannot be empty."},
+            status=400
+        )
+
+    valid_methods = dict(Payment.PAYMENT_METHODS)
+
+    if payment_method not in valid_methods:
+        return Response(
+            {"error": "Invalid payment method."},
+            status=400
+        )
+
+    try:
+        cashier = Cashier.objects.get(user=request.user)
+    except Cashier.DoesNotExist:
+        return Response(
+            {"error": "This account is not linked to a cashier."},
+            status=403
+        )
+
+    quantities = {}
+
+    try:
+        for item in items:
+            product_id = int(item["product_id"])
+            quantity = Decimal(str(item["quantity"]))
+
+            if (
+                not quantity.is_finite()
+                or quantity <= 0
+                or quantity != quantity.quantize(Decimal("0.01"))
+            ):
+                raise ValueError("Invalid quantity.")
+
+            if product_id in quantities:
+                raise ValueError("Duplicate product in cart.")
+
+            quantities[product_id] = quantity
+
+        amount_paid = Decimal(str(amount_paid))
+
+        if (
+            not amount_paid.is_finite()
+            or amount_paid < 0
+            or amount_paid != amount_paid.quantize(Decimal("0.01"))
+        ):
+            raise ValueError("Invalid payment amount.")
+
+    except (KeyError, TypeError, ValueError, InvalidOperation):
+        return Response(
+            {"error": "Invalid product, quantity, or payment amount."},
+            status=400
+        )
+
+    try:
+        with transaction.atomic():
+
+            products = {
+                product.id: product
+                for product in Product.objects.select_for_update()
+                .filter(id__in=quantities.keys())
+                .order_by("id")
+            }
+
+            if len(products) != len(quantities):
+                return Response(
+                    {"error": "One or more products do not exist."},
+                    status=400
+                )
+
+            total = Decimal("0.00")
+
+            for product_id, quantity in quantities.items():
+                product = products[product_id]
+
+                if product.current_stock < quantity:
+                    return Response(
+                        {
+                            "error": (
+                                f"Insufficient stock for {product.name}."
+                            )
+                        },
+                        status=400
+                    )
+
+                total += product.get_actual_sale_price() * quantity
+
+            total = total.quantize(Decimal("0.01"))
+
+            if amount_paid != total:
+                return Response(
+                    {
+                        "error": "Payment must equal the sale total.",
+                        "total": str(total)
+                    },
+                    status=400
+                )
+
+            customer = None
+
+            if customer_id not in (None, ""):
+                try:
+                    customer = Customer.objects.get(id=customer_id)
+                except (
+                    Customer.DoesNotExist,
+                    ValueError,
+                    TypeError
+                ):
+                    return Response(
+                        {"error": "Customer does not exist."},
+                        status=400
+                    )
+
+            order = OrderHistory.objects.create(
+                customer=customer
+            )
+
+            for product_id, quantity in quantities.items():
+                product = products[product_id]
+
+                QuantityOfAnItemBought.objects.create(
+                    order=order,
+                    product=product,
+                    amount_bought=quantity
+                )
+
+                product.current_stock -= quantity
+                product.save(update_fields=["current_stock"])
+
+                StockMovement.objects.create(
+                    product=product,
+                    quantity=-quantity,
+                    movement_type="sale",
+                    performed_by=cashier,
+                    reason=f"Sale OH-{order.id}"
+                )
+
+            payment = Payment.objects.create(
+                order=order,
+                amount=amount_paid,
+                method=payment_method
+            )
+
+            return Response(
+                {
+                    "message": "Sale completed successfully.",
+                    "order_id": order.id,
+                    "payment_id": payment.id,
+                    "total": str(total),
+                    "customer_id": customer.id if customer else None
+                },
+                status=201
+            )
+
+    except Exception:
+        import logging
+        logging.getLogger(__name__).exception(
+            "Checkout failed"
+        )
+        return Response(
+            {"error": "Checkout failed. No sale was completed."},
+            status=500
+        )
 
 
 
