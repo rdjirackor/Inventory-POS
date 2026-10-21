@@ -221,7 +221,7 @@ function UpdateProduct() {
                     />
                 </div>
 
-                <div>
+                {/* <div>
                     <label>Current Stock</label>
                     <input
                         type="number"
@@ -233,7 +233,7 @@ function UpdateProduct() {
                             )
                         }
                     />
-                </div>
+                </div> */}
 
                 <div>
                     <label>Minimum Stock Level</label>

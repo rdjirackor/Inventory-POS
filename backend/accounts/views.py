@@ -14,7 +14,7 @@ from django.db.models.deletion import ProtectedError
 from decimal import Decimal, InvalidOperation
 from django.db import transaction
 
-
+from rest_framework import status
 
 from django.contrib.auth.models import User
 
@@ -352,7 +352,89 @@ def dashboard(request):
     })
 
 
-#okay now lemme write the setting api first, seems the most straightforward one
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@require_model_permissions(PurchaseOrder)
+def receive_purchase_order(request, purchase_order_id):
+
+    with transaction.atomic():
+
+        try:
+            order = PurchaseOrder.objects.select_for_update().get(
+                id=purchase_order_id
+            )
+        except PurchaseOrder.DoesNotExist:
+            return Response(
+                {"error": "Purchase order does not exist."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if order.status != "Sent":
+            return Response(
+                {"error": "Only sent purchase orders can be received."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        items = list(
+            order.items.select_related("product").order_by("product_id")
+        )
+
+        if not items:
+            return Response(
+                {"error": "This purchase order has no items."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            cashier = Cashier.objects.get(user=request.user)
+        except Cashier.DoesNotExist:
+            return Response(
+                {"error": "This account is not linked to a cashier."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        for item in items:
+            if item.quantity <= Decimal("0"):
+                return Response(
+                    {
+                        "error": (
+                            f"Invalid quantity for {item.product.name}."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        for item in items:
+            product = Product.objects.select_for_update().get(
+                id=item.product_id
+            )
+
+            product.current_stock += item.quantity
+            product.save(update_fields=["current_stock"])
+
+            StockMovement.objects.create(
+                product=product,
+                quantity=item.quantity,
+                movement_type="purchase",
+                performed_by=cashier,
+                reason=f"Purchase order PO-{order.id} received"
+            )
+
+        order.status = "Received"
+        order.save(update_fields=["status"])
+
+        return Response(
+            {
+                "message": "Purchase order received successfully.",
+                "purchase_order_id": order.id,
+                "status": order.status,
+                "items_received": len(items)
+            },
+            status=status.HTTP_200_OK
+        )
+
+    
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -1118,6 +1200,19 @@ def purchase_order_detail(request, purchase_order_id):
 
     elif request.method == "PUT":
 
+        if order.status == "Received":
+            return Response(
+                {"error": "Received purchase orders cannot be edited."},
+                status=400
+            )
+
+        if request.data.get("status") == "Received":
+            return Response(
+                {"error": "Use the receive endpoint to receive an order."},
+                status=400
+            )
+        
+
         serializer = PurchaseOrderSerializer(
             order,
             data=request.data
@@ -1133,6 +1228,17 @@ def purchase_order_detail(request, purchase_order_id):
         )
 
     elif request.method == "PATCH":
+        if order.status == "Received":
+            return Response(
+                {"error": "Received purchase orders cannot be edited."},
+                status=400
+            )
+
+        if request.data.get("status") == "Received":
+            return Response(
+                {"error": "Use the receive endpoint to receive an order."},
+                status=400
+            )
 
         serializer = PurchaseOrderSerializer(
             order,
@@ -1552,3 +1658,44 @@ def payments(request):
     )
 
     return Response(serializer.data)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@require_model_permissions([StockMovement])
+def  modify_stock(request):
+    product_id = request.data.get("product_id")
+    product = Product.objects.get(id=product_id)
+    quantity = request.data.get("quantity")
+    direction = request.data.get("direction")
+    reason = request.data.get("reason")
+
+
+    try:
+        with transaction.atomic():
+            product = Product.objects.select_for_update(id = product_id)
+            if direction == "Decrease":
+                product.current_stock-=quantity
+            if direction == "Increase":
+                product.current_stock+=quantity
+
+            product.save()
+            
+
+
+            # Then, I create the audit record here
+            # I alsodo stockMovement.objects.create
+    
+    except Product.DoesNotExist:
+        return Response(
+            {"error":"Product not Found"},
+            status=status.HTTP_404_not_found,
+        )
+    return Response(
+        {"message":"Stock updated Successfully"},
+        status=200
+    )
+        
+
+
+
+   

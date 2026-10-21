@@ -65,6 +65,11 @@ urlpatterns = [
     path("payments/", payments),
 
     path("checkout/", checkout),
+
+    path(
+    "purchase-orders/<int:purchase_order_id>/receive/",
+    receive_purchase_order,
+),
   
     
 ]
