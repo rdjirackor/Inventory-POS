@@ -63,7 +63,7 @@ function DashboardOverview() {
                 }
 
                 <div className="recent_activity">
-                <p><b>Recent Activity (Last 5)</b></p>
+                <a href="/view-stock-movements"><p><b>Recent Activity (Last 5)</b></p></a>
 
                 {dashboard.recent_activity.length > 0 ? (
                     <ul>
