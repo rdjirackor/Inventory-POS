@@ -70,6 +70,11 @@ urlpatterns = [
     "purchase-orders/<int:purchase_order_id>/receive/",
     receive_purchase_order,
 ),
+    path(
+    "stock-movements/",
+    modify_stock,
+    name="modify_stock",
+),
   
     
 ]

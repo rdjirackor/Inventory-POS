@@ -1661,39 +1661,85 @@ def payments(request):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-@require_model_permissions([StockMovement])
-def  modify_stock(request):
+@require_model_permissions(StockMovement) 
+def modify_stock(request):
     product_id = request.data.get("product_id")
-    product = Product.objects.get(id=product_id)
-    quantity = request.data.get("quantity")
+    quantity_input = request.data.get("quantity")
     direction = request.data.get("direction")
-    reason = request.data.get("reason")
+    reason = request.data.get("reason", "").strip()
 
+    if direction not in ["Increase", "Decrease"]:
+        return Response(
+            {"error": "Direction must be Increase or Decrease."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        quantity = Decimal(str(quantity_input))
+        if not quantity.is_finite() or quantity <= 0:
+            raise InvalidOperation
+    except (InvalidOperation, TypeError, ValueError):
+        return Response(
+            {"error": "Quantity must be a positive decimal number."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if not product_id:
+        return Response(
+            {"error": "Product ID is required."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if not reason:
+        return Response(
+            {"error": "A reason is required."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        cashier = request.user.cashier
+    except Cashier.DoesNotExist:
+        return Response(
+            {"error": "Your user account is not linked to a cashier."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
     try:
         with transaction.atomic():
-            product = Product.objects.select_for_update(id = product_id)
-            if direction == "Decrease":
-                product.current_stock-=quantity
+            product = Product.objects.select_for_update().get(id=product_id)
+
+            if direction == "Decrease" and quantity > product.current_stock:
+                return Response(
+                    {"error": "Adjustment would result in negative stock."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
             if direction == "Increase":
-                product.current_stock+=quantity
+                product.current_stock += quantity
+            else:
+                product.current_stock -= quantity
 
-            product.save()
-            
+            product.save(update_fields=["current_stock"])
 
+            movement = StockMovement.objects.create(
+                product=product,
+                quantity=quantity,
+                movement_type="adjustment",
+                performed_by=cashier,
+                reason=reason,
+            )
 
-            # Then, I create the audit record here
-            # I alsodo stockMovement.objects.create
-    
+        return Response(
+            StockMovementSerializer(movement).data,
+            status=status.HTTP_201_CREATED,
+        )
+
     except Product.DoesNotExist:
         return Response(
-            {"error":"Product not Found"},
-            status=status.HTTP_404_not_found,
+            {"error": "Product not found."},
+            status=status.HTTP_404_NOT_FOUND,
         )
-    return Response(
-        {"message":"Stock updated Successfully"},
-        status=200
-    )
+
         
 
 

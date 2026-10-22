@@ -28,7 +28,9 @@ function UpdateProduct() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
 
-    
+    function navigateToStockAdjustment(product_id: number) {
+    navigate(`/products/${product_id}/stock`);
+}
 
     useEffect(() => {
         async function fetchProduct() {
@@ -355,10 +357,19 @@ function UpdateProduct() {
                 </select>
             </div>
 
+           
+        
+
 
                 <button type="submit" disabled={saving}>
                     {saving ? "Saving..." : "Save Changes"}
                 </button>
+                 <div>
+                    
+                <button 
+                    type="button"
+                onClick={()=>navigateToStockAdjustment(product.id)}>Update Stock</button>
+            </div>
 
                 <button
                     type="button"
