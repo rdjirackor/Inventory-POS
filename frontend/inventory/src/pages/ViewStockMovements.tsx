@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Cashier, StockMovement, User } from "../interfaces/interfaces";
 import { getStockMovements } from "../apis/stock_movements";
 import { getUsers } from "../apis/users";
+import { getCashiers } from "../apis/cashiers";
 
 function ViewStockMovements(){
     const [movements, setMovements] = useState<StockMovement []>([]);
@@ -17,8 +18,10 @@ function ViewStockMovements(){
         try{
             const movementsData = await getStockMovements();
             const usersData = await getUsers();
+            const cashiersData = await getCashiers();
             setUsers(usersData);
             setMovements(movementsData);
+            setCashiers(cashiersData);
 
             
         }
@@ -42,19 +45,21 @@ function ViewStockMovements(){
                 <div className="stocks">
 
                     {movements.map(movement => {
-                        const cashier = cashiers.find(
-                            cashier => cashier.id === movement.performed_by,
-                            console.log(movement.performed_by)
-                        );
 
-                        const user = users.find(
-                            user => user.id === cashier?.user
-                        );
+                    const cashier = cashiers.find(
+                        cashier => cashier.id === movement.performed_by
+                    );
+
+                    
 
                         return (
                             <li key={movement.id}>
-                                <p>Staff: {cashier? `${cashier.first_name} ${cashier.second_name}` : "No linked user"}</p>
-                                <p>Movement: {movement.movement_type}</p>
+                            <p>
+                                Staff: {cashier
+                                    ? `${cashier.first_name ?? ""} ${cashier.second_name ?? ""}`.trim()
+                                    : "Cashier not found"}
+                            </p>                                
+                            <p>Movement: {movement.movement_type}</p>
                                 <p>Product ID: {movement.product}</p>
                                 <p>Quantity: {movement.quantity}</p>
                                 <p>Reason: {movement.reason}</p>
