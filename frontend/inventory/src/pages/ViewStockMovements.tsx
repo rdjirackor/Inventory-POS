@@ -31,7 +31,7 @@ function ViewStockMovements(){
 
         useEffect(()=>{
             fetchMovements();
-        },([]));
+        },[]);
 
         return(
             <div>
