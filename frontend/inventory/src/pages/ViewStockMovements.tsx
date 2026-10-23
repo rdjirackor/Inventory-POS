@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
-import type { Cashier, StockMovement, User } from "../interfaces/interfaces";
+import type { StockMovement, User } from "../interfaces/interfaces";
 import { getStockMovements } from "../apis/stock_movements";
 import { getUsers } from "../apis/users";
-import { getCashiers } from "../apis/cashiers";
 
 function ViewStockMovements(){
     const [movements, setMovements] = useState<StockMovement []>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] =useState("");
-    const [users, setUsers] = useState<User [] >([]);
-    const [cashiers, setCashiers] = useState<Cashier[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
     
 
     async function fetchMovements() {
         setError("");
         setLoading(true);
         try{
-            const movementsData = await getStockMovements();
+            const movementsData = (await getStockMovements()).toReversed();
             const usersData = await getUsers();
-            const cashiersData = await getCashiers();
-            setUsers(usersData);
             setMovements(movementsData);
-            setCashiers(cashiersData);
+            setUsers(usersData);
 
             
         }
@@ -46,19 +42,21 @@ function ViewStockMovements(){
 
                     {movements.map(movement => {
 
-                    const cashier = cashiers.find(
-                        cashier => cashier.id === movement.performed_by
+                    const user = users.find(
+                        user => user.id === movement.performed_by
                     );
 
                     
 
                         return (
                             <li key={movement.id}>
-                            <p>
-                                Staff: {cashier
-                                    ? `${cashier.first_name ?? ""} ${cashier.second_name ?? ""}`.trim()
-                                    : "Cashier not found"}
-                            </p>                                
+                        <p>
+                            Staff: {user
+                                ? user.username
+                                : movement.performed_by === null
+                                    ? "System / Unassigned"
+                                    : "User not found"}
+                        </p>                               
                             <p>Movement: {movement.movement_type}</p>
                                 <p>Product ID: {movement.product}</p>
                                 <p>Quantity: {movement.quantity}</p>

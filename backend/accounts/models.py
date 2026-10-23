@@ -261,7 +261,7 @@ class StockMovement(models.Model):
     product = models.ForeignKey(Product, related_name="stock_movements", on_delete=models.PROTECT)
     movement_type = models.CharField(max_length=50) #sale, damaged, etc
     date = models.DateTimeField(auto_now_add=True)
-    performed_by = models.ForeignKey(Cashier, on_delete=models.PROTECT,related_name="stock_movements")
+    performed_by = models.ForeignKey(User, on_delete=models.PROTECT,related_name="stock_movements", null=True)
     reason = models.CharField(max_length=10000, blank=True)
 
 

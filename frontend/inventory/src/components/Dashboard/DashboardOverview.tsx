@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import "../../styles/Dashboard.css";
 import { getDashboard } from "../../apis/dashboard_overview";
 import OrdersChart from "../OrdersChart";
@@ -63,13 +63,13 @@ function DashboardOverview() {
                 }
 
                 <div className="recent_activity">
-                <a href="/view-stock-movements"><p><b>Recent Activity (Last 5)</b></p></a>
+                <a href="/stock-movements"><p><b>Recent Activity (Last 5)</b></p></a>
 
                 {dashboard.recent_activity.length > 0 ? (
                     <ul>
                         {dashboard.recent_activity.map((activity) => (
                             <li key={activity.date}>
-                                {activity.movement_type} - {activity.product} ({activity.quantity})
+                                {activity.movement_type} - {activity.product} ({activity.quantity} {activity.performed_by})
                             </li>
                         ))}
                     </ul>

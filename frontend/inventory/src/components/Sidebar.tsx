@@ -36,6 +36,10 @@ function Sidebar(){
                             Discounts                        
                         </NavLink>
 
+                        <NavLink to="/stock-movements">
+                            Stock Movements
+                        </NavLink>
+
                     </nav>
             </aside>
                     

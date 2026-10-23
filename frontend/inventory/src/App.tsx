@@ -76,7 +76,7 @@ function App() {
                         <Route path="/products/create" element={<CreateProduct />} />
                         <Route path="/products/:id/stock" element={<UpdateProductStock />} /> 
 
-                        <Route path="/view-stock-movements" element={<ViewStockMovements />} />
+                        <Route path="/stock-movements" element={<ViewStockMovements />} />
 
 
                         <Route path="/categories" element={<Categories />} />

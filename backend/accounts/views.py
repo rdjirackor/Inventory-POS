@@ -90,14 +90,30 @@ def checkout(request):
         )
 
     try:
-        cashier = Cashier.objects.get(user=request.user)
+        current_user = request.user
     except Cashier.DoesNotExist:
         return Response(
             {"error": "This account is not linked to a cashier."},
             status=403
         )
+    try:
+        group_names = set(
+                    current_user.groups.values_list("name", flat=True)
+                    )
+        if not group_names.intersection({"Admin", "Cashiers"}):
+                return Response(
+        {"error": "You are not authorized to make sales."},
+        status=403
+    )
+    except User.DoesNotExist:
+            return Response(
+                {"error": "This account is not linked to a user."},
+                status=403
+            )
 
     quantities = {}
+
+
 
     try:
         for item in items:
@@ -196,7 +212,7 @@ def checkout(request):
                     product=product,
                     quantity=-quantity,
                     movement_type="sale",
-                    performed_by=cashier,
+                    performed_by=current_user,
                     reason=f"Sale OH-{order.id}"
                 )
 
@@ -325,11 +341,15 @@ def dashboard(request):
 
     for movement in stock_movements:
         recent_activity.append({
+            
             "product": movement.product.name,
             "quantity": movement.quantity,
             "movement_type": movement.movement_type,
             "date": movement.date,
-            "performed_by": movement.performed_by.user.username,
+            "performed_by": (
+                f"{movement.performed_by.first_name or 'No Name'} "
+                f"{movement.performed_by.second_name or ''}"
+            ).strip() if movement.performed_by else "Admin",
             "reason": movement.reason,
         })
 
@@ -1675,6 +1695,11 @@ def modify_stock(request):
 
 
     if request.method == "POST":
+        if request.user.is_superuser:
+            role = "Admin"
+        else:
+            group = request.user.groups.first()
+            role = group.name if group else None
 
         product_id = request.data.get("product_id")
         quantity_input = request.data.get("quantity")
@@ -1709,13 +1734,13 @@ def modify_stock(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        try:
-            cashier = request.user.cashier
-        except Cashier.DoesNotExist:
+        if role == "Admin" or "Cashier":
+            performed_by = request.user
+        if role == None:
             return Response(
-                {"error": "Your user account is not linked to a cashier."},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+                   {"error": "Your user account is not linked to a cashier or admin."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
 
         try:
             with transaction.atomic():
@@ -1738,7 +1763,7 @@ def modify_stock(request):
                     product=product,
                     quantity=quantity,
                     movement_type="adjustment",
-                    performed_by=cashier,
+                    performed_by=performed_by,
                     reason=reason,
                 )
 
