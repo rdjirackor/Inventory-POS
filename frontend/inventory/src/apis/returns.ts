@@ -18,6 +18,7 @@ export async function createReturn(
     customer: number | null,
     order_history: number,
     quantity:number,
+    reason:string,
 ) {
     const response = await apiFetch("/returns/", {
         method: "POST",
@@ -25,17 +26,18 @@ export async function createReturn(
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            product,
+            product_id:product,
             customer,
             order_history,
             quantity,
+            reason
         }),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Create Return Failed");
+        throw new Error(data.error || "Create Return Failed");
     }
 
     return data;
