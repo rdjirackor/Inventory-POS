@@ -16,7 +16,8 @@ export async function getReturns(): Promise<Return[]> {
 export async function createReturn(
     product: number,
     customer: number | null,
-    stock_movement: number
+    order_history: number,
+    quantity:number,
 ) {
     const response = await apiFetch("/returns/", {
         method: "POST",
@@ -26,7 +27,8 @@ export async function createReturn(
         body: JSON.stringify({
             product,
             customer,
-            stock_movement,
+            order_history,
+            quantity,
         }),
     });
 

@@ -278,7 +278,9 @@ class StockMovement(models.Model):
 class Returns(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="returns")
     customer = models.ForeignKey(Customer, related_name="returns", on_delete=models.PROTECT, null=True, blank=True)
-    stock_movement = models.OneToOneField(StockMovement, related_name="returns", on_delete=models.PROTECT)
+    order_history = models.ForeignKey(OrderHistory, on_delete=models.PROTECT, related_name="returns", null=True)
+    quantity = models.DecimalField(max_digits=10,decimal_places=1,default=1)
+    reason = models.CharField(max_length=1000, null=True)
     def __str__(self):
         return f"{self.product}-{self.stock_movement}"
 

@@ -1777,3 +1777,56 @@ def stock(request):
                 {"error": "Product not found."},
                 status=status.HTTP_404_NOT_FOUND,
             ) 
+
+@api_view(["POST"])
+@require_model_permissions([OrderHistory])
+def returns(request):
+    product_id = request.data.get("product_id")
+    quantity = request.data.get("quantity")
+    customer = request.data.get("customer")
+    order_history = request.data.get("order_history")
+    reason = request.data.get("reason")
+
+
+    # the_returns = Returns.objects.all()
+    # serializer = ReturnsSerializer(
+    #     the_returns,
+    #     many=True
+    # )
+
+    if request.user.groups.value_list("name", flat=True).name in ["Admin", "Cashiers"]:
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return Response(
+                {"error": "The product you are trying to return does not exist"},
+                status=404
+            )
+        with transaction.atomic():
+            product.current_stock+=quantity
+            product.save(update_fields="current_stock")
+
+            returns = Returns.objects.create(
+                product = product,
+                customer = customer,
+                order_history = order_history,
+                quantity = quantity,
+                reason = reason,
+            )
+            stock_update_create = StockMovement.objects.create(
+                product = product,
+                movement_type = "Increase",
+                performed_by = request.user,
+                reason = "Return",
+                quantity = "quantity",
+            ) 
+
+        return Response(
+            ReturnsSerializer(returns).data,
+            StockMovementSerializer(stock_update_create).data,
+            status=201,
+        )
+
+
+
+
