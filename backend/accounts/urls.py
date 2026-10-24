@@ -72,7 +72,7 @@ urlpatterns = [
 ),
     path(
     "stock-movements/",
-    modify_stock,
+    stock,
     name="modify_stock",
 ),
   

@@ -1682,7 +1682,7 @@ def payments(request):
 @api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
 @require_model_permissions(StockMovement) 
-def modify_stock(request):
+def stock(request):
     if request.method =="GET":
         stock_movements = StockMovement.objects.all()
         serializer = StockMovementSerializer(
@@ -1698,7 +1698,7 @@ def modify_stock(request):
         if request.user.is_superuser:
             role = "Admin"
         else:
-            group = request.user.groups.first()
+            group = request.user.groups.value_list("name", flat=True)
             role = group.name if group else None
 
         product_id = request.data.get("product_id")
@@ -1734,11 +1734,11 @@ def modify_stock(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if role == "Admin" or "Cashier":
+        if role in ["Admin", "Cashiers"]:
             performed_by = request.user
         if role == None:
             return Response(
-                   {"error": "Your user account is not linked to a cashier or admin."},
+                   {"error": "You are not authorized to update stock!"},
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
@@ -1762,7 +1762,7 @@ def modify_stock(request):
                 movement = StockMovement.objects.create(
                     product=product,
                     quantity=quantity,
-                    movement_type="adjustment",
+                    movement_type = "Stock Increase" if direction == "Increase" else "Stock Decrease",
                     performed_by=performed_by,
                     reason=reason,
                 )
