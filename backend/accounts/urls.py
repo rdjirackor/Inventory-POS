@@ -73,8 +73,9 @@ urlpatterns = [
     path(
     "stock-movements/",
     stock,
-    name="modify_stock",
-),
+    name="modify_stock"),
+
+   path("returns/", returns, name="returns"),
   
     
 ]

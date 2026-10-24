@@ -332,7 +332,9 @@ class ReturnsSerializer(serializers.ModelSerializer):
             "id",
             "product",
             "customer",
-            "stock_movement",
+            "order_history",
+            "quantity",
+            "reason",
         ]
 
 

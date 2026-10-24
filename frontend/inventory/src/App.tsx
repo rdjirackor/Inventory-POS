@@ -32,6 +32,8 @@ import UpdateDiscount from "./pages/UpdateDiscount";
 import Dashboard from "./pages/Dashboard";
 import UpdateProductStock from "./pages/UpdateProductStock";
 import ViewStockMovements from "./pages/ViewStockMovements";
+import CreateReturn from "./pages/CreateReturns";
+import ViewReturns from "./pages/ViewReturns";
 
 const token = localStorage.getItem("access_token")
 
@@ -103,6 +105,9 @@ function App() {
                         <Route path="/discounts" element={<Discounts/>} />
                         <Route path="/discounts/create" element={<CreateDiscount />} />
                         <Route path="/discounts/:id/edit" element={<UpdateDiscount />} /> 
+
+                        <Route path="/returns" element={<ViewReturns />} />
+                        <Route path="/returns/create" element={<CreateReturn />} />
 
 
 

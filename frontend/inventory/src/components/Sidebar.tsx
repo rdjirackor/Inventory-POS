@@ -40,6 +40,10 @@ function Sidebar(){
                             Stock Movements
                         </NavLink>
 
+                        <NavLink to="/returns">
+                            Returns
+                        </NavLink>
+
                     </nav>
             </aside>
                     

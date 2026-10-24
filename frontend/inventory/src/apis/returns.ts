@@ -20,27 +20,60 @@ export async function createReturn(
     quantity:number,
     reason:string,
 ) {
+    // const response = await apiFetch("/returns/", {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //         product_id:product,
+    //         customer,
+    //         order_history,
+    //         quantity,
+    //         reason
+    //     }),
+    // });
+
+    // const data = await response.json();
+
+    // if (!response.ok) {
+    //     throw new Error(data.error || "Create Return Failed");
+    // }
+
+    // return data;
+
+
     const response = await apiFetch("/returns/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            product_id:product,
-            customer,
-            order_history,
-            quantity,
-            reason
-        }),
-    });
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        product_id: product,
+        customer,
+        order_history,
+        quantity,
+        reason,
+    }),
+});
 
-    const data = await response.json();
+const text = await response.text();
 
-    if (!response.ok) {
-        throw new Error(data.error || "Create Return Failed");
-    }
+let data;
 
-    return data;
+try {
+    data = JSON.parse(text);
+} catch {
+    throw new Error(
+        `Server returned non-JSON data (${response.status}). Check the Django terminal.`
+    );
+}
+
+if (!response.ok) {
+    throw new Error(data.error || data.message || "Create Return Failed");
+}
+
+return data;
 }
 
 export async function getReturn(

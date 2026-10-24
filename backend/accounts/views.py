@@ -1779,158 +1779,169 @@ def stock(request):
                 status=status.HTTP_404_NOT_FOUND,
             ) 
 
-@api_view(["POST"])
+@api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
 @require_model_permissions(OrderHistory)
 def returns(request):
-    product_id = request.data.get("product_id")
-    order_history_id = request.data.get("order_history")
-    customer_id = request.data.get("customer")
-    reason = (request.data.get("reason") or "").strip()
 
-    try:
-        quantity = Decimal(str(request.data.get("quantity")))
-
-        if not quantity.is_finite() or quantity <= 0:
-            raise InvalidOperation
-
-    except (InvalidOperation, TypeError, ValueError):
-        return Response(
-            {"error": "Quantity must be a valid positive number."},
-            status=status.HTTP_400_BAD_REQUEST,
+    if request.method == "GET":
+        returns = Returns.objects.all()
+        serializer = ReturnsSerializer(
+            returns,
+            many=True
         )
 
-    if not product_id or not order_history_id:
-        return Response(
-            {"error": "Product and original sale are required."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+        return Response(serializer.data)
 
-    if not reason:
-        return Response(
-            {"error": "A reason for the return is required."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    if request.method == "POST":    
+        product_id = request.data.get("product_id")
+        order_history_id = request.data.get("order_history")
+        customer_id = request.data.get("customer")
+        reason = (request.data.get("reason") or "").strip()
 
-    group_names = set(
-        request.user.groups.values_list("name", flat=True)
-    )
+        try:
+            quantity = Decimal(str(request.data.get("quantity")))
 
-    if not (
-        request.user.is_superuser
-        or group_names.intersection({"Admin", "Cashiers"})
-    ):
-        return Response(
-            {"error": "You are not authorized to process returns."},
-            status=status.HTTP_403_FORBIDDEN,
-        )
+            if not quantity.is_finite() or quantity <= 0:
+                raise InvalidOperation
 
-    try:
-        with transaction.atomic():
-            
-            order = OrderHistory.objects.select_for_update().get(
-                pk=order_history_id
+        except (InvalidOperation, TypeError, ValueError):
+            return Response(
+                {"error": "Quantity must be a valid positive number."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-            product = Product.objects.select_for_update().get(
-                pk=product_id
+        if not product_id or not order_history_id:
+            return Response(
+                {"error": "Product and original sale are required."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-            sold_items = list(
-                order.items.select_for_update().filter(product=product)
+        if not reason:
+            return Response(
+                {"error": "A reason for the return is required."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-            if not sold_items:
-                return Response(
-                    {"error": "This product was not included in that sale."},
-                    status=status.HTTP_400_BAD_REQUEST,
+        group_names = set(
+            request.user.groups.values_list("name", flat=True)
+        )
+
+        if not (
+            request.user.is_superuser
+            or group_names.intersection({"Admin", "Cashiers"})
+        ):
+            return Response(
+                {"error": "You are not authorized to process returns."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        try:
+            with transaction.atomic():
+                
+                order = OrderHistory.objects.select_for_update().get(
+                    pk=order_history_id
                 )
 
-            quantity_sold = sum(
-                (item.amount_bought for item in sold_items),
-                Decimal("0"),
-            )
-
-            quantity_previously_returned = (
-                Returns.objects.filter(
-                    order_history=order,
-                    product=product,
-                ).aggregate(total=Sum("quantity"))["total"]
-                or Decimal("0")
-            )
-
-            quantity_remaining = (
-                quantity_sold - quantity_previously_returned
-            )
-
-            if quantity > quantity_remaining:
-                return Response(
-                    {
-                        "error": (
-                            f"Only {quantity_remaining} of this product "
-                            "remain eligible for return on this sale."
-                        )
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
+                product = Product.objects.select_for_update().get(
+                    pk=product_id
                 )
 
-      
-            order_customer = order.customer
+                sold_items = list(
+                    order.items.select_for_update().filter(product=product)
+                )
 
-            if customer_id not in (None, ""):
-                if order_customer is None or str(
-                    order_customer.pk
-                ) != str(customer_id):
+                if not sold_items:
+                    return Response(
+                        {"error": "This product was not included in that sale."},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                quantity_sold = sum(
+                    (item.amount_bought for item in sold_items),
+                    Decimal("0"),
+                )
+
+                quantity_previously_returned = (
+                    Returns.objects.filter(
+                        order_history=order,
+                        product=product,
+                    ).aggregate(total=Sum("quantity"))["total"]
+                    or Decimal("0")
+                )
+
+                quantity_remaining = (
+                    quantity_sold - quantity_previously_returned
+                )
+
+                if quantity > quantity_remaining:
                     return Response(
                         {
                             "error": (
-                                "The customer does not match the "
-                                "original sale."
+                                f"Only {quantity_remaining} of this product "
+                                "remain eligible for return on this sale."
                             )
                         },
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
-            return_record = Returns.objects.create(
-                product=product,
-                customer=order_customer,
-                order_history=order,
-                quantity=quantity,
-                reason=reason,
+        
+                order_customer = order.customer
+
+                if customer_id not in (None, ""):
+                    if order_customer is None or str(
+                        order_customer.pk
+                    ) != str(customer_id):
+                        return Response(
+                            {
+                                "error": (
+                                    "The customer does not match the "
+                                    "original sale."
+                                )
+                            },
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+
+                return_record = Returns.objects.create(
+                    product=product,
+                    customer=order_customer,
+                    order_history=order,
+                    quantity=quantity,
+                    reason=reason,
+                )
+
+                product.current_stock += quantity
+                product.save(update_fields=["current_stock"])
+
+                movement = StockMovement.objects.create(
+                    product=product,
+                    movement_type="return",
+                    performed_by=request.user,
+                    reason=f"Return for sale #{order.pk}: {reason}",
+                    quantity=quantity,
+                )
+
+                return_data = ReturnsSerializer(return_record).data
+                movement_data = StockMovementSerializer(movement).data
+
+        except (OrderHistory.DoesNotExist, Product.DoesNotExist):
+            return Response(
+                {"error": "The original sale or product could not be found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except (ValueError, TypeError):
+            return Response(
+                {"error": "The supplied sale or product ID is invalid."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-            product.current_stock += quantity
-            product.save(update_fields=["current_stock"])
-
-            movement = StockMovement.objects.create(
-                product=product,
-                movement_type="return",
-                performed_by=request.user,
-                reason=f"Return for sale #{order.pk}: {reason}",
-                quantity=quantity,
-            )
-
-            return_data = ReturnsSerializer(return_record).data
-            movement_data = StockMovementSerializer(movement).data
-
-    except (OrderHistory.DoesNotExist, Product.DoesNotExist):
         return Response(
-            {"error": "The original sale or product could not be found."},
-            status=status.HTTP_404_NOT_FOUND,
+            {
+                "returns": return_data,
+                "stock_movements": movement_data,
+            },
+            status=status.HTTP_201_CREATED,
         )
-    except (ValueError, TypeError):
-        return Response(
-            {"error": "The supplied sale or product ID is invalid."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    return Response(
-        {
-            "returns": return_data,
-            "stock_movements": movement_data,
-        },
-        status=status.HTTP_201_CREATED,
-    )
 
 
 

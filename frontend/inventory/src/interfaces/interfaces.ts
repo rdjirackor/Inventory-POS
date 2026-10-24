@@ -171,7 +171,9 @@ export interface Return {
     id: number;
     product: number;
     customer: number | null;
-    stock_movement: number;
+    order_history: number;
+    quantity: string | number;
+    reason: string | null;
 }
 
 export interface Payment {
