@@ -295,7 +295,13 @@ class AuditLogSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user",
-            "actions",
+            "action",
+            "timestamp",
+            "status",
+            "description",
+            "entity_type",
+            "entity_id",
+            "changes",
         ]
 
 

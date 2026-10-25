@@ -240,14 +240,53 @@ class AnnouncementReadStatus(models.Model):
     def __str__(self):
         return f"{self.user.username} read {self.announcement.title}"
     
+
 class AuditLog(models.Model):
-    user = models.ForeignKey(User, related_name="audit_logs", on_delete=models.SET_NULL,null=True, blank=True)
-    ALL_POSSIBLE_ACTIONS = [
-        #I think, i have to detail every single possible action and later set triggeres later, bloody heck, thats going to take forver!!!
-    ]
-    actions = models.CharField(max_length=100, choices=ALL_POSSIBLE_ACTIONS, default=f"")
+    user = models.ForeignKey(
+        User,
+        related_name="audit_logs",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    class Action(models.TextChoices):
+        PRODUCT_CREATED = "PRODUCT_CREATED", "Product Created"
+        PRODUCT_UPDATED = "PRODUCT_UPDATED", "Product Updated"
+        PRODUCT_DELETED = "PRODUCT_DELETED", "Product Deleted"
+
+        SALE_COMPLETED = "SALE_COMPLETED", "Sale Completed"
+        SALE_FAILED = "SALE_FAILED", "Sale Failed"
+
+        STOCK_ADJUSTED = "STOCK_ADJUSTED", "Stock Adjusted"
+
+        RETURN_PROCESSED = "RETURN_PROCESSED", "Return Processed"
+
+        LOGIN_SUCCEEDED = "LOGIN_SUCCEEDED", "Login Succeeded"
+        LOGIN_FAILED = "LOGIN_FAILED", "Login Failed"
+
+        ACCESS_DENIED = "ACCESS_DENIED", "Access Denied"
+    action = models.CharField(
+        max_length=50,
+        choices=Action.choices,
+        null=True
+    )
+    timestamp = models.DateTimeField(auto_now_add=True, null=True)
+    status = models.BooleanField(default=True)
+    description = models.CharField(max_length=1000, null=True)
+    entity_type = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+    entity_id = models.PositiveBigIntegerField(
+        null=True,
+        blank=True,
+    )
+    changes = models.JSONField(
+        default=dict,
+        blank=True,
+    ) 
     def __str__(self):
-        return f"{self.user}-{self.actions}"
+        return f"{self.user}-{self.action}"
 
 class Receipt(models.Model):
     order_history = models.ForeignKey(OrderHistory,related_name="receipts",on_delete=models.PROTECT)
