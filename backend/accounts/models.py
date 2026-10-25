@@ -254,6 +254,53 @@ class AuditLog(models.Model):
         PRODUCT_UPDATED = "PRODUCT_UPDATED", "Product Updated"
         PRODUCT_DELETED = "PRODUCT_DELETED", "Product Deleted"
 
+        CATEGORY_CREATED = "CATEGORY_CREATED", "Category Created"
+        CATEGORY_UPDATED = "CATEGORY_UPDATED", "Category Updated"
+        CATEGORY_DELETED = "CATEGORY_DELETED", "Category Deleted"
+
+        DISCOUNT_CREATED = "DISCOUNT_CREATED", "Discount Created"
+        DISCOUNT_UPDATED = "DISCOUNT_UPDATED", "Discount Updated"
+        DISCOUNT_DELETED = "DISCOUNT_DELETED", "Discount Deleted"
+
+        TAXTYPE_CREATED = "TAXTYPE_CREATED", "Taxtype Created"
+        TAXTYPE_UPDATED = "TAXTYPE_UPDATED", "Taxtype Updated"
+        TAXTYPE_DELETED = "TAXTYPE_DELETED", "Taxtype Deleted"
+
+        WAREHOUSE_CREATED = "WAREHOUSE_CREATED", "Warehouse Created"
+        WAREHOUSE_UPDATED = "WAREHOUSE_UPDATED", "Warehouse Updated"
+        WAREHOUSE_DELETED = "WAREHOUSE_DELETED", "Warehouse Deleted"
+
+        BRANCH_CREATED = "BRANCH_CREATED", "Branch Created"
+        BRANCH_UPDATED = "BRANCH_UPDATED", "Branch Updated"
+        BRANCH_DELETED = "BRANCH_DELETED", "Branch Deleted"
+
+        SUPPLIER_CREATED = "SUPPLIER_CREATED", "Supplier Created"
+        SUPPLIER_UPDATED = "SUPPLIER_UPDATED", "Supplier Updated"
+        SUPPLIER_DELETED = "SUPPLIER_DELETED", "Supplier Deleted"
+
+        PURCHASED_ORDER_CREATED = "PURCHASED_ORDER_CREATED", "Purchase Order Created"
+        PURCHASED_ORDER_UPDATED = "PURCHASED_ORDER_UPDATED", "Purchase Order Updated"
+        PURCHASED_ORDER_DELETED = "PURCHASED_ORDER_DELETED", "Purchase Order Deleted"
+
+        CUSTOMER_CREATED = "CUSTOMER_CREATED", "Customer Created"
+        CUSTOMER_UPDATED = "CUSTOMER_UPDATED", "Customer Updated"
+        CUSTOMER_DELETED = "CUSTOMER_DELETED", "Customer Deleted"
+
+        CASHIER_CREATED = "CASHIER_CREATED", "Cashier Created"
+        CASHIER_UPDATED = "CASHIER_UPDATED", "Cashier Updated"
+        CASHIER_DELETED = "CASHIER_DELETED", "Cashier Deleted"
+
+        SETTINGS_UPDATED = "SETTINGS_UPDATED", "Settings Updated"
+        
+        NOTIFICATION_CREATED = "NOTIFICATION_CREATED", "Notification Created"
+        NOTIFICATION_DELETED = "NOTIFICATION_DELETED", "Notification Deleted"
+        
+        ANNOUNCEMENT_CREATED = "ANNOUNCEMENT_CREATED", "Announcement Created"
+        ANNOUNCEMENT_DELETED = "ANNOUNCEMENT_DELETED", "Announcement Deleted"
+
+        ANNOUNCEMENT_READ = "ANNOUNCEMENT_READ", "Announcement Read"
+              
+
         SALE_COMPLETED = "SALE_COMPLETED", "Sale Completed"
         SALE_FAILED = "SALE_FAILED", "Sale Failed"
 

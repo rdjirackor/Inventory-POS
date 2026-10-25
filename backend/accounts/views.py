@@ -22,6 +22,9 @@ from django.contrib.auth.models import User
 from .models import *
 from .serializers import *  
 
+from .audit import log_action
+
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -38,11 +41,25 @@ def login(request):
     user = authenticate(username=username, password=password)
 
     if user is None:
+        log_action(
+                action=AuditLog.Action.LOGIN_FAILED,
+                status=False,
+                description=f"Person with username \"{username}\" failed to log in",
+                entity_type="User",
+            ) 
+
         return Response({
             "message": "Invalid credentials"
             }, status=401)
     refresh = RefreshToken.for_user(user)
-    
+    log_action(
+        user=user,
+        action=AuditLog.Action.LOGIN_SUCCEEDED,
+        status=True,
+        description=f"{user.username} logged in",
+        entity_type="User",
+        entity_id=user.id,
+    )    
     return Response({
         "access": str(refresh.access_token),
         "refresh": str(refresh),
@@ -144,6 +161,8 @@ def checkout(request):
     try:
         with transaction.atomic():
 
+
+
             products = {
                 product.id: product
                 for product in Product.objects.select_for_update()
@@ -217,11 +236,21 @@ def checkout(request):
                     reason=f"Sale OH-{order.id}"
                 )
 
+
             payment = Payment.objects.create(
                 order=order,
                 amount=total,
                 method=payment_method
                 )
+
+            log_action(
+                    user=current_user,
+                    action=AuditLog.Action.SALE_COMPLETED,
+                    status=True,
+                    description=f"{current_user} made a sale, with OrderHistory, \"{order.id}\"",
+                    entity_type="User",
+                    entity_id=current_user.id,
+                ) 
 
             return Response(
                 {
@@ -503,6 +532,7 @@ def notifications(request):
 @permission_classes([IsAuthenticated])
 # @require_model_permissions(Category)
 def categories(request):
+    user = request.user
 
     if request.method == "GET":
 
@@ -521,8 +551,16 @@ def categories(request):
             data=request.data
         )
 
+
         if serializer.is_valid():
-            serializer.save()
+            category = serializer.save()
+            log_action(user=user,
+                       action=AuditLog.Action.CATEGORY_CREATED,
+                       status=True,
+                       description=f"{user} created new Category, {category.name}",
+                       entity_id=category.id,
+                       entity_type="Category"
+            )
 
             return Response(
                 serializer.data,
@@ -542,6 +580,8 @@ def category_detail(request, category_id):
 
     try:
         category = Category.objects.get(id=category_id)
+        category_name = category.name
+        category_id = category.id
 
     except Category.DoesNotExist:
         return Response(
@@ -565,6 +605,14 @@ def category_detail(request, category_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                       action=AuditLog.Action.CATEGORY_UPDATED,
+                       status=True,
+                        description=f"{request.user} updated Category, {category.name}",
+                        entity_id=category.id,
+   
+                       entity_type="Category"
+            )
 
             return Response(serializer.data)
 
@@ -584,6 +632,14 @@ def category_detail(request, category_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                   action=AuditLog.Action.CATEGORY_UPDATED,
+                                   status=True,
+                                   description=f"{request.user} updated Category, {category.name}",
+                                   entity_id=category.id,
+                                   entity_type="Category"
+                                   
+                        )
 
             return Response(serializer.data)
 
@@ -596,6 +652,13 @@ def category_detail(request, category_id):
     elif request.method == "DELETE":
 
         category.delete()
+        log_action(user=request.user,
+                               action=AuditLog.Action.CATEGORY_DELETED,
+                               status=True,
+                               description=f"{request.user} deleted Category, {category_name}",
+                               entity_id=category_id,
+                               entity_type="Category"
+                    )
 
         return Response(
             status=204
@@ -621,7 +684,15 @@ def discounts(request):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            discount = serializer.save()
+
+            log_action(user=request.user,
+                                   action=AuditLog.Action.DISCOUNT_CREATED,
+                                   status=True,
+                                    description=f"{request.user} created discount, {discount.name}",
+                                    entity_id=discount.id,
+                                    entity_type="Discount",
+                        )
 
             return Response(
                 serializer.data,
@@ -656,7 +727,14 @@ def discount_detail(request, discount_id):
         )
         if serializer.is_valid():
 
-            serializer.save()
+            discount = serializer.save()
+            log_action(user=request.user,
+                                               action=AuditLog.Action.DISCOUNT_CREATED,
+                                               status=True,
+                                                description=f"{request.user} updated discount, {discount.name}",
+                                                entity_id=discount.id,
+                                                entity_type="Discount",
+                                    )
 
             return Response(
                 serializer.data,
@@ -671,7 +749,14 @@ def discount_detail(request, discount_id):
             data = request.data
         )
         if serializer.is_valid():
-            serializer.save()
+            discount = serializer.save()
+            log_action(user=request.user,
+                                                           action=AuditLog.Action.DISCOUNT_CREATED,
+                                                           status=True,
+                                                            description=f"{request.user} updated discount, {discount.name}",
+                                                            entity_id=discount.id,
+                                                            entity_type="Discount",
+                                                )
             return Response(
                 serializer.data,
             )
@@ -684,6 +769,13 @@ def discount_detail(request, discount_id):
     elif request.method == "DELETE":
 
         discount.delete()
+        log_action(user=request.user,
+                                                                   action=AuditLog.Action.DISCOUNT_DELETED,
+                                                                   status=True,
+                                                                    description=f"{request.user} deleted discount, {discount.name}",
+                                                                    entity_id=discount.id,
+                                                                    entity_type="Discount",
+                                                        )
 
         return Response(
             status=204
@@ -707,7 +799,16 @@ def taxtypes(request):
             data = request.data
         )
         if serializer.is_valid():
-            serializer.save()
+            discount = serializer.save()
+            log_action(user=request.user,
+                                               action=AuditLog.Action.DISCOUNT_CREATED,
+                                               status=True,
+                                                description=f"{request.user} created discount, {discount.name}",
+                                                entity_id=discount.id,
+                                                entity_type="Discount",
+                                    )
+
+
             return Response(
                 serializer.data,
                 status=201
@@ -1942,7 +2043,6 @@ def returns(request):
             },
             status=status.HTTP_201_CREATED,
         )
-
 
 
 
