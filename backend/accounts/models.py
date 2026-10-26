@@ -250,6 +250,19 @@ class AuditLog(models.Model):
         blank=True,
     )
     class Action(models.TextChoices):
+        USER_CREATED = "USER_CREATED", "User Created"
+        USER_UPDATED = "USER_UPDATED", "User Updated"
+        USER_DELETED = "USER_DELETED", "User Deleted"
+
+        LOGIN_SUCCEEDED = "LOGIN_SUCCEEDED", "Login Succeeded"
+        LOGIN_FAILED = "LOGIN_FAILED", "Login Failed"
+        LOGOUT_SUCCEEDED = "LOGOUT_SUCCEEDED", "Logout Suceeded"
+
+        ACCESS_DENIED = "ACCESS_DENIED", "Access Denied"
+
+        ROLE_OR_PERMISSION_CHANGED = "ROLE_OR_PERMISSION_CHANGED", "Role or Permission Changed"
+
+
         PRODUCT_CREATED = "PRODUCT_CREATED", "Product Created"
         PRODUCT_UPDATED = "PRODUCT_UPDATED", "Product Updated"
         PRODUCT_DELETED = "PRODUCT_DELETED", "Product Deleted"
@@ -278,9 +291,12 @@ class AuditLog(models.Model):
         SUPPLIER_UPDATED = "SUPPLIER_UPDATED", "Supplier Updated"
         SUPPLIER_DELETED = "SUPPLIER_DELETED", "Supplier Deleted"
 
-        PURCHASED_ORDER_CREATED = "PURCHASED_ORDER_CREATED", "Purchase Order Created"
-        PURCHASED_ORDER_UPDATED = "PURCHASED_ORDER_UPDATED", "Purchase Order Updated"
-        PURCHASED_ORDER_DELETED = "PURCHASED_ORDER_DELETED", "Purchase Order Deleted"
+        PURCHASE_ORDER_CREATED = "PURCHASE_ORDER_CREATED", "Purchase Order Created"
+        PURCHASE_ORDER_UPDATED = "PURCHASE_ORDER_UPDATED", "Purchase Order Updated"
+        PURCHASE_ORDER_DELETED = "PURCHASE_ORDER_DELETED", "Purchase Order Deleted"
+        PURCHASE_ORDER_SENT = "PURCHASE_ORDER_SENT", "Purchase Order Sent"
+        PURCHASE_ORDER_RECEIVED = "PURCHASE_ORDER_RECEIVED", "Purchase Order Received"
+        PURCHASE_ORDER_CANCELLED = "PURCHASE_ORDER_CANCELLED", "Purchase Order Cancelled"
 
         CUSTOMER_CREATED = "CUSTOMER_CREATED", "Customer Created"
         CUSTOMER_UPDATED = "CUSTOMER_UPDATED", "Customer Updated"
@@ -291,27 +307,28 @@ class AuditLog(models.Model):
         CASHIER_DELETED = "CASHIER_DELETED", "Cashier Deleted"
 
         SETTINGS_UPDATED = "SETTINGS_UPDATED", "Settings Updated"
-        
-        NOTIFICATION_CREATED = "NOTIFICATION_CREATED", "Notification Created"
-        NOTIFICATION_DELETED = "NOTIFICATION_DELETED", "Notification Deleted"
-        
-        ANNOUNCEMENT_CREATED = "ANNOUNCEMENT_CREATED", "Announcement Created"
-        ANNOUNCEMENT_DELETED = "ANNOUNCEMENT_DELETED", "Announcement Deleted"
 
         ANNOUNCEMENT_READ = "ANNOUNCEMENT_READ", "Announcement Read"
+        ANNOUNCEMENT_UPDATED = "ANNOUNCEMENT_UPDATED", "Announcement Updated"
               
 
         SALE_COMPLETED = "SALE_COMPLETED", "Sale Completed"
         SALE_FAILED = "SALE_FAILED", "Sale Failed"
-
+        SALE_VOIDED = "SALE_VOIDED", "Sale Voided"
+        
         STOCK_ADJUSTED = "STOCK_ADJUSTED", "Stock Adjusted"
 
         RETURN_PROCESSED = "RETURN_PROCESSED", "Return Processed"
+        RETURN_REJECTED = "RETURN_REJECTED", "Return Rejected"
 
-        LOGIN_SUCCEEDED = "LOGIN_SUCCEEDED", "Login Succeeded"
-        LOGIN_FAILED = "LOGIN_FAILED", "Login Failed"
+        STOCK_MOVEMENT_CREATED = "STOCK_MOVEMENT_CREATED", "Stock Movement Created" 
 
-        ACCESS_DENIED = "ACCESS_DENIED", "Access Denied"
+        PAYMENT_PROCESSED = "PAYMENT_PROCESSED", "Payment Processed"
+
+
+
+
+
     action = models.CharField(
         max_length=50,
         choices=Action.choices,
