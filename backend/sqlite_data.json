@@ -1,0 +1,4195 @@
+[
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Admin",
+    "permissions": [
+      [
+        "add_announcement",
+        "accounts",
+        "announcement"
+      ],
+      [
+        "change_announcement",
+        "accounts",
+        "announcement"
+      ],
+      [
+        "delete_announcement",
+        "accounts",
+        "announcement"
+      ],
+      [
+        "view_announcement",
+        "accounts",
+        "announcement"
+      ],
+      [
+        "add_announcementreadstatus",
+        "accounts",
+        "announcementreadstatus"
+      ],
+      [
+        "change_announcementreadstatus",
+        "accounts",
+        "announcementreadstatus"
+      ],
+      [
+        "delete_announcementreadstatus",
+        "accounts",
+        "announcementreadstatus"
+      ],
+      [
+        "view_announcementreadstatus",
+        "accounts",
+        "announcementreadstatus"
+      ],
+      [
+        "add_auditlog",
+        "accounts",
+        "auditlog"
+      ],
+      [
+        "change_auditlog",
+        "accounts",
+        "auditlog"
+      ],
+      [
+        "delete_auditlog",
+        "accounts",
+        "auditlog"
+      ],
+      [
+        "view_auditlog",
+        "accounts",
+        "auditlog"
+      ],
+      [
+        "add_branch",
+        "accounts",
+        "branch"
+      ],
+      [
+        "change_branch",
+        "accounts",
+        "branch"
+      ],
+      [
+        "delete_branch",
+        "accounts",
+        "branch"
+      ],
+      [
+        "view_branch",
+        "accounts",
+        "branch"
+      ],
+      [
+        "add_cashier",
+        "accounts",
+        "cashier"
+      ],
+      [
+        "change_cashier",
+        "accounts",
+        "cashier"
+      ],
+      [
+        "delete_cashier",
+        "accounts",
+        "cashier"
+      ],
+      [
+        "view_cashier",
+        "accounts",
+        "cashier"
+      ],
+      [
+        "add_category",
+        "accounts",
+        "category"
+      ],
+      [
+        "change_category",
+        "accounts",
+        "category"
+      ],
+      [
+        "delete_category",
+        "accounts",
+        "category"
+      ],
+      [
+        "view_category",
+        "accounts",
+        "category"
+      ],
+      [
+        "add_customer",
+        "accounts",
+        "customer"
+      ],
+      [
+        "change_customer",
+        "accounts",
+        "customer"
+      ],
+      [
+        "delete_customer",
+        "accounts",
+        "customer"
+      ],
+      [
+        "view_customer",
+        "accounts",
+        "customer"
+      ],
+      [
+        "add_discount",
+        "accounts",
+        "discount"
+      ],
+      [
+        "change_discount",
+        "accounts",
+        "discount"
+      ],
+      [
+        "delete_discount",
+        "accounts",
+        "discount"
+      ],
+      [
+        "view_discount",
+        "accounts",
+        "discount"
+      ],
+      [
+        "add_notification",
+        "accounts",
+        "notification"
+      ],
+      [
+        "change_notification",
+        "accounts",
+        "notification"
+      ],
+      [
+        "delete_notification",
+        "accounts",
+        "notification"
+      ],
+      [
+        "view_notification",
+        "accounts",
+        "notification"
+      ],
+      [
+        "add_orderhistory",
+        "accounts",
+        "orderhistory"
+      ],
+      [
+        "change_orderhistory",
+        "accounts",
+        "orderhistory"
+      ],
+      [
+        "delete_orderhistory",
+        "accounts",
+        "orderhistory"
+      ],
+      [
+        "view_orderhistory",
+        "accounts",
+        "orderhistory"
+      ],
+      [
+        "add_payment",
+        "accounts",
+        "payment"
+      ],
+      [
+        "change_payment",
+        "accounts",
+        "payment"
+      ],
+      [
+        "delete_payment",
+        "accounts",
+        "payment"
+      ],
+      [
+        "view_payment",
+        "accounts",
+        "payment"
+      ],
+      [
+        "add_product",
+        "accounts",
+        "product"
+      ],
+      [
+        "change_product",
+        "accounts",
+        "product"
+      ],
+      [
+        "delete_product",
+        "accounts",
+        "product"
+      ],
+      [
+        "view_product",
+        "accounts",
+        "product"
+      ],
+      [
+        "add_purchaseorder",
+        "accounts",
+        "purchaseorder"
+      ],
+      [
+        "change_purchaseorder",
+        "accounts",
+        "purchaseorder"
+      ],
+      [
+        "delete_purchaseorder",
+        "accounts",
+        "purchaseorder"
+      ],
+      [
+        "view_purchaseorder",
+        "accounts",
+        "purchaseorder"
+      ],
+      [
+        "add_purchaseorderitem",
+        "accounts",
+        "purchaseorderitem"
+      ],
+      [
+        "change_purchaseorderitem",
+        "accounts",
+        "purchaseorderitem"
+      ],
+      [
+        "delete_purchaseorderitem",
+        "accounts",
+        "purchaseorderitem"
+      ],
+      [
+        "view_purchaseorderitem",
+        "accounts",
+        "purchaseorderitem"
+      ],
+      [
+        "add_quantityofanitembought",
+        "accounts",
+        "quantityofanitembought"
+      ],
+      [
+        "change_quantityofanitembought",
+        "accounts",
+        "quantityofanitembought"
+      ],
+      [
+        "delete_quantityofanitembought",
+        "accounts",
+        "quantityofanitembought"
+      ],
+      [
+        "view_quantityofanitembought",
+        "accounts",
+        "quantityofanitembought"
+      ],
+      [
+        "add_receipt",
+        "accounts",
+        "receipt"
+      ],
+      [
+        "change_receipt",
+        "accounts",
+        "receipt"
+      ],
+      [
+        "delete_receipt",
+        "accounts",
+        "receipt"
+      ],
+      [
+        "view_receipt",
+        "accounts",
+        "receipt"
+      ],
+      [
+        "add_returns",
+        "accounts",
+        "returns"
+      ],
+      [
+        "change_returns",
+        "accounts",
+        "returns"
+      ],
+      [
+        "delete_returns",
+        "accounts",
+        "returns"
+      ],
+      [
+        "view_returns",
+        "accounts",
+        "returns"
+      ],
+      [
+        "add_settings",
+        "accounts",
+        "settings"
+      ],
+      [
+        "change_settings",
+        "accounts",
+        "settings"
+      ],
+      [
+        "delete_settings",
+        "accounts",
+        "settings"
+      ],
+      [
+        "view_settings",
+        "accounts",
+        "settings"
+      ],
+      [
+        "add_stockmovement",
+        "accounts",
+        "stockmovement"
+      ],
+      [
+        "change_stockmovement",
+        "accounts",
+        "stockmovement"
+      ],
+      [
+        "delete_stockmovement",
+        "accounts",
+        "stockmovement"
+      ],
+      [
+        "view_stockmovement",
+        "accounts",
+        "stockmovement"
+      ],
+      [
+        "add_supplier",
+        "accounts",
+        "supplier"
+      ],
+      [
+        "change_supplier",
+        "accounts",
+        "supplier"
+      ],
+      [
+        "delete_supplier",
+        "accounts",
+        "supplier"
+      ],
+      [
+        "view_supplier",
+        "accounts",
+        "supplier"
+      ],
+      [
+        "add_taxtype",
+        "accounts",
+        "taxtype"
+      ],
+      [
+        "change_taxtype",
+        "accounts",
+        "taxtype"
+      ],
+      [
+        "delete_taxtype",
+        "accounts",
+        "taxtype"
+      ],
+      [
+        "view_taxtype",
+        "accounts",
+        "taxtype"
+      ],
+      [
+        "add_warehouse",
+        "accounts",
+        "warehouse"
+      ],
+      [
+        "change_warehouse",
+        "accounts",
+        "warehouse"
+      ],
+      [
+        "delete_warehouse",
+        "accounts",
+        "warehouse"
+      ],
+      [
+        "view_warehouse",
+        "accounts",
+        "warehouse"
+      ],
+      [
+        "add_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "change_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "delete_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "view_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "add_group",
+        "auth",
+        "group"
+      ],
+      [
+        "change_group",
+        "auth",
+        "group"
+      ],
+      [
+        "delete_group",
+        "auth",
+        "group"
+      ],
+      [
+        "view_group",
+        "auth",
+        "group"
+      ],
+      [
+        "add_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "change_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "delete_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "view_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "add_user",
+        "auth",
+        "user"
+      ],
+      [
+        "change_user",
+        "auth",
+        "user"
+      ],
+      [
+        "delete_user",
+        "auth",
+        "user"
+      ],
+      [
+        "view_user",
+        "auth",
+        "user"
+      ],
+      [
+        "add_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "change_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "delete_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "view_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "add_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "change_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "delete_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "view_session",
+        "sessions",
+        "session"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Cashiers",
+    "permissions": [
+      [
+        "view_announcement",
+        "accounts",
+        "announcement"
+      ],
+      [
+        "view_branch",
+        "accounts",
+        "branch"
+      ],
+      [
+        "view_cashier",
+        "accounts",
+        "cashier"
+      ],
+      [
+        "view_category",
+        "accounts",
+        "category"
+      ],
+      [
+        "view_customer",
+        "accounts",
+        "customer"
+      ],
+      [
+        "view_discount",
+        "accounts",
+        "discount"
+      ],
+      [
+        "view_notification",
+        "accounts",
+        "notification"
+      ],
+      [
+        "add_orderhistory",
+        "accounts",
+        "orderhistory"
+      ],
+      [
+        "change_orderhistory",
+        "accounts",
+        "orderhistory"
+      ],
+      [
+        "delete_orderhistory",
+        "accounts",
+        "orderhistory"
+      ],
+      [
+        "view_orderhistory",
+        "accounts",
+        "orderhistory"
+      ],
+      [
+        "view_payment",
+        "accounts",
+        "payment"
+      ],
+      [
+        "change_product",
+        "accounts",
+        "product"
+      ],
+      [
+        "view_product",
+        "accounts",
+        "product"
+      ],
+      [
+        "view_purchaseorder",
+        "accounts",
+        "purchaseorder"
+      ],
+      [
+        "view_purchaseorderitem",
+        "accounts",
+        "purchaseorderitem"
+      ],
+      [
+        "view_quantityofanitembought",
+        "accounts",
+        "quantityofanitembought"
+      ],
+      [
+        "view_receipt",
+        "accounts",
+        "receipt"
+      ],
+      [
+        "view_returns",
+        "accounts",
+        "returns"
+      ],
+      [
+        "add_stockmovement",
+        "accounts",
+        "stockmovement"
+      ],
+      [
+        "view_stockmovement",
+        "accounts",
+        "stockmovement"
+      ],
+      [
+        "view_supplier",
+        "accounts",
+        "supplier"
+      ],
+      [
+        "view_taxtype",
+        "accounts",
+        "taxtype"
+      ],
+      [
+        "view_warehouse",
+        "accounts",
+        "warehouse"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Customers",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$25TPoJ67cBWGE8aP8c5t8c$Y8bWsqRiSP73WYRx/u1dcZiE10avJIFNhZXKEo/+vyw=",
+    "last_login": "2026-10-16T20:51:06Z",
+    "is_superuser": true,
+    "username": "dev",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-08-21T20:51:12Z",
+    "groups": [
+      [
+        "Admin"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$ByncsXy9N6D3NZvdeqGd1b$fKES6oIl3WOGwpJUjVtO3yD3F+Gs7WE7rgGpEz0VFrM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "tryhard",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-03T13:54:10Z",
+    "groups": [
+      [
+        "Cashiers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$uGCpgUiopwegJHvaY72Etu$122U9TDOBpjA/ABGBFb9M49TU/YyhABICttRSbQFspw=",
+    "last_login": "2026-09-06T20:46:47Z",
+    "is_superuser": false,
+    "username": "fe",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-03T13:57:18Z",
+    "groups": [
+      [
+        "Customers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$z9hkC52J8MWRUUMgbRB4m0$yhUFX5Bx+bbidrUrQnZLQUWDwvz5eOZOQQj4cHvFNbM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "Blae",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-15T14:43:46.226Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "bsz4uzi1pboa85g9k6q0ztkm8lf3nht2",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGllex19Kes5g2bteHECxlE-FuDtESgHtm5n3Eilva0vbUuc0kjgLEKffrWR81GkHdM_TrUvs0zqPRe6KPOgir53q83K4fwctL-1bIwMNEWrQWYcIQZNTniN6Sw4wEgcwmq01iKwGAO8smcjV2uIUFxLvD9YXN7Y:1xHotO:KRI-KvvPGyC5HwM9m85OfWEblimksbcboxDnEXx3J4U",
+    "expire_date": "2026-10-30T20:51:06.574Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "in809bijllvrh9im7gstqjl046hsp6ih",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGllex19Kes5g2bteHECxlE-FuDtESgHtm5n3Eilva0vbUuc0kjgLEKffrWR81GkHdM_TrUvs0zqPRe6KPOgir53q83K4fwctL-1bIwMNEWrQWYcIQZNTniN6Sw4wEgcwmq01iKwGAO8smcjV2uIUFxLvD9YXN7Y:1wyZkw:pdag19iUqFNDoWgI6Y7YL1pOXXL-2KLcWxyFtGIW1hA",
+    "expire_date": "2026-09-07T18:50:50.148Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "o6443y5l2d39ua7bnzlh91ao3tk4vue1",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGllex19Kes5g2bteHECxlE-FuDtESgHtm5n3Eilva0vbUuc0kjgLEKffrWR81GkHdM_TrUvs0zqPRe6KPOgir53q83K4fwctL-1bIwMNEWrQWYcIQZNTniN6Sw4wEgcwmq01iKwGAO8smcjV2uIUFxLvD9YXN7Y:1x3b2v:bTkQ8TgS8HdYuq8tAN9fC73cEudpmR4JZfNE9Okd6To",
+    "expire_date": "2026-09-21T15:14:09.250Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "xa9bwmvf8ybzqspmaknz2ppsuxhgjgxk",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGllex19Kes5g2bteHECxlE-FuDtESgHtm5n3Eilva0vbUuc0kjgLEKffrWR81GkHdM_TrUvs0zqPRe6KPOgir53q83K4fwctL-1bIwMNEWrQWYcIQZNTniN6Sw4wEgcwmq01iKwGAO8smcjV2uIUFxLvD9YXN7Y:1wxWCz:diwvglSOjfiGg8IgnkDQNoRlDmJnGqpaG6K759k3VLw",
+    "expire_date": "2026-09-04T20:51:25.925Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "zgc839prb83v9bd0c1a4n42ee42boabj",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGllex19Kes5g2bteHECxlE-FuDtESgHtm5n3Eilva0vbUuc0kjgLEKffrWR81GkHdM_TrUvs0zqPRe6KPOgir53q83K4fwctL-1bIwMNEWrQWYcIQZNTniN6Sw4wEgcwmq01iKwGAO8smcjV2uIUFxLvD9YXN7Y:1x3JmU:DZspXy18knvt9SPdCBj16Go3H0AEXk7WWrdEn8Ybaog",
+    "expire_date": "2026-09-20T20:48:02.146Z"
+  }
+},
+{
+  "model": "accounts.taxtype",
+  "pk": 1,
+  "fields": {
+    "name": "NHIL",
+    "rate": "2.50",
+    "active": true
+  }
+},
+{
+  "model": "accounts.taxtype",
+  "pk": 6,
+  "fields": {
+    "name": "Standard VAT",
+    "rate": "15.00",
+    "active": true
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 1,
+  "fields": {
+    "name": "Food and Drinks?"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 4,
+  "fields": {
+    "name": "Be Dressed"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 7,
+  "fields": {
+    "name": "Toiletries"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 8,
+  "fields": {
+    "name": "Beverages"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 9,
+  "fields": {
+    "name": "Food"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 10,
+  "fields": {
+    "name": "Household Items"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 11,
+  "fields": {
+    "name": "Personal Care"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 12,
+  "fields": {
+    "name": "Electronics"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 13,
+  "fields": {
+    "name": "Dark and Bare"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 14,
+  "fields": {
+    "name": "Dark and Bare"
+  }
+},
+{
+  "model": "accounts.category",
+  "pk": 15,
+  "fields": {
+    "name": "Dark"
+  }
+},
+{
+  "model": "accounts.discount",
+  "pk": 2,
+  "fields": {
+    "name": "Love",
+    "discount": "100.00"
+  }
+},
+{
+  "model": "accounts.discount",
+  "pk": 3,
+  "fields": {
+    "name": "Hey",
+    "discount": "5.00"
+  }
+},
+{
+  "model": "accounts.discount",
+  "pk": 4,
+  "fields": {
+    "name": "bgd",
+    "discount": "100.00"
+  }
+},
+{
+  "model": "accounts.warehouse",
+  "pk": 1,
+  "fields": {
+    "name": "Anothera",
+    "location": "thingys"
+  }
+},
+{
+  "model": "accounts.warehouse",
+  "pk": 2,
+  "fields": {
+    "name": "Joy",
+    "location": "Travaille"
+  }
+},
+{
+  "model": "accounts.product",
+  "pk": 1,
+  "fields": {
+    "name": "Nott a Thingy",
+    "sku": "vdgd",
+    "brand": "hcshcsb",
+    "net_cost": "354.00",
+    "selling_price_without_tax": "10.00",
+    "discount": 2,
+    "minimum_stock_level": 60,
+    "image": "0hu409gqedd61.webp",
+    "barcode_number": "vgdhjs",
+    "category": 1,
+    "warehouse": 1,
+    "current_stock": "999951.00",
+    "taxes": [
+      1
+    ]
+  }
+},
+{
+  "model": "accounts.product",
+  "pk": 2,
+  "fields": {
+    "name": "gubber",
+    "sku": "bh",
+    "brand": "jsjsj",
+    "net_cost": "2.00",
+    "selling_price_without_tax": "10.00",
+    "discount": null,
+    "minimum_stock_level": 10,
+    "image": "5WGyJA-X7t93lbn6DsFPe0l9Rou3jHTnUc2HWcjC8Ug.gif",
+    "barcode_number": "",
+    "category": 4,
+    "warehouse": 1,
+    "current_stock": "9993.00",
+    "taxes": []
+  }
+},
+{
+  "model": "accounts.product",
+  "pk": 3,
+  "fields": {
+    "name": "ge",
+    "sku": "ndnd",
+    "brand": "ndn",
+    "net_cost": "333.00",
+    "selling_price_without_tax": "333.00",
+    "discount": null,
+    "minimum_stock_level": 33,
+    "image": "9ri3utz30g7g1.jpeg",
+    "barcode_number": "nnjd",
+    "category": 1,
+    "warehouse": 1,
+    "current_stock": "100998.00",
+    "taxes": []
+  }
+},
+{
+  "model": "accounts.product",
+  "pk": 6,
+  "fields": {
+    "name": "heal",
+    "sku": "heal",
+    "brand": "heal",
+    "net_cost": "2.00",
+    "selling_price_without_tax": "22.00",
+    "discount": null,
+    "minimum_stock_level": 22,
+    "image": "13572075_1621579945657_jpeg0bd514a3c8682624b317e1e54a812833.jpeg",
+    "barcode_number": "222",
+    "category": 1,
+    "warehouse": 1,
+    "current_stock": "1040.00",
+    "taxes": [
+      1
+    ]
+  }
+},
+{
+  "model": "accounts.supplier",
+  "pk": 2,
+  "fields": {
+    "name": "What a weird looking chud",
+    "phone_number": "fghjk",
+    "email": "e@tada.com",
+    "address": "lamini",
+    "contact_person": "doodood",
+    "tax_number": "iijjj",
+    "products": [
+      2
+    ]
+  }
+},
+{
+  "model": "accounts.supplier",
+  "pk": 3,
+  "fields": {
+    "name": "Depression",
+    "phone_number": "12345",
+    "email": "e@tada.com",
+    "address": "Fresh",
+    "contact_person": "Dude",
+    "tax_number": "112234",
+    "products": [
+      1,
+      3,
+      6
+    ]
+  }
+},
+{
+  "model": "accounts.purchaseorder",
+  "pk": 3,
+  "fields": {
+    "supplier": 2,
+    "expected_delivery": "2026-10-21",
+    "status": "Received"
+  }
+},
+{
+  "model": "accounts.purchaseorderitem",
+  "pk": 4,
+  "fields": {
+    "purchase_order": 3,
+    "product": 1,
+    "quantity": "10.00"
+  }
+},
+{
+  "model": "accounts.customer",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "tryhard"
+    ],
+    "first_name": "aww",
+    "second_name": "doodee",
+    "reward_points": "2",
+    "credit_balance": "1.00"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 1,
+  "fields": {
+    "customer": 1,
+    "time_of_purchase": "2026-09-12T21:46:24.455Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 2,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-09-13T13:22:47.531Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 3,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-09-13T13:56:47.169Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 4,
+  "fields": {
+    "customer": 1,
+    "time_of_purchase": "2026-10-20T16:36:37.518Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 5,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-20T17:22:38.089Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 6,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-20T17:22:52.666Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 7,
+  "fields": {
+    "customer": 1,
+    "time_of_purchase": "2026-10-20T17:26:28.749Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 8,
+  "fields": {
+    "customer": 1,
+    "time_of_purchase": "2026-10-20T17:27:19.283Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 9,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-20T17:27:50.550Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 10,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-20T17:43:36.024Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 11,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-20T17:51:23.427Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 12,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-20T18:03:06.179Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 13,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-23T17:23:07.351Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 14,
+  "fields": {
+    "customer": 1,
+    "time_of_purchase": "2026-10-23T17:24:06.750Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 15,
+  "fields": {
+    "customer": 1,
+    "time_of_purchase": "2026-10-23T17:24:57.292Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 16,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-23T17:25:38.790Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 17,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-23T17:29:19.131Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 18,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-24T20:33:03.892Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 19,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-24T20:37:31.076Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 20,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-25T07:45:53.668Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 21,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-27T21:43:14.370Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 22,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-27T21:43:39.027Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 23,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-27T21:43:57.601Z"
+  }
+},
+{
+  "model": "accounts.orderhistory",
+  "pk": 24,
+  "fields": {
+    "customer": null,
+    "time_of_purchase": "2026-10-27T21:44:08.781Z"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 1,
+  "fields": {
+    "order": 1,
+    "product": 1,
+    "amount_bought": "2.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 2,
+  "fields": {
+    "order": 1,
+    "product": 2,
+    "amount_bought": "5.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 3,
+  "fields": {
+    "order": 2,
+    "product": 2,
+    "amount_bought": "5.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 4,
+  "fields": {
+    "order": 4,
+    "product": 2,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 5,
+  "fields": {
+    "order": 5,
+    "product": 6,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 6,
+  "fields": {
+    "order": 6,
+    "product": 1,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 7,
+  "fields": {
+    "order": 7,
+    "product": 3,
+    "amount_bought": "10.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 8,
+  "fields": {
+    "order": 7,
+    "product": 6,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 9,
+  "fields": {
+    "order": 8,
+    "product": 3,
+    "amount_bought": "10.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 10,
+  "fields": {
+    "order": 8,
+    "product": 6,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 11,
+  "fields": {
+    "order": 9,
+    "product": 2,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 12,
+  "fields": {
+    "order": 10,
+    "product": 6,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 13,
+  "fields": {
+    "order": 11,
+    "product": 3,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 14,
+  "fields": {
+    "order": 12,
+    "product": 2,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 15,
+  "fields": {
+    "order": 12,
+    "product": 6,
+    "amount_bought": "20.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 16,
+  "fields": {
+    "order": 13,
+    "product": 1,
+    "amount_bought": "14.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 17,
+  "fields": {
+    "order": 13,
+    "product": 2,
+    "amount_bought": "15.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 18,
+  "fields": {
+    "order": 13,
+    "product": 3,
+    "amount_bought": "16.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 19,
+  "fields": {
+    "order": 13,
+    "product": 6,
+    "amount_bought": "11.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 20,
+  "fields": {
+    "order": 14,
+    "product": 6,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 21,
+  "fields": {
+    "order": 15,
+    "product": 6,
+    "amount_bought": "13.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 22,
+  "fields": {
+    "order": 16,
+    "product": 6,
+    "amount_bought": "10.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 23,
+  "fields": {
+    "order": 17,
+    "product": 6,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 24,
+  "fields": {
+    "order": 18,
+    "product": 1,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 25,
+  "fields": {
+    "order": 19,
+    "product": 2,
+    "amount_bought": "5.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 26,
+  "fields": {
+    "order": 20,
+    "product": 2,
+    "amount_bought": "1.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 27,
+  "fields": {
+    "order": 21,
+    "product": 1,
+    "amount_bought": "123.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 28,
+  "fields": {
+    "order": 22,
+    "product": 1,
+    "amount_bought": "30.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 29,
+  "fields": {
+    "order": 23,
+    "product": 6,
+    "amount_bought": "12.00"
+  }
+},
+{
+  "model": "accounts.quantityofanitembought",
+  "pk": 30,
+  "fields": {
+    "order": 24,
+    "product": 6,
+    "amount_bought": "13.00"
+  }
+},
+{
+  "model": "accounts.branch",
+  "pk": 1,
+  "fields": {
+    "name": "There",
+    "location": "Place, World"
+  }
+},
+{
+  "model": "accounts.cashier",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "tryhard"
+    ],
+    "first_name": "Try",
+    "second_name": "Hard",
+    "date_employed": "2025-12-31",
+    "branch_stationed_at": 1
+  }
+},
+{
+  "model": "accounts.cashier",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "Blae"
+    ],
+    "first_name": "Eren",
+    "second_name": "Yeager",
+    "date_employed": "2026-10-26",
+    "branch_stationed_at": 1
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "LOGIN_SUCCEEDED",
+    "timestamp": "2026-10-25T12:25:21.483Z",
+    "status": true,
+    "description": "dev logged in",
+    "entity_type": "User",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 2,
+  "fields": {
+    "user": null,
+    "action": "LOGIN_FAILED",
+    "timestamp": "2026-10-25T12:29:15.878Z",
+    "status": false,
+    "description": "dev failed to log in",
+    "entity_type": "User",
+    "entity_id": null,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 3,
+  "fields": {
+    "user": null,
+    "action": "LOGIN_FAILED",
+    "timestamp": "2026-10-25T12:30:13.413Z",
+    "status": false,
+    "description": "Person with username \"dev\" failed to log in",
+    "entity_type": "User",
+    "entity_id": null,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "LOGIN_SUCCEEDED",
+    "timestamp": "2026-10-25T13:03:32.791Z",
+    "status": true,
+    "description": "dev logged in",
+    "entity_type": "User",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "CATEGORY_UPDATED",
+    "timestamp": "2026-10-25T13:05:40.578Z",
+    "status": true,
+    "description": "",
+    "entity_type": "Category",
+    "entity_id": null,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "CATEGORY_UPDATED",
+    "timestamp": "2026-10-25T13:06:05.732Z",
+    "status": true,
+    "description": "",
+    "entity_type": "Category",
+    "entity_id": null,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "CATEGORY_UPDATED",
+    "timestamp": "2026-10-25T13:12:02.124Z",
+    "status": true,
+    "description": "dev updated Category, fFood and Drinks",
+    "entity_type": "Category",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "CATEGORY_CREATED",
+    "timestamp": "2026-10-25T13:19:51.635Z",
+    "status": true,
+    "description": "dev created new Category, fDark",
+    "entity_type": "Category",
+    "entity_id": 16,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "CATEGORY_UPDATED",
+    "timestamp": "2026-10-26T11:49:11.788Z",
+    "status": true,
+    "description": "dev updated Category, Food and Drinks?",
+    "entity_type": "Category",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "CATEGORY_DELETED",
+    "timestamp": "2026-10-26T11:49:38.475Z",
+    "status": true,
+    "description": "dev deleted Category, Dark",
+    "entity_type": "Category",
+    "entity_id": 16,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "CASHIER_UPDATED",
+    "timestamp": "2026-10-26T11:51:53.294Z",
+    "status": true,
+    "description": "dev updated cashier, Try Hard",
+    "entity_type": "Cashier",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "CASHIER_CREATED",
+    "timestamp": "2026-10-26T11:52:37.684Z",
+    "status": true,
+    "description": "dev created cashier, Eren Yeager",
+    "entity_type": "Cashier",
+    "entity_id": 5,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "TAXTYPE_DELETED",
+    "timestamp": "2026-10-26T12:02:24.052Z",
+    "status": true,
+    "description": "dev deleted Taxtype, Like",
+    "entity_type": "Taxtype",
+    "entity_id": null,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 15,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "LOGIN_SUCCEEDED",
+    "timestamp": "2026-10-27T21:35:34.741Z",
+    "status": true,
+    "description": "dev logged in",
+    "entity_type": "User",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 16,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "SALE_COMPLETED",
+    "timestamp": "2026-10-27T21:43:14.375Z",
+    "status": true,
+    "description": "dev made a sale, with OrderHistory, \"21\"",
+    "entity_type": "User",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "SALE_COMPLETED",
+    "timestamp": "2026-10-27T21:43:39.033Z",
+    "status": true,
+    "description": "dev made a sale, with OrderHistory, \"22\"",
+    "entity_type": "User",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "SALE_COMPLETED",
+    "timestamp": "2026-10-27T21:43:57.604Z",
+    "status": true,
+    "description": "dev made a sale, with OrderHistory, \"23\"",
+    "entity_type": "User",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.auditlog",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "dev"
+    ],
+    "action": "SALE_COMPLETED",
+    "timestamp": "2026-10-27T21:44:08.785Z",
+    "status": true,
+    "description": "dev made a sale, with OrderHistory, \"24\"",
+    "entity_type": "User",
+    "entity_id": 1,
+    "changes": {}
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 1,
+  "fields": {
+    "product": 1,
+    "movement_type": "OUT",
+    "date": "2026-09-13T15:34:45.490Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Who cares",
+    "quantity": "2.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 2,
+  "fields": {
+    "product": 2,
+    "movement_type": "sale",
+    "date": "2026-10-20T16:36:37.524Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-4",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 3,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-20T17:22:38.092Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-5",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 4,
+  "fields": {
+    "product": 1,
+    "movement_type": "sale",
+    "date": "2026-10-20T17:22:52.670Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-6",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 5,
+  "fields": {
+    "product": 3,
+    "movement_type": "sale",
+    "date": "2026-10-20T17:26:28.753Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-7",
+    "quantity": "-10.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 6,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-20T17:26:28.755Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-7",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 7,
+  "fields": {
+    "product": 3,
+    "movement_type": "sale",
+    "date": "2026-10-20T17:27:19.286Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-8",
+    "quantity": "-10.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 8,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-20T17:27:19.288Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-8",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 9,
+  "fields": {
+    "product": 2,
+    "movement_type": "sale",
+    "date": "2026-10-20T17:27:50.553Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-9",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 10,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-20T17:43:36.027Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-10",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 11,
+  "fields": {
+    "product": 3,
+    "movement_type": "sale",
+    "date": "2026-10-20T17:51:23.430Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-11",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 12,
+  "fields": {
+    "product": 2,
+    "movement_type": "sale",
+    "date": "2026-10-20T18:03:06.182Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-12",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 13,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-20T18:03:06.183Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-12",
+    "quantity": "-20.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 14,
+  "fields": {
+    "product": 1,
+    "movement_type": "adjustment",
+    "date": "2026-10-22T20:01:10.265Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "B",
+    "quantity": "3.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 15,
+  "fields": {
+    "product": 1,
+    "movement_type": "adjustment",
+    "date": "2026-10-22T20:01:39.978Z",
+    "performed_by": [
+      "fe"
+    ],
+    "reason": "Felt Like It",
+    "quantity": "80.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 16,
+  "fields": {
+    "product": 1,
+    "movement_type": "adjustment",
+    "date": "2026-10-22T21:19:40.071Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Increase",
+    "quantity": "10.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 17,
+  "fields": {
+    "product": 1,
+    "movement_type": "adjustment",
+    "date": "2026-10-23T06:52:45.332Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "h",
+    "quantity": "6.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 18,
+  "fields": {
+    "product": 1,
+    "movement_type": "adjustment",
+    "date": "2026-10-23T06:53:07.928Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "SD",
+    "quantity": "5.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 19,
+  "fields": {
+    "product": 1,
+    "movement_type": "adjustment",
+    "date": "2026-10-23T06:53:32.528Z",
+    "performed_by": null,
+    "reason": "DS",
+    "quantity": "7.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 20,
+  "fields": {
+    "product": 1,
+    "movement_type": "adjustment",
+    "date": "2026-10-23T07:08:16.516Z",
+    "performed_by": null,
+    "reason": "h",
+    "quantity": "15.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 21,
+  "fields": {
+    "product": 6,
+    "movement_type": "adjustment",
+    "date": "2026-10-23T17:02:16.796Z",
+    "performed_by": null,
+    "reason": "Need big numbers dont ask why",
+    "quantity": "100.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 22,
+  "fields": {
+    "product": 3,
+    "movement_type": "adjustment",
+    "date": "2026-10-23T17:02:28.994Z",
+    "performed_by": null,
+    "reason": "Need big numbers dont ask why",
+    "quantity": "1000.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 23,
+  "fields": {
+    "product": 2,
+    "movement_type": "adjustment",
+    "date": "2026-10-23T17:02:42.193Z",
+    "performed_by": null,
+    "reason": "Need big numbers dont ask why",
+    "quantity": "10000.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 24,
+  "fields": {
+    "product": 1,
+    "movement_type": "adjustment",
+    "date": "2026-10-23T17:02:53.182Z",
+    "performed_by": null,
+    "reason": "Need big numbers dont ask why",
+    "quantity": "999999.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 25,
+  "fields": {
+    "product": 1,
+    "movement_type": "sale",
+    "date": "2026-10-23T17:23:07.355Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-13",
+    "quantity": "-14.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 26,
+  "fields": {
+    "product": 2,
+    "movement_type": "sale",
+    "date": "2026-10-23T17:23:07.357Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-13",
+    "quantity": "-15.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 27,
+  "fields": {
+    "product": 3,
+    "movement_type": "sale",
+    "date": "2026-10-23T17:23:07.359Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-13",
+    "quantity": "-16.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 28,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-23T17:23:07.361Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-13",
+    "quantity": "-11.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 29,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-23T17:24:06.753Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-14",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 30,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-23T17:24:57.294Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-15",
+    "quantity": "-13.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 31,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-23T17:25:38.794Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-16",
+    "quantity": "-10.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 32,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-23T17:29:19.134Z",
+    "performed_by": [
+      "tryhard"
+    ],
+    "reason": "Sale OH-17",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 33,
+  "fields": {
+    "product": 1,
+    "movement_type": "adjustment",
+    "date": "2026-10-23T18:00:00.998Z",
+    "performed_by": [
+      "tryhard"
+    ],
+    "reason": "b",
+    "quantity": "89.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 34,
+  "fields": {
+    "product": 6,
+    "movement_type": "1000",
+    "date": "2026-10-24T08:13:14.801Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "c",
+    "quantity": "1000.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 35,
+  "fields": {
+    "product": 3,
+    "movement_type": "Stock Increase",
+    "date": "2026-10-24T08:14:31.396Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "make una tell am to call me",
+    "quantity": "100000.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 36,
+  "fields": {
+    "product": 1,
+    "movement_type": "sale",
+    "date": "2026-10-24T20:33:03.896Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-18",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 37,
+  "fields": {
+    "product": 2,
+    "movement_type": "sale",
+    "date": "2026-10-24T20:37:31.079Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-19",
+    "quantity": "-5.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 38,
+  "fields": {
+    "product": 2,
+    "movement_type": "return",
+    "date": "2026-10-24T20:45:15.154Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Return for sale #19: bd",
+    "quantity": "1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 39,
+  "fields": {
+    "product": 2,
+    "movement_type": "sale",
+    "date": "2026-10-25T07:45:53.673Z",
+    "performed_by": [
+      "tryhard"
+    ],
+    "reason": "Sale OH-20",
+    "quantity": "-1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 40,
+  "fields": {
+    "product": 2,
+    "movement_type": "return",
+    "date": "2026-10-25T07:46:30.738Z",
+    "performed_by": [
+      "tryhard"
+    ],
+    "reason": "Return for sale #20: Not interested",
+    "quantity": "1.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 41,
+  "fields": {
+    "product": 1,
+    "movement_type": "sale",
+    "date": "2026-10-27T21:43:14.373Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-21",
+    "quantity": "-123.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 42,
+  "fields": {
+    "product": 1,
+    "movement_type": "sale",
+    "date": "2026-10-27T21:43:39.030Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-22",
+    "quantity": "-30.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 43,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-27T21:43:57.603Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-23",
+    "quantity": "-12.00"
+  }
+},
+{
+  "model": "accounts.stockmovement",
+  "pk": 44,
+  "fields": {
+    "product": 6,
+    "movement_type": "sale",
+    "date": "2026-10-27T21:44:08.784Z",
+    "performed_by": [
+      "dev"
+    ],
+    "reason": "Sale OH-24",
+    "quantity": "-13.00"
+  }
+},
+{
+  "model": "accounts.returns",
+  "pk": 1,
+  "fields": {
+    "product": 2,
+    "customer": null,
+    "order_history": 19,
+    "quantity": "1.00",
+    "reason": "bd"
+  }
+},
+{
+  "model": "accounts.returns",
+  "pk": 2,
+  "fields": {
+    "product": 2,
+    "customer": null,
+    "order_history": 20,
+    "quantity": "1.00",
+    "reason": "Not interested"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 1,
+  "fields": {
+    "order": 4,
+    "amount": "10.00",
+    "method": "Cash",
+    "paid_at": "2026-10-20T16:36:37.526Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 2,
+  "fields": {
+    "order": 5,
+    "amount": "22.55",
+    "method": "Cash",
+    "paid_at": "2026-10-20T17:22:38.093Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 3,
+  "fields": {
+    "order": 6,
+    "amount": "1.75",
+    "method": "Cash",
+    "paid_at": "2026-10-20T17:22:52.671Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 4,
+  "fields": {
+    "order": 7,
+    "amount": "3352.55",
+    "method": "Cash",
+    "paid_at": "2026-10-20T17:26:28.756Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 5,
+  "fields": {
+    "order": 8,
+    "amount": "3352.55",
+    "method": "Cash",
+    "paid_at": "2026-10-20T17:27:19.289Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 6,
+  "fields": {
+    "order": 9,
+    "amount": "10.00",
+    "method": "Cash",
+    "paid_at": "2026-10-20T17:27:50.554Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 7,
+  "fields": {
+    "order": 10,
+    "amount": "22.55",
+    "method": "Cash",
+    "paid_at": "2026-10-20T17:43:36.028Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 8,
+  "fields": {
+    "order": 11,
+    "amount": "333.00",
+    "method": "Mobile Money",
+    "paid_at": "2026-10-20T17:51:23.431Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 9,
+  "fields": {
+    "order": 12,
+    "amount": "461.00",
+    "method": "Cash",
+    "paid_at": "2026-10-20T18:03:06.184Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 10,
+  "fields": {
+    "order": 13,
+    "amount": "5729.55",
+    "method": "Cash",
+    "paid_at": "2026-10-23T17:23:07.361Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 11,
+  "fields": {
+    "order": 14,
+    "amount": "22.55",
+    "method": "Cash",
+    "paid_at": "2026-10-23T17:24:06.754Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 12,
+  "fields": {
+    "order": 15,
+    "amount": "293.15",
+    "method": "Cash",
+    "paid_at": "2026-10-23T17:24:57.295Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 13,
+  "fields": {
+    "order": 16,
+    "amount": "225.50",
+    "method": "Cash",
+    "paid_at": "2026-10-23T17:25:38.796Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 14,
+  "fields": {
+    "order": 17,
+    "amount": "22.55",
+    "method": "Cash",
+    "paid_at": "2026-10-23T17:29:19.135Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 15,
+  "fields": {
+    "order": 18,
+    "amount": "0.25",
+    "method": "Cash",
+    "paid_at": "2026-10-24T20:33:03.897Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 16,
+  "fields": {
+    "order": 19,
+    "amount": "50.00",
+    "method": "Cash",
+    "paid_at": "2026-10-24T20:37:31.080Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 17,
+  "fields": {
+    "order": 20,
+    "amount": "10.00",
+    "method": "Cash",
+    "paid_at": "2026-10-25T07:45:53.675Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 18,
+  "fields": {
+    "order": 21,
+    "amount": "30.75",
+    "method": "Cash",
+    "paid_at": "2026-10-27T21:43:14.374Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 19,
+  "fields": {
+    "order": 22,
+    "amount": "7.50",
+    "method": "Cash",
+    "paid_at": "2026-10-27T21:43:39.032Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 20,
+  "fields": {
+    "order": 23,
+    "amount": "270.60",
+    "method": "Cash",
+    "paid_at": "2026-10-27T21:43:57.604Z"
+  }
+},
+{
+  "model": "accounts.payment",
+  "pk": 21,
+  "fields": {
+    "order": 24,
+    "amount": "293.15",
+    "method": "Cash",
+    "paid_at": "2026-10-27T21:44:08.785Z"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-08-24T18:51:11.474Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "category"
+    ],
+    "object_id": "2",
+    "object_repr": "Foods and drinks",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-08-26T12:21:28.429Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "warehouse"
+    ],
+    "object_id": "1",
+    "object_repr": "Another",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-09-03T13:54:10.644Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "2",
+    "object_repr": "tryhard",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-09-03T13:54:40.673Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "branch"
+    ],
+    "object_id": "1",
+    "object_repr": "There-Place, World",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-09-03T13:54:49.052Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "branch"
+    ],
+    "object_id": "1",
+    "object_repr": "There-Place, World",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2026-09-03T13:54:52.874Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "cashier"
+    ],
+    "object_id": "1",
+    "object_repr": "tryhard-There-Place, World",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2026-09-03T13:57:18.287Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "3",
+    "object_repr": "fe",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2026-09-06T20:45:45.786Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "3",
+    "object_repr": "fe",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2026-09-06T20:46:31.496Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "3",
+    "object_repr": "fe",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Staff status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2026-09-06T20:47:32.424Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "3",
+    "object_repr": "fe",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Staff status\", \"Superuser status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2026-09-06T20:48:12.329Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "3",
+    "object_repr": "fe",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Superuser status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2026-09-06T22:07:28.735Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "1",
+    "object_repr": "Thingy-5454",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2026-09-07T09:20:35.291Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "cashier"
+    ],
+    "object_id": "2",
+    "object_repr": "dev-There-Place, World",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2026-09-07T15:05:42.924Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "1",
+    "object_repr": "Admin",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2026-09-07T15:08:19.481Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "2",
+    "object_repr": "Cashiers",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2026-09-07T15:10:20.580Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "3",
+    "object_repr": "Customers",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2026-09-07T15:10:50.110Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "1",
+    "object_repr": "dev",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2026-09-07T15:11:07.422Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "3",
+    "object_repr": "fe",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2026-09-07T15:11:20.257Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "2",
+    "object_repr": "tryhard",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2026-09-07T15:11:45.739Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "3",
+    "object_repr": "fe",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2026-09-07T15:11:54.077Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "2",
+    "object_repr": "tryhard",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2026-09-07T15:13:06.309Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "3",
+    "object_repr": "Customers",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2026-09-07T15:48:06.598Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "1",
+    "object_repr": "Admin",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2026-09-07T15:48:58.647Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "1",
+    "object_repr": "Admin",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2026-09-07T21:41:06.549Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "taxtype"
+    ],
+    "object_id": "1",
+    "object_repr": "NHIL (2.5%)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2026-09-07T21:41:09.511Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "1",
+    "object_repr": "Thingy-5454.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Taxes\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2026-09-09T14:27:18.379Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "taxtype"
+    ],
+    "object_id": "2",
+    "object_repr": "VAT (15%)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2026-09-09T14:27:20.320Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "1",
+    "object_repr": "Thingy-5454.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Taxes\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2026-09-09T15:02:11.103Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "supplier"
+    ],
+    "object_id": "1",
+    "object_repr": "Chicago-8484848484",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2026-09-12T21:46:24.458Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "orderhistory"
+    ],
+    "object_id": "1",
+    "object_repr": "OH-None-2026-09-12 21:46:24.455369+00:00",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2026-09-12T21:47:11.863Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "2",
+    "object_repr": "gubber-44",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2026-09-12T21:47:42.823Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "quantityofanitembought"
+    ],
+    "object_id": "1",
+    "object_repr": "5 x Thingy",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2026-09-12T21:47:59.161Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "quantityofanitembought"
+    ],
+    "object_id": "2",
+    "object_repr": "6 x gubber",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2026-09-12T21:58:17.863Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "2",
+    "object_repr": "Product object (2)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Net cost\", \"Selling price without tax\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2026-09-12T21:58:31.110Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "1",
+    "object_repr": "Product object (1)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Selling price without tax\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2026-09-12T21:59:06.624Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "quantityofanitembought"
+    ],
+    "object_id": "1",
+    "object_repr": "2 x Thingy",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Amount bought\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2026-09-12T21:59:29.127Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "quantityofanitembought"
+    ],
+    "object_id": "2",
+    "object_repr": "1 x gubber",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Amount bought\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2026-09-12T22:29:23.953Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "customer"
+    ],
+    "object_id": "1",
+    "object_repr": "tryhard",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2026-09-12T22:29:25.785Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "orderhistory"
+    ],
+    "object_id": "1",
+    "object_repr": "OH-tryhard-2026-09-12 21:46:24.455369+00:00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Customer\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2026-09-12T22:30:02.494Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "1",
+    "object_repr": "Product object (1)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Minimum stock level\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2026-09-12T22:30:44.954Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "quantityofanitembought"
+    ],
+    "object_id": "2",
+    "object_repr": "5 x gubber",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Amount bought\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 42,
+  "fields": {
+    "action_time": "2026-09-13T13:22:12.744Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "2",
+    "object_repr": "Product object (2)",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 43,
+  "fields": {
+    "action_time": "2026-09-13T13:22:33.581Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "orderhistory"
+    ],
+    "object_id": "1",
+    "object_repr": "OH-tryhard-2026-09-12 21:46:24.455369+00:00",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 44,
+  "fields": {
+    "action_time": "2026-09-13T13:22:35.781Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "orderhistory"
+    ],
+    "object_id": "1",
+    "object_repr": "OH-tryhard-2026-09-12 21:46:24.455369+00:00",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 45,
+  "fields": {
+    "action_time": "2026-09-13T13:22:47.532Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "orderhistory"
+    ],
+    "object_id": "2",
+    "object_repr": "OH-None-2026-09-13 13:22:47.531265+00:00",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 46,
+  "fields": {
+    "action_time": "2026-09-13T13:23:24.908Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "quantityofanitembought"
+    ],
+    "object_id": "3",
+    "object_repr": "5 x gubber",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 47,
+  "fields": {
+    "action_time": "2026-09-13T13:56:47.170Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "orderhistory"
+    ],
+    "object_id": "3",
+    "object_repr": "OH-None-2026-09-13 13:56:47.169535+00:00",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 48,
+  "fields": {
+    "action_time": "2026-09-13T14:48:39.663Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "1",
+    "object_repr": "Product object (1)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Minimum stock level\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 49,
+  "fields": {
+    "action_time": "2026-09-13T14:48:46.690Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "2",
+    "object_repr": "Product object (2)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Minimum stock level\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 50,
+  "fields": {
+    "action_time": "2026-09-13T15:16:46.707Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "2",
+    "object_repr": "Product object (2)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Current stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 51,
+  "fields": {
+    "action_time": "2026-09-13T15:17:06.676Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "1",
+    "object_repr": "Product object (1)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Current stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 52,
+  "fields": {
+    "action_time": "2026-09-13T15:33:48.035Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "3",
+    "object_repr": "Product object (3)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 53,
+  "fields": {
+    "action_time": "2026-09-13T15:34:45.491Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "stockmovement"
+    ],
+    "object_id": "1",
+    "object_repr": "Product object (1)-OUT-2",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 54,
+  "fields": {
+    "action_time": "2026-09-14T09:04:31.159Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "4",
+    "object_repr": "Product object (4)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 55,
+  "fields": {
+    "action_time": "2026-09-14T09:10:05.720Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "5",
+    "object_repr": "Product object (5)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 56,
+  "fields": {
+    "action_time": "2026-09-14T09:12:03.147Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "6",
+    "object_repr": "Product object (6)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 57,
+  "fields": {
+    "action_time": "2026-09-14T23:05:22.061Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "supplier"
+    ],
+    "object_id": "2",
+    "object_repr": "tgdgs-8484848484",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 58,
+  "fields": {
+    "action_time": "2026-09-15T14:43:46.361Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "4",
+    "object_repr": "Blae",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 59,
+  "fields": {
+    "action_time": "2026-09-15T14:43:49.057Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "cashier"
+    ],
+    "object_id": "3",
+    "object_repr": "Blae-There-Place, World",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 60,
+  "fields": {
+    "action_time": "2026-10-20T16:36:18.680Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "2",
+    "object_repr": "Cashiers",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 61,
+  "fields": {
+    "action_time": "2026-10-20T17:51:48.563Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "2",
+    "object_repr": "gubber",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Current stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 62,
+  "fields": {
+    "action_time": "2026-10-20T17:57:25.829Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "2",
+    "object_repr": "gubber",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Current stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 63,
+  "fields": {
+    "action_time": "2026-10-20T18:03:40.649Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "2",
+    "object_repr": "gubber",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Current stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 64,
+  "fields": {
+    "action_time": "2026-10-21T06:48:23.547Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorder"
+    ],
+    "object_id": "1",
+    "object_repr": "Depression-12345-Sent",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 65,
+  "fields": {
+    "action_time": "2026-10-21T06:48:35.683Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorder"
+    ],
+    "object_id": "2",
+    "object_repr": "What a weird looking chud-fghjk-Sent",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 66,
+  "fields": {
+    "action_time": "2026-10-21T06:48:57.965Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorderitem"
+    ],
+    "object_id": "1",
+    "object_repr": "PurchaseOrderItem object (1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 67,
+  "fields": {
+    "action_time": "2026-10-21T06:49:05.967Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorderitem"
+    ],
+    "object_id": "2",
+    "object_repr": "PurchaseOrderItem object (2)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 68,
+  "fields": {
+    "action_time": "2026-10-21T06:49:15.189Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorderitem"
+    ],
+    "object_id": "3",
+    "object_repr": "PurchaseOrderItem object (3)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 69,
+  "fields": {
+    "action_time": "2026-10-21T06:51:16.764Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorder"
+    ],
+    "object_id": "2",
+    "object_repr": "What a weird looking chud-fghjk-Received",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 70,
+  "fields": {
+    "action_time": "2026-10-21T06:52:23.682Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorder"
+    ],
+    "object_id": "1",
+    "object_repr": "Depression-12345-Received",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 71,
+  "fields": {
+    "action_time": "2026-10-21T06:53:10.803Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorder"
+    ],
+    "object_id": "2",
+    "object_repr": "What a weird looking chud-fghjk-Received",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 72,
+  "fields": {
+    "action_time": "2026-10-21T06:53:10.803Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorder"
+    ],
+    "object_id": "1",
+    "object_repr": "Depression-12345-Received",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 73,
+  "fields": {
+    "action_time": "2026-10-21T06:53:31.785Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorder"
+    ],
+    "object_id": "3",
+    "object_repr": "What a weird looking chud-fghjk-Draft",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 74,
+  "fields": {
+    "action_time": "2026-10-21T06:53:49.880Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorderitem"
+    ],
+    "object_id": "4",
+    "object_repr": "PurchaseOrderItem object (4)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 75,
+  "fields": {
+    "action_time": "2026-10-21T06:54:03.231Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "purchaseorder"
+    ],
+    "object_id": "3",
+    "object_repr": "What a weird looking chud-fghjk-Received",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 76,
+  "fields": {
+    "action_time": "2026-10-21T16:20:30.322Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "2",
+    "object_repr": "Cashiers",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 77,
+  "fields": {
+    "action_time": "2026-10-22T08:29:58.958Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "product"
+    ],
+    "object_id": "6",
+    "object_repr": "heal",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Current stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 78,
+  "fields": {
+    "action_time": "2026-10-22T21:25:19.285Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "stockmovement"
+    ],
+    "object_id": "15",
+    "object_repr": "Nott a Thingy-adjustment-80.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Performed by\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 79,
+  "fields": {
+    "action_time": "2026-10-23T17:26:07.787Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "1",
+    "object_repr": "dev",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 80,
+  "fields": {
+    "action_time": "2026-10-23T17:29:05.258Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "2",
+    "object_repr": "Cashiers",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 81,
+  "fields": {
+    "action_time": "2026-10-25T07:48:15.398Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "2",
+    "object_repr": "Cashiers",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Permissions\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 82,
+  "fields": {
+    "action_time": "2026-10-26T12:02:13.250Z",
+    "user": [
+      "dev"
+    ],
+    "content_type": [
+      "accounts",
+      "auditlog"
+    ],
+    "object_id": "13",
+    "object_repr": "dev-DISCOUNT_CREATED",
+    "action_flag": 3,
+    "change_message": ""
+  }
+}
+]

@@ -377,8 +377,8 @@ def dashboard(request):
             "movement_type": movement.movement_type,
             "date": movement.date,
             "performed_by": (
-                f"{movement.performed_by.first_name or 'No Name'} "
-                f"{movement.performed_by.second_name or ''}"
+                f"{movement.performed_by.username or 'No Name'} "
+                
             ).strip() if movement.performed_by else "Admin",
             "reason": movement.reason,
         })
@@ -799,13 +799,13 @@ def taxtypes(request):
             data = request.data
         )
         if serializer.is_valid():
-            discount = serializer.save()
+            taxtype = serializer.save()
             log_action(user=request.user,
-                                               action=AuditLog.Action.DISCOUNT_CREATED,
+                       action=AuditLog.Action.TAXTYPE_CREATED,
                                                status=True,
-                                                description=f"{request.user} created discount, {discount.name}",
-                                                entity_id=discount.id,
-                                                entity_type="Discount",
+                                                description=f"{request.user} created taxtype, {taxtype.name}",
+                                                entity_id=taxtype.id,
+                                                entity_type="Taxtype",
                                     )
 
 
@@ -842,6 +842,13 @@ def taxtype_details(request, taxtype_id):
         )
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                                       action=AuditLog.Action.TAXTYPE_UPDATED,
+                                                                               status=True,
+                                                                                description=f"{request.user} updated Taxtype, \"{taxtype.name}\"",
+                                                                                entity_id=taxtype.id,
+                                                                                entity_type="Taxtype",
+                                                                    ) 
             return Response(
                 serializer.data
             )
@@ -856,7 +863,14 @@ def taxtype_details(request, taxtype_id):
             partial = True
         )
         if serializer.is_valid():  
-            serializer.save()             
+            serializer.save() 
+            log_action(user=request.user,
+                                           action=AuditLog.Action.TAXTYPE_UPDATED,
+                                                                   status=True,
+                                                                    description=f"{request.user} updated Taxtype, \"{taxtype.name}\"",
+                                                                    entity_id=taxtype.id,
+                                                                    entity_type="Taxtype",
+                                                        )            
             return Response(
                 serializer.data
             )
@@ -866,6 +880,14 @@ def taxtype_details(request, taxtype_id):
         )  
     elif request.method == "DELETE":
         taxtype.delete()
+        log_action(user=request.user,
+                               action=AuditLog.Action.TAXTYPE_DELETED,
+                                                       status=True,
+                                                        description=f"{request.user} deleted Taxtype, {taxtype.name}",
+                                                        entity_id=taxtype.id,
+                                                        entity_type="Taxtype",
+                                            )
+        
         return Response(
             status=204
         )
@@ -890,7 +912,14 @@ def warehouses(request):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            warehouse = serializer.save()
+            log_action(user=request.user,
+                                               action=AuditLog.Action.WAREHOUSE_CREATED,
+                                                                       status=True,
+                                                                        description=f"{request.user} updated warehouse, {warehouse.name}",
+                                                                        entity_id=warehouse.id,
+                                                                        entity_type="Warehouse",
+                                                            )
 
             return Response(
                 serializer.data,
@@ -931,6 +960,13 @@ def warehouse_detail(request, warehouse_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                               action=AuditLog.Action.WAREHOUSE_UPDATED,
+                                                                       status=True,
+                                                                        description=f"{request.user} updated warehouse, {warehouse.name}",
+                                                                        entity_id=warehouse.id,
+                                                                        entity_type="Warehouse",
+                                                            )
             return Response(serializer.data)
 
         return Response(
@@ -948,6 +984,13 @@ def warehouse_detail(request, warehouse_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                   action=AuditLog.Action.WAREHOUSE_UPDATED,
+                                                           status=True,
+                                                            description=f"{request.user} updated warehouse, {warehouse.name}",
+                                                            entity_id=warehouse.id,
+                                                            entity_type="Warehouse",
+                                                )
             return Response(serializer.data)
 
         return Response(
@@ -958,6 +1001,13 @@ def warehouse_detail(request, warehouse_id):
     elif request.method == "DELETE":
 
         warehouse.delete()
+        log_action(user=request.user,
+                                           action=AuditLog.Action.WAREHOUSE_DELETED,
+                                                                   status=True,
+                                                                    description=f"{request.user} deleted warehouse, {warehouse.name}",
+                                                                    entity_id=warehouse.id,
+                                                                    entity_type="Warehouse",
+                                                        )
 
         return Response(status=204)
     
@@ -983,7 +1033,14 @@ def products(request):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            product = serializer.save()
+            log_action(user=request.user,
+                                               action=AuditLog.Action.PRODUCT_CREATED,
+                                                                       status=True,
+                                                                        description=f"{request.user} created product, {product.name}",
+                                                                        entity_id=product.id,
+                                                                        entity_type="Product",
+                                                            )
 
             return Response(
                 serializer.data,
@@ -1024,7 +1081,13 @@ def product_detail(request, product_id):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            log_action(user=request.user,
+                                   action=AuditLog.Action.PRODUCT_UPDATED,
+                                                           status=True,
+                                                            description=f"{request.user} updated product, {product.name}",
+                                                            entity_id=product.id,
+                                                            entity_type="Product",
+                                                )
             return Response(serializer.data)
 
         return Response(
@@ -1049,7 +1112,13 @@ def product_detail(request, product_id):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            log_action(user=request.user,
+                                               action=AuditLog.Action.PRODUCT_UPDATED,
+                                                                       status=True,
+                                                                        description=f"{request.user} updated product, {product.name}",
+                                                                        entity_id=product.id,
+                                                                        entity_type="Product",
+                                                            )
             return Response(serializer.data)
 
         return Response(
@@ -1061,6 +1130,13 @@ def product_detail(request, product_id):
 
         try:
             product.delete()
+            log_action(user=request.user,
+                                               action=AuditLog.Action.PRODUCT_DELETED,
+                                                                       status=True,
+                                                                        description=f"{request.user} deleted product, {product.name}",
+                                                                        entity_id=product.id,
+                                                                        entity_type="Product",
+                                                            )
 
         except ProtectedError:
             return Response(
@@ -1190,7 +1266,14 @@ def branches(request):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            branch = serializer.save()
+            log_action(user=request.user,
+                                               action=AuditLog.Action.BRANCH_CREATED,
+                                                                       status=True,
+                                                                        description=f"{request.user} created branch, {branch.name}",
+                                                                        entity_id=branch.id,
+                                                                        entity_type="Branch",
+                                                            )
 
             return Response(
                 serializer.data,
@@ -1232,6 +1315,13 @@ def branch_detail(request, branch_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                                           action=AuditLog.Action.BRANCH_UPDATED,
+                                                                                   status=True,
+                                                                                    description=f"{request.user} updated branch, {branch.name}",
+                                                                                    entity_id=branch.id,
+                                                                                    entity_type="Branch",
+                                                                        )
             return Response(serializer.data)
 
         return Response(
@@ -1249,6 +1339,13 @@ def branch_detail(request, branch_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                                           action=AuditLog.Action.BRANCH_UPDATED,
+                                                                                   status=True,
+                                                                                    description=f"{request.user} updated branch, {branch.name}",
+                                                                                    entity_id=branch.id,
+                                                                                    entity_type="Branch",
+                                                                        )
             return Response(serializer.data)
 
         return Response(
@@ -1259,6 +1356,13 @@ def branch_detail(request, branch_id):
     elif request.method == "DELETE":
 
         branch.delete()
+        log_action(user=request.user,
+                                                       action=AuditLog.Action.BRANCH_DELETED,
+                                                                               status=True,
+                                                                                description=f"{request.user} deleted branch, {branch.name}",
+                                                                                entity_id=branch.id,
+                                                                                entity_type="Branch",
+                                                                    )
 
         return Response(status=204)
 
@@ -1502,7 +1606,15 @@ def customers(request):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            customer = serializer.save()
+            log_action(user=request.user,
+                                                           action=AuditLog.Action.CUSTOMER_CREATED,
+                                                                                   status=True,
+                                                                                    description=f"{request.user} created customer, {customer.name}",
+                                                                                    entity_id=customer.id,
+                                                                                    entity_type="Customer",
+                                                                        )
+
 
             return Response(
                 serializer.data,
@@ -1544,6 +1656,13 @@ def customer_detail(request, customer_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                                                       action=AuditLog.Action.CUSTOMER_UPDATED,
+                                                                                               status=True,
+                                                                                                description=f"{request.user} updated customer, {customer.name}",
+                                                                                                entity_id=customer.id,
+                                                                                                entity_type="Customer",
+                                                                                    )
             return Response(serializer.data)
 
         return Response(
@@ -1561,6 +1680,13 @@ def customer_detail(request, customer_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                                                                   action=AuditLog.Action.CUSTOMER_UPDATED,
+                                                                                                           status=True,
+                                                                                                            description=f"{request.user} updated customer, {customer.name}",
+                                                                                                            entity_id=customer.id,
+                                                                                                            entity_type="Customer",
+                                                                                                )
             return Response(serializer.data)
 
         return Response(
@@ -1571,6 +1697,13 @@ def customer_detail(request, customer_id):
     elif request.method == "DELETE":
 
         customer.delete()
+        log_action(user=request.user,
+                                                                               action=AuditLog.Action.CUSTOMER_DELETED,
+                                                                                                       status=True,
+                                                                                                        description=f"{request.user} deleted customer, {customer.name}",
+                                                                                                        entity_id=customer.id,
+                                                                                                        entity_type="Customer",
+                                                                                            )
 
         return Response(status=204)
     
@@ -1597,7 +1730,14 @@ def cashiers(request):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            cashier = serializer.save()
+            log_action(user=request.user,
+                                                                                   action=AuditLog.Action.CASHIER_CREATED,
+                                                                                                           status=True,
+                                                                                                            description=f"{request.user} created cashier, {cashier.first_name} {cashier.second_name}",
+                                                                                                            entity_id=cashier.id,
+                                                                                                            entity_type="Cashier",
+                                                                                                )
 
             return Response(
                 serializer.data,
@@ -1639,6 +1779,13 @@ def cashier_detail(request, cashier_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                                                                               action=AuditLog.Action.CASHIER_UPDATED,
+                                                                                                                       status=True,
+                                                                                                                        description=f"{request.user} updated cashier, {cashier.first_name} {cashier.second_name}",
+                                                                                                                        entity_id=cashier.id,
+                                                                                                                        entity_type="Cashier",
+                                                                                                            )
             return Response(serializer.data)
 
         return Response(
@@ -1656,6 +1803,13 @@ def cashier_detail(request, cashier_id):
 
         if serializer.is_valid():
             serializer.save()
+            log_action(user=request.user,
+                                                                                                           action=AuditLog.Action.CASHIER_UPDATED,
+                                                                                                                                   status=True,
+                                                                                                                                    description=f"{request.user} updated cashier, {cashier.first_name} {cashier.second_name}",
+                                                                                                                                    entity_id=cashier.id,
+                                                                                                                                    entity_type="Cashier",
+                                                                                                                        )
             return Response(serializer.data)
 
         return Response(
@@ -1666,6 +1820,13 @@ def cashier_detail(request, cashier_id):
     elif request.method == "DELETE":
 
         cashier.delete()
+        log_action(user=request.user,
+                                                                                                       action=AuditLog.Action.CASHIER_DELETED,
+                                                                                                                               status=True,
+                                                                                                                                description=f"{request.user} deleted cashier, {cashier.name}",
+                                                                                                                                entity_id=cashier.id,
+                                                                                                                                entity_type="Cashier",
+                                                                                                                    )
 
         return Response(status=204)
 
@@ -1860,6 +2021,13 @@ def stock(request):
                     product.current_stock -= quantity
 
                 product.save(update_fields=["current_stock"])
+                log_action(user=request.user,
+                                                                                                               action=AuditLog.Action.STOCK_ADJUSTED,
+                                                                                                                                       status=True,
+                                                                                                                                        description=f"{request.user} updated product, {product.name}\'s stock",
+                                                                                                                                        entity_id=product.id,
+                                                                                                                                        entity_type="Product",
+                                                                                                                            )
 
                 movement = StockMovement.objects.create(
                     product=product,
@@ -1868,6 +2036,13 @@ def stock(request):
                     performed_by=performed_by,
                     reason=reason,
                 )
+                log_action(user=request.user,
+                                                                                                                               action=AuditLog.Action.STOCK_MOVEMENT_CREATED,
+                                                                                                                                                       status=True,
+                                                                                                                                                        description=f"{request.user} created a {movement} on product, {product.name}",
+                                                                                                                                                        entity_id=movement.id,
+                                                                                                                                                        entity_type="StockMovement",
+                                                                                                                                            )
 
             return Response(
                 StockMovementSerializer(movement).data,
@@ -2013,6 +2188,13 @@ def returns(request):
 
                 product.current_stock += quantity
                 product.save(update_fields=["current_stock"])
+                log_action(user=request.user,
+                            action=AuditLog.Action.STOCK_ADJUSTED,
+                            status=True,
+                            description=f"{request.user} processed a return that resulted in a stock increase on {product.name} with ID {product_id}.This has resulted in an increase of {quantity} to it\'s stock.",
+                            entity_id=movement.id,
+                            entity_type="StockMovement",
+                            )
 
                 movement = StockMovement.objects.create(
                     product=product,
@@ -2024,6 +2206,13 @@ def returns(request):
 
                 return_data = ReturnsSerializer(return_record).data
                 movement_data = StockMovementSerializer(movement).data
+                log_action(user=request.user,
+                            action=AuditLog.Action.STOCK_MOVEMENT_CREATED,
+                            status=True,
+                            description=f"{return_record.id} created a stock increase on product, {product.name}",
+                            entity_id=movement.id,
+                            entity_type="StockMovement",
+                            )
 
         except (OrderHistory.DoesNotExist, Product.DoesNotExist):
             return Response(

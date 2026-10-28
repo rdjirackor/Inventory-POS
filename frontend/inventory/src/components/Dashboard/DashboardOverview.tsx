@@ -69,7 +69,7 @@ function DashboardOverview() {
                     <ul>
                         {dashboard.recent_activity.map((activity) => (
                             <li key={activity.date}>
-                                {activity.movement_type} - {activity.product} ({activity.quantity} {activity.performed_by})
+                                {activity.movement_type} - {activity.product} (Quantity: {activity.quantity} By: {activity.performed_by})
                             </li>
                         ))}
                     </ul>

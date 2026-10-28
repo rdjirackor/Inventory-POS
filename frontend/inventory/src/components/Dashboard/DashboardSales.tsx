@@ -26,7 +26,7 @@ function DashboardSales(){
 
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const filtered = items.filter(item=>item.name.toLowerCase().includes(search.toLowerCase()));
-    const[quantity, setQuantity] = useState(1);
+    const[quantity, setQuantity] = useState("1");
 
     const [saleItems, setSaleItems] = useState<Record<string,number>>({});
 
@@ -81,7 +81,7 @@ async function handleCheckout() {
 
         setSaleItems({});
         setSelectedProduct(null);
-        setQuantity(1);
+        setQuantity("1");
         setSelectedCustomer("");
         
 
@@ -122,11 +122,18 @@ async function handleCheckout() {
                 <li key={item.id}
                 onClick={()=>{
                     setSelectedProduct(item);
-                    setQuantity(1);
+                    setQuantity("1");
 
                 }}
                 
-                >{item.name}</li>
+                >{item.image && (
+                                            <img
+                                                src={`http://127.0.0.1:8000${item.image}`}
+                                                alt={item.name}
+                                                width="80"
+                                                height="80"
+                                            />
+                                        )}{item.name}</li>
                 
             ))}
         </ul>
@@ -147,35 +154,42 @@ async function handleCheckout() {
                     type="number"
                     placeholder="Enter Quantity"
                     value= {quantity}
-                    onChange={(e)=>setQuantity(Number(e.target.value))}
+                    onChange={(e)=>setQuantity(e.target.value)}
                     />
 
 
                 <button onClick={()=>{
                     setSelectedProduct(null);
-                    setQuantity(1);}}>
+                    setQuantity("1");}}>
                     X
                 </button>
                 
 
+
                 <button
                     type="button"
                     disabled={
-                        !Number.isFinite(quantity) ||
-                        quantity <= 0 ||
-                        Math.round(quantity * 100) !== quantity * 100
+                        quantity.trim() === "" ||
+                        !Number.isFinite(Number(quantity)) ||
+                        Number(quantity) <= 0 ||
+                        Math.round(Number(quantity) * 100) !== Number(quantity) * 100
                     }
                     onClick={() => {
+                        const qty = Number(quantity);
+
                         setSaleItems(prev => ({
                             ...prev,
-                            [selectedProduct.id]: quantity
+                            [selectedProduct.id]: qty
                         }));
+
                         setSelectedProduct(null);
-                        setQuantity(1);
+                        setQuantity("1");
                     }}
                 >
                     Proceed
-                </button>
+                </button>   
+
+                
                 
             </>)}
 
