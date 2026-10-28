@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { deleteDiscount, getDiscounts, getDiscount } from "../apis/discounts";
 import type { Discount } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
-import "../styles/Pages.css"
 
 function Discounts() {
     const navigate = useNavigate();

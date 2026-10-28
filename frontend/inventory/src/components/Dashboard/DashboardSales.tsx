@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Product } from "../../interfaces/interfaces";
 import { getProducts } from "../../apis/products";
-import "../../styles/Pages.css"
 import type { Customer } from "../../interfaces/interfaces";
 import { getCustomers } from "../../apis/customers";
 import { checkout } from "../../apis/checkout";

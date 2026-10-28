@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { deleteCashier, getCashier, getCashiers } from "../apis/cashiers";
 import type { Cashier } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
-import "../styles/Pages.css"
 
 
 

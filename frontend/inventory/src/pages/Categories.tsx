@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { deleteCategory, getCategories, getCategory } from "../apis/categories";
 import type { Category } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
-import "../styles/Pages.css"
 
 function Categories() {
     const navigate = useNavigate();

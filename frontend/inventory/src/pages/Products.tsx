@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProduct, getProducts } from "../apis/products";
 import type { Product } from "../interfaces/interfaces";
-import "../styles/Pages.css"
 import { useNavigate } from "react-router-dom";
 import { deleteProduct } from "../apis/products";
 
