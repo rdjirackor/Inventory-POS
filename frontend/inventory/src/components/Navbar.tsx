@@ -5,8 +5,13 @@ import { useLocation } from "react-router-dom";
 
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { Box,Text, Flex, Heading } from "@chakra-ui/react";
+
 
 function Navbar() {
+
+
+
     const [user, setUser] = useState<User | null>(null);
     const auth = useContext(AuthContext);
 
@@ -21,7 +26,7 @@ function Navbar() {
         "/taxtypes": "Tax Types",
         "/suppliers": "Suppliers",
     };
-
+    
     const pageTitle =
         pageTitles[location.pathname] || "Inventory POS";
     
@@ -43,17 +48,16 @@ function Navbar() {
 
     return(
         <>
-        <div className="navbar">
-           <h2 className="page_name">{pageTitle}</h2>
-            <button className="logout" onClick={handleLogout}>    
-                            
-                <p className="details">
-                    <em>Current User: <i>{user?.username}</i></em>
-                    <em>Role: <i>{user?.role ?? "No role"}</i></em>
-                </p>
+        <Flex justifyContent="space-between" p="1.5" bg="white" color={"black"}>
+            <Box display="flex" flexDirection="column" alignItems="flex-start" >
+           <Heading>{pageTitle}</Heading>
+           <Text>Inventory POS</Text>
+           </Box>
 
-                </button>
-            </div></>);    
+           <Box alignItems='flex-end'>
+    
+            </Box>
+            </Flex></>);    
 }
 
 export default Navbar;

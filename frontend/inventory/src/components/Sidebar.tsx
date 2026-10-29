@@ -1,5 +1,13 @@
+import { useEffect, useState } from "react";
+import { getCurrentUser } from "../apis/auth";
+import type { User } from "../interfaces/interfaces";
+
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+
 import { NavLink, useLocation} from "react-router-dom";
 import {
+  Avatar,
   Box,
   Flex,
   Text,
@@ -15,7 +23,17 @@ import {
   Tags,
   Truck,
   Settings,
+  LogOut,
 } from "lucide-react";
+
+
+
+const palettes = ["red", "blue", "green", "purple", "orange", "teal", "pink", "cyan"];
+
+function pickPalette(name = "") {
+  const sum = [...name].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  return palettes[sum % palettes.length];
+}
 
 const StyledNavLink = chakra(NavLink);
 
@@ -43,18 +61,39 @@ const navigation = [
 export default function Sidebar() {
   const location = useLocation();
 
+      const [user, setUser] = useState<User | null>(null);
+    const auth = useContext(AuthContext);
+
+
+      useEffect(() => {
+        getCurrentUser()
+            .then(data => setUser(data))
+            .catch(error => console.error(error));
+    }, []);
+
+      function handleLogout() {
+        const confirm_logout = window.confirm("Sign out?");
+        if (confirm_logout){
+            auth?.logout();
+            window.location.reload();
+        }
+    }
+
   return (
-    <Box
-      w="250px"
-      h="100vh"
-      bg="#172033"
-      color="white"
-      p={4}
-      position="fixed"
-      top={0}
-      left={0}
-      overflowY="auto"
-    >
+
+  <Flex
+    direction="column"
+    w="250px"
+    h="100vh"
+    bg="#172033"
+    color="white"
+    p={4}
+    position="fixed"
+    top={0}
+    left={0}
+    overflowY="auto"
+  >
+    
       <Flex align="center" gap={3} mb={8} px={2}>
         <Box bg="#4F7DF3" p={2} borderRadius="md">
           <Package size={24} />
@@ -119,7 +158,37 @@ export default function Sidebar() {
             </VStack>
           </Box>
         ))}
-      </VStack>
+              </VStack>
+
+   <Box mt="auto" pt={4}>
+  <chakra.button
+    onClick={handleLogout}
+    display="flex"
+    alignItems="center"
+    gap={3}
+    w="full"
+    p={3}
+    borderRadius="md"
+    textAlign="left"
+    _hover={{ bg: "#25334B" }}
+    transition="background 0.2s"
+  >
+    <Avatar.Root size="sm" colorPalette={pickPalette(user?.username)}>
+      <Avatar.Fallback name={user?.username} />
+    </Avatar.Root>
+
+    <Box flex="1" minW={0}>
+      <Text fontSize="sm" fontWeight="semibold" truncate>
+        {user?.username}
+      </Text>
+      <Text fontSize="xs" color="#9CAAC0">
+        {user?.role ?? "No role"}
+      </Text>
     </Box>
+
+    <LogOut size={16} />
+  </chakra.button>
+</Box>
+    </Flex>
   );
 }
