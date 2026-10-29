@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@chakra-ui/react": "^3.37.0",
-    "@emotion/react": "^11.14.0"
+    "@emotion/react": "^11.14.0",
+    "lucide-react": "^1.64.0"
   }
 }

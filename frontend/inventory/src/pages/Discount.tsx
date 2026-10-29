@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { deleteDiscount, getDiscounts, getDiscount } from "../apis/discounts";
 import type { Discount } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@chakra-ui/react";
 
 function Discounts() {
     const navigate = useNavigate();
@@ -55,6 +56,7 @@ function Discounts() {
 
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
+            <Button>Test</Button>
             <div className="fetch_table">
 
             <table>
