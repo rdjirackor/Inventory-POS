@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from decimal import Decimal
+from django.db.models import Q
+from django.utils import timezone
+
 
 
 class TaxType(models.Model):
@@ -191,30 +194,51 @@ class Settings(models.Model):
         return self.business_name
 
 class Notification(models.Model):
-    POSSIBLE_NOTIFICATION = [
-        ('Low Stock', 'Low Stock'),
-        ('Pending Purchase', 'Pending Purchase'),
-        ('New Supplier', 'New Supplier'),
-        ('Large Sale', 'Large Sale'),
-        ('Failed Payment','Failed Payment'),
-        ('New User', 'New User')
-    ]
+
+    class Type(models.TextChoices):
+            LOW_STOCK = "LOW_STOCK", "Low Stock"
+            NEW_USER = "NEW_USER", "New User Deleted"
 
     notification_type = models.CharField(
-        max_length=100,
-        choices=POSSIBLE_NOTIFICATION,
-        default='Low Stock')
+            max_length=50,
+            choices=Type.choices,
+            null=True
+        )
+
+
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+
+  
     
     def __str__(self):
         return f"{self.notification_type}- {self.created_at}"
 
+
+
+
 class NotificationRecipient(models.Model):
-    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name="notifications")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='read_notifications')
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name="recipients")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="notification_recipients"
+    )
     is_read = models.BooleanField(default=False)
-    read_at = models.DateTimeField(auto_now_add=True)
+    read_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["notification", "user"],
+                name="unique_notification_user",
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        if self.is_read and self.read_at is None:
+            self.read_at = timezone.now()
+        elif not self.is_read:
+            self.read_at = None
+        super().save(*args, **kwargs)      
 
 
     

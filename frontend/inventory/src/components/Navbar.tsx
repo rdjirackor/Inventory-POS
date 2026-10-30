@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 
-import { Box,Text, Flex, Heading } from "@chakra-ui/react";
+import { Box,Text, Flex, Heading, Popover } from "@chakra-ui/react";
 import NotificationBell from "./NotificationBell";
 
 
@@ -31,7 +31,9 @@ function Navbar() {
            </Box>
 
            <Box alignItems='flex-end'>
-    <NotificationBell/>
+            <Popover.Root>
+                <NotificationBell/>
+                </Popover.Root>
             </Box>
             </Flex></>);    
 }

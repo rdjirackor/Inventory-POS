@@ -23,6 +23,7 @@ from .models import *
 from .serializers import *  
 
 from .audit import log_action
+from .notify import *
 
 
 
@@ -317,6 +318,7 @@ def dashboard(request):
     for product in Product.objects.all().order_by("current_stock")[:5]:
             if product.current_stock <= product.minimum_stock_level:
                 low_stock_products.append(product.name)
+                
 
     for product in Product.objects.all():
         
@@ -400,6 +402,19 @@ def dashboard(request):
         "recent_activity": recent_activity,
 
     })
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def notification_receipt(request):
+    active_user = request.user
+    queryset = NotificationRecipient.objects.filter(user = active_user).select_related("notification")
+    serializer = NotificationReadStatusSerializer(
+            queryset,
+            many = True, 
+            
+    )
+    return Response(serializer.data)
 
 
 @api_view(["POST"])
@@ -1081,6 +1096,10 @@ def product_detail(request, product_id):
         )
 
         if serializer.is_valid():
+            if product.current_stock <= product.minimum_stock_level:
+                notify(notification_type=Notification.Type.LOW_STOCK,
+                    message=f"{product.name} is low in stock",
+                    )
             log_action(user=request.user,
                                    action=AuditLog.Action.PRODUCT_UPDATED,
                                                            status=True,
@@ -1112,6 +1131,10 @@ def product_detail(request, product_id):
         )
 
         if serializer.is_valid():
+            if product.current_stock <= product.minimum_stock_level:
+                notify(notification_type=Notification.Type.LOW_STOCK,
+                    message=f"{product.name} is low in stock",
+                    )
             log_action(user=request.user,
                                                action=AuditLog.Action.PRODUCT_UPDATED,
                                                                        status=True,
@@ -2036,6 +2059,10 @@ def stock(request):
                     performed_by=performed_by,
                     reason=reason,
                 )
+                if product.current_stock <= product.minimum_stock_level:
+                    notify(notification_type=Notification.Type.LOW_STOCK,
+                        message=f"{product.name} is low in stock",
+                        )
                 log_action(user=request.user,
                                                                                                                                action=AuditLog.Action.STOCK_MOVEMENT_CREATED,
                                                                                                                                                        status=True,

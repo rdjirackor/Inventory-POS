@@ -1,19 +1,37 @@
 import { useEffect, useState } from "react";
 import { getNotifications } from "../apis/notifications";
-import type { AppNotification } from "../interfaces/interfaces";
+import type { NotificationReadStatus, AppNotification, User } from "../interfaces/interfaces";
 import { Box } from "@chakra-ui/react";
 import { Bell } from "lucide-react";
+import { getCurrentUser } from "../apis/auth";
+import { getNotificationReadStatus } from "../apis/notificationReadStatus";
 
 
 function NotificationBell(){
-const [notifications, setNotifications] = useState<AppNotification[]>([]);
 
-const is_read = notifications.some((notification)=> !notification.is_read)
+    const [user, setUser] = useState<User | null>(null);
+
+    const [notifications, setNotifications] = useState<AppNotification[]>([]);
+
+
+const [notificationReadStatus, setNotificationReadStatus] = useState<NotificationReadStatus[]>([]);
+
+    useEffect(() => {
+        getCurrentUser()
+            .then(data => setUser(data))
+            .catch(error => console.error(error));
+    }, []);
+
+const is_read = notificationReadStatus.some((status)=> !status.is_read)
 
         async function fetchNotifications(){
             try {
-                const data = await getNotifications();
-                setNotifications(data);
+                const notificationData = await getNotifications();
+                const notificationReadStatusData = await getNotificationReadStatus();
+                setNotifications(notificationData);
+                setNotificationReadStatus(notificationReadStatusData);
+
+
                 }
             catch(error){
                 console.log(error);

@@ -17,7 +17,7 @@ function AppLayout() {
                 <main className="main-content" >
                     <Box 
                     ml = "250px"
-                    bg={"white"}>
+                    >
                     <Outlet />
                     </Box>
                 </main>

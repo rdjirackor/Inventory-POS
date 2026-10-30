@@ -127,6 +127,14 @@ export interface AppNotification {
     is_read: boolean;
 }
 
+export interface NotificationReadStatus {
+    id: number;
+    notification_foreign_key: number;
+    user: number;
+    is_read: boolean;
+    read_at: string;
+}
+
 export interface Announcement {
     id: number;
     title: string;

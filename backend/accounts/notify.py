@@ -1,16 +1,35 @@
 
-from .models import Notification
+from django.contrib.auth import get_user_model
+from django.db import transaction
+
+from .models import Notification, NotificationRecipient
 
 
+User = get_user_model()
+
+
+@transaction.atomic
 def notify(
     notification_type=None,
     message=None,
-    created_at=True,
-
 ):
-    return Notification.objects.create(
+    notification = Notification.objects.create(
         notification_type=notification_type,
         message=message,
-        created_at=created_at,
-        
     )
+
+    users = User.objects.filter(
+        is_active=True,
+    )
+
+    recipients = [
+        NotificationRecipient(
+            notification=notification,
+            user=user,
+        )
+        for user in users
+    ]
+
+    NotificationRecipient.objects.bulk_create(recipients)
+
+    return notification
