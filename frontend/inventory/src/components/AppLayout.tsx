@@ -13,12 +13,15 @@ function AppLayout() {
 
             <div className="app-body">
                 <Sidebar />
-
+                <Box>
                 <main className="main-content" >
-                    <Box ml = "250px">
+                    <Box 
+                    ml = "250px"
+                    bg={"white"}>
                     <Outlet />
                     </Box>
                 </main>
+                </Box>
             </div>
         </div>
     );

@@ -85,8 +85,8 @@ export default function Sidebar() {
     direction="column"
     w="250px"
     h="100vh"
-    bg="#172033"
-    color="white"
+    bg="white"
+    color="black"
     p={4}
     position="fixed"
     top={0}
@@ -101,7 +101,7 @@ export default function Sidebar() {
 
         <Box>
           <Text fontWeight="bold">Inventory POS</Text>
-          <Text fontSize="xs" color="#AAB5C8">
+          <Text fontSize="xs" color="black">
             Management system
           </Text>
         </Box>
@@ -112,7 +112,7 @@ export default function Sidebar() {
           <Box key={group.heading}>
             <Text
               fontSize="xs"
-              color="#9CAAC0"
+              color="violet"
               fontWeight="semibold"
               mb={2}
               px={3}
@@ -141,8 +141,8 @@ export default function Sidebar() {
   borderRadius="md"
   fontSize="sm"
   fontWeight={active ? "semibold" : "normal"}
-  bg={active ? "#30446B" : "transparent"}
-  color={active ? "white" : "#D3DBE8"}
+  bg={active ? "transparent" : "transparent"}
+  color={active ? "blue.700" : "black"}
   _hover={{
     bg: active ? "#30446B" : "#25334B",
     color: "white",
@@ -170,23 +170,26 @@ export default function Sidebar() {
     p={3}
     borderRadius="md"
     textAlign="left"
-    _hover={{ bg: "#25334B" }}
+    _hover={{ bg: "#25334B", color:"white" }}
     transition="background 0.2s"
   >
+
+    
     <Avatar.Root size="sm" colorPalette={pickPalette(user?.username)}>
       <Avatar.Fallback name={user?.username} />
     </Avatar.Root>
 
-    <Box flex="1" minW={0}>
+    <Box flex="1" minW={0} >
       <Text fontSize="sm" fontWeight="semibold" truncate>
         {user?.username}
       </Text>
-      <Text fontSize="xs" color="#9CAAC0">
+      <Text fontSize="xs" >
         {user?.role ?? "No role"}
       </Text>
     </Box>
 
     <LogOut size={16} />
+
   </chakra.button>
 </Box>
     </Flex>

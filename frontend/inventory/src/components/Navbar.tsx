@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 
 import { Box,Text, Flex, Heading } from "@chakra-ui/react";
+import NotificationBell from "./NotificationBell";
 
 
 function Navbar() {
@@ -20,9 +21,6 @@ function Navbar() {
     const pageTitle =
         pageTitles[location.pathname] || "Inventory POS";
 
-        
-    
-
 
     return(
         <>
@@ -33,7 +31,7 @@ function Navbar() {
            </Box>
 
            <Box alignItems='flex-end'>
-    
+    <NotificationBell/>
             </Box>
             </Flex></>);    
 }

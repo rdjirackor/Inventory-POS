@@ -206,10 +206,17 @@ class Notification(models.Model):
         default='Low Stock')
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.notification_type}- {self.created_at}"
+
+class NotificationRecipient(models.Model):
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name="notifications")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='read_notifications')
+    is_read = models.BooleanField(default=False)
+    read_at = models.DateTimeField(auto_now_add=True)
+
+
     
 class Announcement(models.Model):
     title = models.CharField(max_length=200)

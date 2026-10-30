@@ -1,7 +1,7 @@
-import type { Notification } from "../interfaces/interfaces";
+import type { AppNotification } from "../interfaces/interfaces";
 import { apiFetch } from "./api";
 
-export async function getNotifications(): Promise<Notification[]> {
+export async function getNotifications(): Promise<AppNotification[]> {
     const response = await apiFetch("/notifications/");
 
     const data = await response.json();

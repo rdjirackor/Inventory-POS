@@ -119,7 +119,7 @@ export interface Cashier {
     branch_name: string;
 }
 
-export interface Notification {
+export interface AppNotification {
     id: number;
     notification_type: string;
     message: string;
