@@ -449,6 +449,23 @@ def notification_read(request, notification_id):
             status=404,
         )
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def notification_read_all(request):
+    notification_receipt = NotificationRecipient.objects.filter(user = request.user, is_read=False)
+    for n in notification_receipt:
+        n.is_read = True
+        n.save()
+    serializer = NotificationReadStatusSerializer(
+            notification_receipt,
+            many =True,
+        )
+    return Response(
+        serializer.data
+        )
+
+
+
 
 
 

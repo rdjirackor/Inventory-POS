@@ -3,7 +3,7 @@ import { getNotifications } from "../apis/notifications";
 import type { NotificationReadStatus, AppNotification } from "../interfaces/interfaces";
 import { Box, Flex, IconButton, Popover, Text } from "@chakra-ui/react";
 import { Bell } from "lucide-react";
-import { createNotificationReadStatus, getNotificationReadStatus } from "../apis/notificationReadStatus";
+import { createNotificationReadAllStatus, createNotificationReadStatus, getNotificationReadStatus } from "../apis/notificationReadStatus";
 
 
 function NotificationBell(){
@@ -13,6 +13,7 @@ function NotificationBell(){
 
 
 const [notificationReadStatus, setNotificationReadStatus] = useState<NotificationReadStatus[]>([]);
+
 
 
 
@@ -51,6 +52,24 @@ const hasUnreadNotifications = notificationReadStatus.some((status)=> !status.is
 
     } catch (error) {
         console.error("Failed to mark notification as read:", error);
+    }
+}
+
+
+    async function handleReadAllNotifications() {
+    try {
+        await createNotificationReadAllStatus();
+
+          setNotificationReadStatus(previous =>
+            previous.map(status => ({
+                ...status,
+                is_read: true
+            }))
+        );
+
+
+    } catch (error) {
+        console.error("Failed to mark all notifications as read:", error);
     }
 }
 
@@ -96,9 +115,19 @@ const hasUnreadNotifications = notificationReadStatus.some((status)=> !status.is
                 <Popover.Positioner>
                     <Popover.Content width="350px" color="white">
                         <Popover.Header>
+                            <Flex
+                            justifyContent={"space-between"}>
                             <Text fontWeight="bold" fontSize="lg">
                                 Notifications
                             </Text>
+                                <Text 
+                                        onClick={() => handleReadAllNotifications()}
+                                        cursor="pointer"
+                                        fontSize="sm"
+                                        >
+                                            Mark all as Read
+                                        </Text>
+                            </Flex>
                         </Popover.Header>
 
                        <Popover.Body>
@@ -113,8 +142,6 @@ const hasUnreadNotifications = notificationReadStatus.some((status)=> !status.is
                                     const isRead = status?.is_read?? false;
 
                                     return(
-
-                                        
 
                                         <Flex
                                         key={n.id}

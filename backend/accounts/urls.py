@@ -79,4 +79,6 @@ urlpatterns = [
 
   path("notifications-status/", notification_receipt),
 path("read-notification/<int:notification_id>/", notification_read),    
+path("read-notification-all/", notification_read_all),    
+
 ]

@@ -36,3 +36,22 @@ export async function createNotificationReadStatus(notification_id: number) {
 
     return data;
 }
+
+export async function createNotificationReadAllStatus() {
+    const response = await apiFetch(
+        `/read-notification-all/`,
+        {
+            method: "POST",
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            data.message || "Update all notification read status failed"
+        );
+    }
+
+    return data;
+}
