@@ -93,6 +93,11 @@ const hasUnreadNotifications = notificationReadStatus.some((status)=> !status.is
                             variant="ghost"
                             position="relative"
                             color="black"
+                            bg={"white"}
+                            _hover={{
+                            borderColor:"black",
+                            borderRadius:"2xl",
+                            }}
                         >
                             <Bell size={20} />
                         </IconButton>
