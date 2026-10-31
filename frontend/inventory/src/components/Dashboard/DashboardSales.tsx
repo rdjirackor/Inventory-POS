@@ -4,6 +4,7 @@ import { getProducts } from "../../apis/products";
 import type { Customer } from "../../interfaces/interfaces";
 import { getCustomers } from "../../apis/customers";
 import { checkout } from "../../apis/checkout";
+import AppButton from "../AppButton";
 
 function DashboardSales(){
 
@@ -157,15 +158,16 @@ async function handleCheckout() {
                     />
 
 
-                <button onClick={()=>{
+                <AppButton intent="secondary" onClick={()=>{
                     setSelectedProduct(null);
                     setQuantity("1");}}>
                     X
-                </button>
+                </AppButton>
                 
 
 
-                <button
+
+                <AppButton intent="primary"
                     type="button"
                     disabled={
                         quantity.trim() === "" ||
@@ -186,7 +188,7 @@ async function handleCheckout() {
                     }}
                 >
                     Proceed
-                </button>   
+                </AppButton>   
 
                 
                 
@@ -239,16 +241,16 @@ async function handleCheckout() {
                                 {" | "}Subtotal: GHc {
                                     (Number(product.selling_price_without_tax) * qty).toFixed(2)
                                 }
-                            <button
+                            <AppButton intent="primary"
                                     onClick={() => 
                                     setSaleItems(prev => ({
                                     ...prev,
                                     [productId]: qty + 1
                                     }))}>
                                     +
-                                </button>
+                                </AppButton>
                             
-                            <button
+                            <AppButton intent="secondary"
                                     onClick={() =>
                                     setSaleItems(prev =>{
                                         const next= {... prev}
@@ -260,15 +262,15 @@ async function handleCheckout() {
                                         }
                                         return next;
 
-                                    })}>-</button>
+                                    })}>-</AppButton>
                                     
 
-                            <button onClick={()=>setSaleItems(prev=>{
+                            <AppButton intent="secondary" onClick={()=>setSaleItems(prev=>{
                                     const next = {...prev};
                                     delete next[productId];
                                     return next;
                                 }
-                                )}>Remove</button>
+                                )}>Remove</AppButton>
                             </li>                           
                         );
                     })}
@@ -307,14 +309,14 @@ async function handleCheckout() {
                 <option value="Bank Transfer">Bank Transfer</option>
             </select>
 
-            <button
+            <AppButton intent="primary"
                 type="button"
                 onClick={handleCheckout}
                 disabled={checkingOut || Object.keys(saleItems).length === 0}
             >
                 {checkingOut ? "Processing..." : "Complete Sale"}
 
-            </button>
+            </AppButton>
 
 
                 </>)
