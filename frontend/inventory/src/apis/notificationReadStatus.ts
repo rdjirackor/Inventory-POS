@@ -17,3 +17,22 @@ export async function getNotificationReadStatus(
 
     return data;
 }
+
+export async function createNotificationReadStatus(notification_id: number) {
+    const response = await apiFetch(
+        `/read-notification/${notification_id}/`,
+        {
+            method: "POST",
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            data.message || "Update notification read status failed"
+        );
+    }
+
+    return data;
+}

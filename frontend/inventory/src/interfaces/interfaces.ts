@@ -129,7 +129,7 @@ export interface AppNotification {
 
 export interface NotificationReadStatus {
     id: number;
-    notification_foreign_key: number;
+    notification: number;
     user: number;
     is_read: boolean;
     read_at: string;

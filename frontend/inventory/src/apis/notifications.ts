@@ -15,32 +15,6 @@ export async function getNotifications(): Promise<AppNotification[]> {
     return data;
 }
 
-export async function markNotificationRead(
-    notification_id: number
-) {
-    const response = await apiFetch(
-        `/notifications/${notification_id}/`,
-        {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                is_read: true,
-            }),
-        }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(
-            data.message || "Mark Notification Failed"
-        );
-    }
-
-    return data;
-}
 
 export async function getNotification(
     notification_id: number

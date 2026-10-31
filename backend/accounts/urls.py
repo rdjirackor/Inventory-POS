@@ -77,6 +77,6 @@ urlpatterns = [
 
    path("returns/", returns, name="returns"),
 
-  path("notifications-status/", notification_receipt)
-    
+  path("notifications-status/", notification_receipt),
+path("read-notification/<int:notification_id>/", notification_read),    
 ]

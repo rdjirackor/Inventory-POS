@@ -238,7 +238,10 @@ class NotificationRecipient(models.Model):
             self.read_at = timezone.now()
         elif not self.is_read:
             self.read_at = None
-        super().save(*args, **kwargs)      
+        super().save(*args, **kwargs)     
+
+    def __str__(self):
+        return f"{self.user}" 
 
 
     
