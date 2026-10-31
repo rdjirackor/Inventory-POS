@@ -23,6 +23,7 @@ from .models import *
 from .serializers import *  
 
 from .audit import log_action
+from .notify import *
 
 
 
@@ -317,6 +318,7 @@ def dashboard(request):
     for product in Product.objects.all().order_by("current_stock")[:5]:
             if product.current_stock <= product.minimum_stock_level:
                 low_stock_products.append(product.name)
+                
 
     for product in Product.objects.all():
         
@@ -400,6 +402,72 @@ def dashboard(request):
         "recent_activity": recent_activity,
 
     })
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@require_model_permissions(Notification)
+def notifications(request):
+    notification = Notification.objects.all().order_by("-created_at")
+    
+    serializer = NotificationSerializer(
+        notification, many =True 
+    )
+
+    return Response(
+        serializer.data
+    )
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def notification_receipt(request):
+    active_user = request.user
+    queryset = NotificationRecipient.objects.filter(user = active_user).select_related("notification")
+    serializer = NotificationReadStatusSerializer(
+            queryset,
+            many = True, 
+            
+    )
+    return Response(serializer.data)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def notification_read(request, notification_id):
+    try:
+        notification_receipt = NotificationRecipient.objects.get(user = request.user, notification=notification_id )
+        notification_receipt.is_read = True
+        notification_receipt.save()
+        serializer = NotificationReadStatusSerializer(
+                notification_receipt,
+        )
+        return Response(
+            serializer.data
+        )
+
+    except(NotificationRecipient.DoesNotExist):
+        return Response(
+            status=404,
+        )
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def notification_read_all(request):
+    notification_receipt = NotificationRecipient.objects.filter(user = request.user, is_read=False)
+    for n in notification_receipt:
+        n.is_read = True
+        n.save()
+    serializer = NotificationReadStatusSerializer(
+            notification_receipt,
+            many =True,
+        )
+    return Response(
+        serializer.data
+        )
+
+
+
+
+
 
 
 @api_view(["POST"])
@@ -515,19 +583,7 @@ def settings(request):
         serializer.errors,
         status=400
     )
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-@require_model_permissions(Notification)
-def notifications(request):
-    notification = Notification.objects.all()
-    
-    serializer = NotificationSerializer(
-        notification, many =True 
-    )
 
-    return Response(
-        serializer.data
-    )
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
 # @require_model_permissions(Category)
@@ -1081,6 +1137,10 @@ def product_detail(request, product_id):
         )
 
         if serializer.is_valid():
+            if product.current_stock <= product.minimum_stock_level:
+                notify(notification_type=Notification.Type.LOW_STOCK,
+                    message=f"{product.name} is low in stock",
+                    )
             log_action(user=request.user,
                                    action=AuditLog.Action.PRODUCT_UPDATED,
                                                            status=True,
@@ -1112,6 +1172,10 @@ def product_detail(request, product_id):
         )
 
         if serializer.is_valid():
+            if product.current_stock <= product.minimum_stock_level:
+                notify(notification_type=Notification.Type.LOW_STOCK,
+                    message=f"{product.name} is low in stock",
+                    )
             log_action(user=request.user,
                                                action=AuditLog.Action.PRODUCT_UPDATED,
                                                                        status=True,
@@ -1961,7 +2025,7 @@ def stock(request):
         if request.user.is_superuser:
             role = "Admin"
         else:
-            group = request.user.groups.value_list("name", flat=True)
+            group = request.user.groups.first()
             role = group.name if group else None
 
         product_id = request.data.get("product_id")
@@ -2036,6 +2100,10 @@ def stock(request):
                     performed_by=performed_by,
                     reason=reason,
                 )
+                if product.current_stock <= product.minimum_stock_level:
+                    notify(notification_type=Notification.Type.LOW_STOCK,
+                        message=f"{product.name} is low in stock",
+                        )
                 log_action(user=request.user,
                                                                                                                                action=AuditLog.Action.STOCK_MOVEMENT_CREATED,
                                                                                                                                                        status=True,

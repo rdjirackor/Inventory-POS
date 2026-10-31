@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {  deleteWarehouse, getWarehouse, getWarehouses } from "../apis/warehouses";
 import type { Warehouse } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
-import "../styles/Pages.css"
 
 function Warehouses() {
     const navigate = useNavigate();

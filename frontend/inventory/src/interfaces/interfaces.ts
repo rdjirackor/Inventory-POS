@@ -119,12 +119,20 @@ export interface Cashier {
     branch_name: string;
 }
 
-export interface Notification {
+export interface AppNotification {
     id: number;
     notification_type: string;
     message: string;
     created_at: string;
     is_read: boolean;
+}
+
+export interface NotificationReadStatus {
+    id: number;
+    notification: number;
+    user: number;
+    is_read: boolean;
+    read_at: string;
 }
 
 export interface Announcement {

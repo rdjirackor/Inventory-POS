@@ -1,5 +1,4 @@
 import {  useEffect, useState } from "react";
-import "../../styles/Dashboard.css";
 import { getDashboard } from "../../apis/dashboard_overview";
 import OrdersChart from "../OrdersChart";
 

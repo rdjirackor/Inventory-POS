@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
 import DashboardOverview from '../components/Dashboard/DashboardOverview';
-import "../styles/Pages.css"
 import DashboardSales from '../components/Dashboard/DashboardSales';
 
 

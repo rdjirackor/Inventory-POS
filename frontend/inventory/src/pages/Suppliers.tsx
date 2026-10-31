@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { deleteSupplier, getSuppliers } from "../apis/suppliers";
 import type { Supplier } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
-import "../styles/Pages.css"
 
 function Suppliers() {
     const [loading, setLoading] = useState(false);

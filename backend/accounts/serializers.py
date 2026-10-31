@@ -24,6 +24,7 @@ from .models import (
     StockMovement,
     Returns,
     Payment,
+    NotificationRecipient
 )
 
 class UserSerializer(serializers.ModelSerializer):
@@ -261,7 +262,17 @@ class NotificationSerializer(serializers.ModelSerializer):
             "notification_type",
             "message",
             "created_at",
+        ]
+
+class NotificationReadStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NotificationRecipient
+        fields = [
+            "id",
+            "notification",
+            "user",
             "is_read",
+            "read_at",
         ]
 
 
