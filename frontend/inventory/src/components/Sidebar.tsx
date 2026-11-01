@@ -24,6 +24,9 @@ import {
   Truck,
   Settings,
   LogOut,
+  FolderOpen,
+  RotateCcw,
+  
 } from "lucide-react";
 
 
@@ -42,8 +45,8 @@ const navigation = [
     heading: "WORKSPACE",
     items: [
       { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-      { label: "Sales", path: "/sales", icon: ShoppingCart },
       { label: "Products", path: "/products", icon: Package },
+      { label: "Returns", path: "/returns", icon: RotateCcw },
       { label: "Stock movements", path: "/stock-movements", icon: Boxes },
       { label: "Customers", path: "/customers", icon: Users },
     ],

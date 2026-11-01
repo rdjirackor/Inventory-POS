@@ -5,6 +5,7 @@ import type { Customer } from "../../interfaces/interfaces";
 import { getCustomers } from "../../apis/customers";
 import { checkout } from "../../apis/checkout";
 import AppButton from "../AppButton";
+import { SaveCancel } from "../Buttons";
 
 function DashboardSales(){
 
@@ -158,12 +159,13 @@ async function handleCheckout() {
                     />
 
 
-                <AppButton intent="secondary" onClick={()=>{
+                <AppButton onClick={()=>{
                     setSelectedProduct(null);
                     setQuantity("1");}}>
                     X
                 </AppButton>
                 
+                <AppButton/>
 
 
 
