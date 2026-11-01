@@ -58,7 +58,7 @@ export default function ViewHistories() {
                     <table>
                         <thead>
                             <tr>
-                                <th>Customer ID</th>
+                                <th>Customer Name</th>
                                 <th>Time of Purchase</th>
                    
                             </tr>

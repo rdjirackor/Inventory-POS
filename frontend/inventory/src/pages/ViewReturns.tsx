@@ -50,10 +50,9 @@ export default function ViewReturns() {
                     <table>
                         <thead>
                             <tr>
-                                <th>Return ID</th>
-                                <th>Product ID</th>
+                                <th>Product Name</th>
                                 <th>Sale ID</th>
-                                <th>Customer ID</th>
+                                <th>Customer Name</th>
                                 <th>Quantity</th>
                                 <th>Reason</th>
                             </tr>
@@ -62,10 +61,9 @@ export default function ViewReturns() {
                         <tbody>
                             {returns.map((item) => (
                                 <tr key={item.id}>
-                                    <td>{item.id}</td>
-                                    <td>{item.product}</td>
+                                    <td>{item.product_name}</td>
                                     <td>{item.order_history}</td>
-                                    <td>{item.customer ?? "Walk-in"}</td>
+                                    <td>{item.customer_name ?? "Walk-in"}</td>
                                     <td>{item.quantity}</td>
                                     <td>{item.reason || "—"}</td>
                                 </tr>

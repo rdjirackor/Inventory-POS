@@ -35,6 +35,7 @@ import ViewStockMovements from "./pages/ViewStockMovements";
 import CreateReturn from "./pages/CreateReturns";
 import ViewReturns from "./pages/ViewReturns";
 import ViewHistories from "./pages/ViewOrderHistory";
+import Customers from "./pages/Customers";
 
 const token = localStorage.getItem("access_token")
 
@@ -95,6 +96,11 @@ function App() {
                         <Route path="/cashiers" element={<Cashiers />} />
                         <Route path="/cashiers/create" element={<CreateCashier />} />
                         <Route path="/cashiers/:id/edit" element={<UpdateCashier />} />
+
+                        <Route path="/customers" element={<Customers />} />
+                        <Route path="/cashiers/create" element={<CreateCashier />} />
+                        <Route path="/cashiers/:id/edit" element={<UpdateCashier />} />
+
 
                         <Route path="/taxtypes" element={<Taxtype/>} />
                         <Route path="/taxtypes/create" element={<CreateTax />}/>

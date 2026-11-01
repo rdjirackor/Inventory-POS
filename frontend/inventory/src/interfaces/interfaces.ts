@@ -94,7 +94,7 @@ export interface OrderHistory {
     id: number;
     customer: number | null;
     time_of_purchase: string;
-    customer_name: string; 
+    customer_name: string | null; 
 }
 
 export interface QuantityOfAnItemBought {
@@ -183,6 +183,8 @@ export interface Return {
     order_history: number;
     quantity: string | number;
     reason: string | null;
+    product_name: string,
+    customer_name: string | null;
 }
 
 export interface Payment {

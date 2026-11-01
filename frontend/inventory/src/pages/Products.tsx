@@ -72,7 +72,6 @@ async function DeleteProduct(product_id: number) {
 
 
                             
-                                <th>Product ID</th>
                                 <th>Current Stock</th>
                                 <th>Category</th>
                                 <th>Tax Names</th>
@@ -87,7 +86,6 @@ async function DeleteProduct(product_id: number) {
 
 
                                 <tr key={product.id}>
-                                    <td>{product.id}</td>
                                     <td>{product.name}</td>                                       
                                     <td>{product.current_stock}</td>           
                                     <td>{product.category_name}</td>

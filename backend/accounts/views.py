@@ -2256,13 +2256,7 @@ def returns(request):
 
                 product.current_stock += quantity
                 product.save(update_fields=["current_stock"])
-                log_action(user=request.user,
-                            action=AuditLog.Action.STOCK_ADJUSTED,
-                            status=True,
-                            description=f"{request.user} processed a return that resulted in a stock increase on {product.name} with ID {product_id}.This has resulted in an increase of {quantity} to it\'s stock.",
-                            entity_id=movement.id,
-                            entity_type="StockMovement",
-                            )
+
 
                 movement = StockMovement.objects.create(
                     product=product,
@@ -2271,6 +2265,13 @@ def returns(request):
                     reason=f"Return for sale #{order.pk}: {reason}",
                     quantity=quantity,
                 )
+                log_action(user=request.user,
+                            action=AuditLog.Action.STOCK_ADJUSTED,
+                            status=True,
+                            description=f"{request.user} processed a return that resulted in a stock increase on {product.name} with ID {product_id}.This has resulted in an increase of {quantity} to it\'s stock.",
+                            entity_id=movement.id,
+                            entity_type="StockMovement",
+                            )
 
                 return_data = ReturnsSerializer(return_record).data
                 movement_data = StockMovementSerializer(movement).data

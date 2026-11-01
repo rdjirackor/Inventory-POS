@@ -352,6 +352,19 @@ class StockMovementSerializer(serializers.ModelSerializer):
 
 
 class ReturnsSerializer(serializers.ModelSerializer):
+
+    product_name = serializers.StringRelatedField(
+        source ="product",
+        read_only = True
+    )
+
+    customer_name = serializers.StringRelatedField(
+        source ="customer",
+        read_only = True
+    )
+    
+
+
     class Meta:
         model = Returns
         fields = [
@@ -361,6 +374,8 @@ class ReturnsSerializer(serializers.ModelSerializer):
             "order_history",
             "quantity",
             "reason",
+            "product_name",
+            "customer_name",
         ]
 
 
