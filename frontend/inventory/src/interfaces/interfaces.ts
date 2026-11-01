@@ -94,6 +94,7 @@ export interface OrderHistory {
     id: number;
     customer: number | null;
     time_of_purchase: string;
+    customer_name: string; 
 }
 
 export interface QuantityOfAnItemBought {

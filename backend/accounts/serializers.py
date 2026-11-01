@@ -203,12 +203,21 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 class OrderHistorySerializer(serializers.ModelSerializer):
+
+    customer_name = serializers.StringRelatedField(
+        source ="customer",
+        read_only = True
+    )
+
+
+
     class Meta:
         model = OrderHistory
         fields = [
             "id",
             "customer",
             "time_of_purchase",
+            "customer_name",
         ]
 
 

@@ -26,6 +26,8 @@ import {
   LogOut,
   FolderOpen,
   RotateCcw,
+  History,
+  ClipboardList,
   
 } from "lucide-react";
 
@@ -47,6 +49,7 @@ const navigation = [
       { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
       { label: "Products", path: "/products", icon: Package },
       { label: "Returns", path: "/returns", icon: RotateCcw },
+      { label: "Order History", path: "/histories", icon: ClipboardList },
       { label: "Stock movements", path: "/stock-movements", icon: Boxes },
       { label: "Customers", path: "/customers", icon: Users },
     ],

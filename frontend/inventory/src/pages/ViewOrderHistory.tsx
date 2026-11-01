@@ -67,7 +67,7 @@ export default function ViewHistories() {
                         <tbody>
                             {histories.map((item) => (
                                 <tr key={item.id}>
-                                    <td>{item.customer}</td>
+                                    <td>{item.customer_name || "Walk In Customer"}</td>
                                     <td>{timeLabel(item.time_of_purchase)}</td>
                         
                                 </tr>
