@@ -34,6 +34,7 @@ import UpdateProductStock from "./pages/UpdateProductStock";
 import ViewStockMovements from "./pages/ViewStockMovements";
 import CreateReturn from "./pages/CreateReturns";
 import ViewReturns from "./pages/ViewReturns";
+import ViewHistories from "./pages/ViewOrderHistory";
 
 const token = localStorage.getItem("access_token")
 
@@ -79,6 +80,7 @@ function App() {
                         <Route path="/products/:id/stock" element={<UpdateProductStock />} /> 
 
                         <Route path="/stock-movements" element={<ViewStockMovements />} />
+                        <Route path="/histories" element={<ViewHistories />} />
 
 
                         <Route path="/categories" element={<Categories />} />

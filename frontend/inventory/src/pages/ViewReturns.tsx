@@ -2,18 +2,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getReturns } from "../apis/returns";
+import type { Return } from "../interfaces/interfaces";
 
-interface ReturnRecord {
-    id: number;
-    product: number;
-    customer: number | null;
-    order_history: number;
-    quantity: string | number;
-    reason: string | null;
-}
+
 
 export default function ViewReturns() {
-    const [returns, setReturns] = useState<ReturnRecord[]>([]);
+    const [returns, setReturns] = useState<Return[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -21,7 +15,7 @@ export default function ViewReturns() {
         async function fetchReturns() {
             try {
                 const data = await getReturns();
-                setReturns(data as ReturnRecord[]);
+                setReturns(data as Return[]);
             } catch (err) {
                 setError(
                     err instanceof Error

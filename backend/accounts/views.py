@@ -2302,4 +2302,19 @@ def returns(request):
         )
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@require_model_permissions(OrderHistory)
+def history(request):
+
+    if request.method == "GET":
+        histories = OrderHistory.objects.all()
+        serializer = OrderHistorySerializer(
+            histories,
+            many=True
+        )
+
+        return Response(serializer.data)
+
+    
 

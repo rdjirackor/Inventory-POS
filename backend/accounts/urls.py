@@ -76,6 +76,7 @@ urlpatterns = [
     name="modify_stock"),
 
    path("returns/", returns, name="returns"),
+   path("histories/", history, name="histories"),
 
   path("notifications-status/", notification_receipt),
 path("read-notification/<int:notification_id>/", notification_read),    
