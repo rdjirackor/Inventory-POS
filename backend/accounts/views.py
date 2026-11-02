@@ -554,37 +554,40 @@ def receive_purchase_order(request, purchase_order_id):
     
 
 
-@api_view(["GET"])
+
+    setting = Settings.objects.first()
+    
+
+@api_view(["GET","PATCH"])
 @permission_classes([IsAuthenticated])
 @require_model_permissions(Settings)
+
 def settings(request):
+
     setting = Settings.objects.first()
-    serializer = SettingsSerializer(setting)
-    return Response(serializer.data)
 
-# @api_view(["PUT"])
-# @permission_classes([IsAuthenticated])
-# @require_model_permissions(Settings)
+    if request.method=="GET":
+        serializer = SettingsSerializer(setting)
+        return Response(serializer.data)
 
-# def settings(request):
-#     setting = Settings.objects.first()
+    if request.method == "PATCH":
 
-#     serializer = SettingsSerializer(
-#         setting,
-#         data = request.data,
-#         partial = True
-#     )
+        serializer = SettingsSerializer(
+            setting,
+            data = request.data,
+            partial = True
+        )
 
-#     if serializer.is_valid():
-#         serializer.save()
-#         log_action(user = request.user,action=AuditLog.Action.SETTINGS_UPDATED, status=True,
-#                    description=f"{request.user} updated settings", entity_type="Settings", entity_id=setting.pk)
-#         return Response(serializer.data)
-    
-#     return Response(
-#         serializer.errors,
-#         status=400
-#     )
+        if serializer.is_valid():
+            serializer.save()
+            log_action(user = request.user,action=AuditLog.Action.SETTINGS_UPDATED, status=True,
+                    description=f"{request.user} updated settings", entity_type="Settings", entity_id=setting.pk)
+            return Response(serializer.data)
+        
+        return Response(
+            serializer.errors,
+            status=400
+        )
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])

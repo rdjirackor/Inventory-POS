@@ -38,6 +38,7 @@ import ViewHistories from "./pages/ViewOrderHistory";
 import Customers from "./pages/Customers";
 import CreateCustomer from "./pages/CreateCustomer";
 import { SettingsProvider } from "./context/SettingsContext";
+import SettingsPage from "./pages/Settings";
 
 const token = localStorage.getItem("access_token")
 
@@ -120,6 +121,8 @@ function App() {
 
                         <Route path="/returns" element={<ViewReturns />} />
                         <Route path="/returns/create" element={<CreateReturn />} />
+
+                        <Route path="/settings" element={<SettingsPage />} />
 
 
 
