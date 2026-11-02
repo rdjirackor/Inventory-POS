@@ -5,7 +5,6 @@ export async function getSettings(): Promise<Settings> {
     const response = await apiFetch("/settings/");
 
     const data = await response.json();
-    console.log(data);
 
     if (!response.ok) {
         throw new Error(data || "Get Settings Failed");

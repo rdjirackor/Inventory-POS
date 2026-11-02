@@ -37,6 +37,7 @@ import ViewReturns from "./pages/ViewReturns";
 import ViewHistories from "./pages/ViewOrderHistory";
 import Customers from "./pages/Customers";
 import CreateCustomer from "./pages/CreateCustomer";
+import { SettingsProvider } from "./context/SettingsContext";
 
 const token = localStorage.getItem("access_token")
 
@@ -71,7 +72,9 @@ function App() {
                     <Route
                         element={
                             <ProtectedRoute>
+                                <SettingsProvider>
                                 <AppLayout />
+                                </SettingsProvider>
                             </ProtectedRoute>
                             }
                     >

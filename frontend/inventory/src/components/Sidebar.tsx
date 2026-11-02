@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../apis/auth";
-import type { Settings, User } from "../interfaces/interfaces";
+import type { User } from "../interfaces/interfaces";
 
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -32,7 +32,7 @@ import {
   HandCoins,
   
 } from "lucide-react";
-import { getSettings } from "../apis/settings";
+import { useSettings } from "../hooks/useSettings";
 
 
 
@@ -81,35 +81,13 @@ export default function Sidebar() {
 
       const [user, setUser] = useState<User | null>(null);
       const auth = useContext(AuthContext);
-      const [settingsData, setSettingsData] = useState<Settings | null>(null);
-
-    const [, setLoading] = useState(false);
-    const [, setError] = useState("");
-
-async function fetchSettings() {
-    setError("");
-    setLoading(true);
-
-    try {
-        const data = await getSettings();
-        console.log("RAW SETTINGS:", data);  
-        setSettingsData(data);
-    } catch (error) {
-        console.error("SETTINGS ERROR:", error);  
-        setError("Failed to load Settings");
-    } finally {
-        setLoading(false);
-    }
-}   
-
+      const {settingsData, loading, error} = useSettings();
 
 
       useEffect(() => {
         getCurrentUser()
             .then(data => setUser(data))
             .catch(error => console.error(error));
-
-        fetchSettings();
     }, []);
 
       function handleLogout() {
@@ -141,7 +119,10 @@ async function fetchSettings() {
         </Box>
 
         <Box>
-          <Text fontWeight="bold">
+          
+            {error && (<p>{error}</p>)}
+            {loading && (<p>Loading settings...</p>)}
+            <Text fontWeight="bold">
           {settingsData?.business_name || "Inventory POS"} 
           </Text>   
           <Text fontSize="xs" color="black">
