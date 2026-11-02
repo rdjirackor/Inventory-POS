@@ -1,13 +1,14 @@
 import type { Settings } from "../interfaces/interfaces";
 import { apiFetch } from "./api";
 
-export async function getSettings(): Promise<Settings[]> {
+export async function getSettings(): Promise<Settings> {
     const response = await apiFetch("/settings/");
 
     const data = await response.json();
+    console.log(data);
 
     if (!response.ok) {
-        throw new Error(data.message || "Get Settings Failed");
+        throw new Error(data || "Get Settings Failed");
     }
 
     return data;

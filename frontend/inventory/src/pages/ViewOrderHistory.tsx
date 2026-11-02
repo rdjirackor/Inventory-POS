@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import type { OrderHistory } from "../interfaces/interfaces";
 import { getOrderHistories } from "../apis/order_history";
 

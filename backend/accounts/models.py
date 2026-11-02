@@ -184,9 +184,18 @@ class Settings(models.Model):
     store_logo = models.ImageField(upload_to="store_logos/", blank=True, null=True)
     currency = models.CharField(max_length=3, default="GHS")    
     receipt_footer = models.CharField(max_length=500)
-    timezone = models.CharField(max_length=50, default="Africa/Accra")    #i think this would be a path to maybe some place online or multiple paths, preferably one offline at a different location and one synced. On second thought, the backup will be online nvm
+    timezone = models.CharField(max_length=50, default="Africa/Accra")    
     backup_enabled = models.BooleanField(default=False)
     backup_provider = models.CharField(max_length=50, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
  
 
 

@@ -17,8 +17,8 @@ export async function createCustomer(
     user: number,
     first_name: string,
     second_name: string,
-    reward_points: number,
-    credit_balance: number
+    reward_points: string,
+    credit_balance: string
 ) {
     const response = await apiFetch("/customers/", {
         method: "POST",

@@ -76,7 +76,7 @@ function Customers() {
                     <tr>
                     <th>First Name</th>
                     <th>Second Name</th>
-                    <th>Credit Balance Employed</th>
+                    <th>Credit Balance</th>
                     <th>Reward Points</th>
                     <th>Actions</th>
                     </tr>

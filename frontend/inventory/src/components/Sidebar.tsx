@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../apis/auth";
-import type { User } from "../interfaces/interfaces";
+import type { Settings, User } from "../interfaces/interfaces";
 
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -16,20 +16,25 @@ import {
 } from "@chakra-ui/react";
 import {
   LayoutDashboard,
-  ShoppingCart,
   Package,
   Boxes,
   Users,
   Tags,
   Truck,
-  Settings,
+  Settings as Set,
   LogOut,
-  FolderOpen,
   RotateCcw,
-  History,
   ClipboardList,
+  BadgePercent,
+  Warehouse,
+  MapPin,
+  FileText,
+  HandCoins,
   
 } from "lucide-react";
+import { getSettings } from "../apis/settings";
+
+
 
 
 
@@ -58,8 +63,15 @@ const navigation = [
     heading: "MANAGEMENT",
     items: [
       { label: "Categories", path: "/categories", icon: Tags },
+      { label: "Cashiers", path: "/cashiers", icon: HandCoins },
       { label: "Suppliers", path: "/suppliers", icon: Truck },
-      { label: "Settings", path: "/settings", icon: Settings },
+      { label: "Discounts", path: "/discounts", icon: BadgePercent },
+      { label: "Taxtype", path: "/taxtypes", icon: FileText },
+      { label: "Branches", path: "/branches", icon: MapPin },
+      { label: "Warehouses", path: "/warehouses", icon: Warehouse },
+      
+
+      { label: "Settings", path: "/settings", icon: Set },
     ],
   },
 ];
@@ -68,13 +80,36 @@ export default function Sidebar() {
   const location = useLocation();
 
       const [user, setUser] = useState<User | null>(null);
-    const auth = useContext(AuthContext);
+      const auth = useContext(AuthContext);
+      const [settingsData, setSettingsData] = useState<Settings | null>(null);
+
+    const [, setLoading] = useState(false);
+    const [, setError] = useState("");
+
+async function fetchSettings() {
+    setError("");
+    setLoading(true);
+
+    try {
+        const data = await getSettings();
+        console.log("RAW SETTINGS:", data);  
+        setSettingsData(data);
+    } catch (error) {
+        console.error("SETTINGS ERROR:", error);  
+        setError("Failed to load Settings");
+    } finally {
+        setLoading(false);
+    }
+}   
+
 
 
       useEffect(() => {
         getCurrentUser()
             .then(data => setUser(data))
             .catch(error => console.error(error));
+
+        fetchSettings();
     }, []);
 
       function handleLogout() {
@@ -106,7 +141,9 @@ export default function Sidebar() {
         </Box>
 
         <Box>
-          <Text fontWeight="bold">Inventory POS</Text>
+          <Text fontWeight="bold">
+          {settingsData?.business_name || "Inventory POS"} 
+          </Text>   
           <Text fontSize="xs" color="black">
             Management system
           </Text>

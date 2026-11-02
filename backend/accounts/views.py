@@ -562,27 +562,29 @@ def settings(request):
     serializer = SettingsSerializer(setting)
     return Response(serializer.data)
 
-@api_view(["PUT"])
-@permission_classes([IsAuthenticated])
-@require_model_permissions(Settings)
+# @api_view(["PUT"])
+# @permission_classes([IsAuthenticated])
+# @require_model_permissions(Settings)
 
-def settings(request):
-    setting = Settings.objects.first()
+# def settings(request):
+#     setting = Settings.objects.first()
 
-    serializer = SettingsSerializer(
-        setting,
-        data = request.data,
-        partial = True
-    )
+#     serializer = SettingsSerializer(
+#         setting,
+#         data = request.data,
+#         partial = True
+#     )
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         log_action(user = request.user,action=AuditLog.Action.SETTINGS_UPDATED, status=True,
+#                    description=f"{request.user} updated settings", entity_type="Settings", entity_id=setting.pk)
+#         return Response(serializer.data)
     
-    return Response(
-        serializer.errors,
-        status=400
-    )
+#     return Response(
+#         serializer.errors,
+#         status=400
+#     )
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
@@ -1674,7 +1676,7 @@ def customers(request):
             log_action(user=request.user,
                                                            action=AuditLog.Action.CUSTOMER_CREATED,
                                                                                    status=True,
-                                                                                    description=f"{request.user} created customer, {customer.name}",
+                                                                                    description=f"{request.user} created customer, {customer.id}",
                                                                                     entity_id=customer.id,
                                                                                     entity_type="Customer",
                                                                         )
