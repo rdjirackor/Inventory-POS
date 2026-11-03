@@ -2324,3 +2324,13 @@ def history(request):
 
     
 
+@api_view(["GET"])
+def announcements(request):
+    announcement = Announcement.objects.filter(enabled = True).order_by("-created_at").first()
+    serializer = AnnouncementSerializer(
+        announcement,
+
+    )
+    return Response(
+        serializer.data,
+    )

@@ -1,7 +1,7 @@
 import type { Announcement } from "../interfaces/interfaces";
 import { apiFetch } from "./api";
 
-export async function getAnnouncements(): Promise<Announcement[]> {
+export async function getLastAnnouncement(): Promise<Announcement> {
     const response = await apiFetch("/announcements/");
 
     const data = await response.json();
