@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 from django.db.models import Q
 from django.utils import timezone
+from django.conf import settings
+
 
 
 
@@ -134,34 +136,167 @@ class Customer(models.Model):
         return self.user.username
     
 class OrderHistory(models.Model):
-    customer = models.ForeignKey(Customer, related_name="orders", on_delete=models.PROTECT, blank=True, null=True)
-    time_of_purchase = models.DateTimeField(auto_now_add=True)
+
+    customer = models.ForeignKey(
+        "Customer",
+        related_name="orders",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+
+    time_of_purchase = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def get_total_items(self):
         data = {}
+
         for item in self.items.all():
             data[item.product] = item.amount_bought
+
         return data
+
+    def get_total_amount(self):
+        total = Decimal("0.00")
+
+        for item in self.items.all():
+            line_total = item.get_line_total()
+
+            if line_total is None:
+                return None
+
+            total += line_total
+
+        return total.quantize(Decimal("0.01"))
+
+    def get_amount_paid(self):
+        return sum(
+            (payment.amount for payment in self.payments.all()),
+            Decimal("0.00")
+        ).quantize(Decimal("0.01"))
+
+    def get_balance_due(self):
+        total = self.get_total_amount()
+
+        if total is None:
+            return None
+
+        return (
+            total - self.get_amount_paid()
+        ).quantize(Decimal("0.01"))
+
+    @property
+    def payment_status(self):
+        total = self.get_total_amount()
+
+        if total is None or total <= 0:
+            return "Unpaid"
+
+        amount_paid = self.get_amount_paid()
+
+        if amount_paid <= 0:
+            return "Unpaid"
+
+        if amount_paid >= total:
+            return "Paid"
+
+        return "Partially Paid"
 
     def __str__(self):
         return f"OH-{self.customer}-{self.time_of_purchase}"
+
+    
     
 class QuantityOfAnItemBought(models.Model):
-    order = models.ForeignKey('OrderHistory', on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    #just in case the store using this application is like not a major supermarket, and lowkey be selling things in fractions, ill allow for decimals but hide it with react unless necassary for prettiness
-    amount_bought = models.DecimalField(decimal_places=2, max_digits=5)
-    
+    order = models.ForeignKey(
+        "OrderHistory",
+        on_delete=models.CASCADE,
+        related_name="items"
+    )
+
+    product = models.ForeignKey(
+        "Product",
+        on_delete=models.PROTECT
+    )
+
+    amount_bought = models.DecimalField(
+        decimal_places=2,
+        max_digits=10
+    )
+
+    # Historical pricing snapshots
+    unit_price_before_discount = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+
+    discount_rate = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+
+    tax_rate = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+
+    unit_price = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+
+    def capture_pricing_snapshot(self, product):
+        """
+        Capture the product's pricing information at the
+        time this order item is created.
+        """
+
+        self.unit_price_before_discount = (
+            product.selling_price_without_tax
+        )
+
+        self.discount_rate = (
+            product.discount.discount
+            if product.discount
+            else Decimal("0.00")
+        )
+
+        self.tax_rate = product.get_total_taxrate()
+
+        # This should be sort of like  the final perunit price,
+        # after discounts and taxes.
+        self.unit_price = product.get_actual_sale_price()
+
     def get_net_price_at_time_of_sale(self):
-        return self.product.selling_price_without_tax
+        return self.unit_price_before_discount
+
     def get_active_discount_rate_at_sale_time(self):
-        if self.product.discount:
-            return self.product.discount.discount / 100
-        return 0
+        return self.discount_rate / Decimal("100")
+
     def get_taxes_on_individual_item(self):
-        return self.product.get_total_taxrate()/100
+        return self.tax_rate / Decimal("100")
+
+    def get_line_total(self):
+        if self.unit_price is None:
+            return None
+
+        return (
+            self.unit_price * self.amount_bought
+        ).quantize(Decimal("0.01"))
+
     def __str__(self):
         return f"{self.amount_bought} x {self.product.name}"
+
+
 
 class Branch(models.Model):
     name = models.CharField(max_length=100)
@@ -437,11 +572,12 @@ class Returns(models.Model):
 
     
 class Payment(models.Model):
+
     PAYMENT_METHODS = [
-        ('Cash', 'Cash'),
-        ('Card', 'Card'),
-        ('Mobile Money', 'Mobile Money'),
-        ('Bank Transfer', 'Bank Transfer'),
+        ("Cash", "Cash"),
+        ("Card", "Card"),
+        ("Mobile Money", "Mobile Money"),
+        ("Bank Transfer", "Bank Transfer"),
     ]
 
     order = models.ForeignKey(
@@ -460,7 +596,42 @@ class Payment(models.Model):
         choices=PAYMENT_METHODS
     )
 
-    paid_at = models.DateTimeField(auto_now_add=True)
+    provider = models.CharField(
+        max_length=50,
+        blank=True,
+        default=""
+    )
+
+    reference_number = models.CharField(
+        max_length=100,
+        blank=True,
+        default=""
+    )
+
+    recorded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="payments_recorded",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
+
+    paid_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
-        return f"{self.method}-{self.amount}"
+        return f"{self.method} - {self.amount}"
+
+
+    
+
+
+
+
+
+
+
+
+
+
