@@ -53,6 +53,7 @@ export interface Product {
     taxes: number[];
     category: number;
     warehouse: number;
+    actual_sale_price: string;
 }
 
 export interface Supplier {
@@ -88,20 +89,6 @@ export interface Customer {
     second_name: string | null;
     reward_points: string;
     credit_balance: string;
-}
-
-export interface OrderHistory {
-    id: number;
-    customer: number | null;
-    time_of_purchase: string;
-    customer_name: string | null; 
-}
-
-export interface QuantityOfAnItemBought {
-    id: number;
-    order: number;
-    product: number;
-    amount_bought: string;
 }
 
 export interface Branch {
@@ -191,8 +178,37 @@ export interface Payment {
     id: number;
     order: number;
     amount: string;
-    method: string;
+    method: "Cash" | "Card" | "Mobile Money" | "Bank Transfer";
+    provider: string;
+    reference_number: string;
+    recorded_by: number | null;
+    recorded_by_username: string | null;
     paid_at: string;
+}
+
+export interface OrderHistory {
+    id: number;
+    customer: number | null;
+    customer_name: string | null;
+    time_of_purchase: string;
+    total_amount: string | null;
+    amount_paid: string;
+    balance_due: string | null;
+    payment_status: "Unpaid" | "Partially Paid" | "Paid";
+}
+
+export interface QuantityOfAnItemBought {
+    id: number;
+    order: number;
+    product: number;
+    product_name: string;
+    amount_bought: string;
+    unit_price_before_discount: string | null;
+    discount_rate: string | null;
+    discount_amount: string | null;
+    tax_rate: string | null;
+    tax_amount: string | null;
+    unit_price: string | null;
 }
 
 export interface User {

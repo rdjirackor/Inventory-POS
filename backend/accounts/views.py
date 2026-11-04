@@ -27,6 +27,7 @@ from .notify import *
 
 
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def users(request):
@@ -85,6 +86,9 @@ def me(request):
 
 
 
+
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 @require_model_permissions(OrderHistory)
@@ -92,50 +96,43 @@ def checkout(request):
 
     items = request.data.get("items")
     customer_id = request.data.get("customer_id")
-    payment_method = request.data.get("payment_method")
+    payment_data = request.data.get("payments", [])
 
     if not isinstance(items, list) or not items:
         return Response(
             {"error": "The cart cannot be empty."},
-            status=400
+            status=status.HTTP_400_BAD_REQUEST
         )
 
-    valid_methods = dict(Payment.PAYMENT_METHODS)
-
-    if payment_method not in valid_methods:
+    if not isinstance(payment_data, list):
         return Response(
-            {"error": "Invalid payment method."},
-            status=400
+            {"error": "Payments must be provided as a list."},
+            status=status.HTTP_400_BAD_REQUEST
         )
 
-    try:
-        current_user = request.user
-    except Cashier.DoesNotExist:
-        return Response(
-            {"error": "This account is not linked to a cashier."},
-            status=403
-        )
-    try:
-        group_names = set(
-                    current_user.groups.values_list("name", flat=True)
-                    )
-        if not group_names.intersection({"Admin", "Cashiers"}):
-                return Response(
-        {"error": "You are not authorized to make sales."},
-        status=403
+    current_user = request.user
+
+    group_names = set(
+        current_user.groups.values_list("name", flat=True)
     )
-    except User.DoesNotExist:
-            return Response(
-                {"error": "This account is not linked to a user."},
-                status=403
-            )
+
+    if not current_user.is_superuser and not group_names.intersection(
+        {"Admin", "Cashiers"}
+    ):
+        return Response(
+            {"error": "You are not authorized to make sales."},
+            status=status.HTTP_403_FORBIDDEN
+        )
+
 
     quantities = {}
 
-
-
     try:
         for item in items:
+
+            if not isinstance(item, dict):
+                raise ValueError
+
             product_id = int(item["product_id"])
             quantity = Decimal(str(item["quantity"]))
 
@@ -144,25 +141,75 @@ def checkout(request):
                 or quantity <= 0
                 or quantity != quantity.quantize(Decimal("0.01"))
             ):
-                raise ValueError("Invalid quantity.")
+                raise ValueError
 
             if product_id in quantities:
-                raise ValueError("Duplicate product in cart.")
+                raise ValueError
 
             quantities[product_id] = quantity
 
-        
+    except (KeyError, TypeError, ValueError, InvalidOperation):
+        return Response(
+            {"error": "Invalid product or quantity."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+
+    valid_methods = dict(Payment.PAYMENT_METHODS)
+    validated_payments = []
+
+    try:
+        for payment in payment_data:
+
+            if not isinstance(payment, dict):
+                raise ValueError
+
+            amount = Decimal(str(payment["amount"]))
+            method = payment["method"]
+
+            provider = payment.get("provider", "")
+            reference_number = payment.get("reference_number", "")
+
+            if not isinstance(provider, str):
+                raise ValueError
+
+            if not isinstance(reference_number, str):
+                raise ValueError
+
+            if (
+                not amount.is_finite()
+                or amount <= 0
+                or amount != amount.quantize(Decimal("0.01"))
+            ):
+                raise ValueError
+
+            if method not in valid_methods:
+                raise ValueError
+
+            if method in ["Mobile Money", "Bank Transfer"]:
+                if not provider or not reference_number:
+                    raise ValueError(
+                        "Provider and reference number are required for this payment method."
+                    )
+
+            validated_payments.append({
+                "amount": amount,
+                "method": method,
+                "provider": provider.strip(),
+                "reference_number": reference_number.strip(),
+            })
 
     except (KeyError, TypeError, ValueError, InvalidOperation):
         return Response(
-            {"error": "Invalid product, quantity, or payment amount."},
-            status=400
+            {"error": "One or more payment entries are invalid."},
+            status=status.HTTP_400_BAD_REQUEST
         )
+
+  
 
     try:
         with transaction.atomic():
-
-
 
             products = {
                 product.id: product
@@ -174,12 +221,14 @@ def checkout(request):
             if len(products) != len(quantities):
                 return Response(
                     {"error": "One or more products do not exist."},
-                    status=400
+                    status=status.HTTP_400_BAD_REQUEST
                 )
 
+            order_items = []
             total = Decimal("0.00")
 
             for product_id, quantity in quantities.items():
+
                 product = products[product_id]
 
                 if product.current_stock < quantity:
@@ -189,42 +238,66 @@ def checkout(request):
                                 f"Insufficient stock for {product.name}."
                             )
                         },
-                        status=400
+                        status=status.HTTP_400_BAD_REQUEST
                     )
 
-                total += product.get_actual_sale_price() * quantity
+                order_item = QuantityOfAnItemBought(
+                    product=product,
+                    amount_bought=quantity
+                )
+
+                order_item.capture_pricing_snapshot(product)
+
+                line_total = order_item.get_line_total()
+
+                if line_total is None:
+                    raise ValueError(
+                        "Could not calculate product pricing."
+                    )
+
+                total += line_total
+                order_items.append(order_item)
 
             total = total.quantize(Decimal("0.01"))
 
-            
+            amount_to_pay = sum(
+                (payment["amount"] for payment in validated_payments),
+                Decimal("0.00")
+            )
+
+            if amount_to_pay > total:
+                return Response(
+                    {
+                        "error": (
+                            "The total payment cannot exceed the order total."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
             customer = None
 
             if customer_id not in (None, ""):
                 try:
                     customer = Customer.objects.get(id=customer_id)
-                except (
-                    Customer.DoesNotExist,
-                    ValueError,
-                    TypeError
-                ):
+                except (Customer.DoesNotExist, ValueError, TypeError):
                     return Response(
                         {"error": "Customer does not exist."},
-                        status=400
+                        status=status.HTTP_400_BAD_REQUEST
                     )
 
             order = OrderHistory.objects.create(
                 customer=customer
             )
 
-            for product_id, quantity in quantities.items():
-                product = products[product_id]
+            for order_item in order_items:
+                order_item.order = order
+                order_item.save()
 
-                QuantityOfAnItemBought.objects.create(
-                    order=order,
-                    product=product,
-                    amount_bought=quantity
-                )
+
+            for product_id, quantity in quantities.items():
+
+                product = products[product_id]
 
                 product.current_stock -= quantity
                 product.save(update_fields=["current_stock"])
@@ -238,40 +311,186 @@ def checkout(request):
                 )
 
 
-            payment = Payment.objects.create(
-                order=order,
-                amount=total,
-                method=payment_method
+
+            created_payments = []
+
+            for payment in validated_payments:
+
+                created_payment = Payment.objects.create(
+                    order=order,
+                    amount=payment["amount"],
+                    method=payment["method"],
+                    provider=payment["provider"],
+                    reference_number=payment["reference_number"],
+                    recorded_by=current_user
                 )
 
+                created_payments.append(created_payment)
+
+
             log_action(
-                    user=current_user,
-                    action=AuditLog.Action.SALE_COMPLETED,
-                    status=True,
-                    description=f"{current_user} made a sale, with OrderHistory, \"{order.id}\"",
-                    entity_type="User",
-                    entity_id=current_user.id,
-                ) 
+                user=current_user,
+                action=AuditLog.Action.SALE_COMPLETED,
+                status=True,
+                description=(
+                    f"{current_user} completed sale OH-{order.id}"
+                ),
+                entity_type="User",
+                entity_id=current_user.id,
+            )
+            for product in products.values():
+                if product.current_stock< product.minimum_stock_level:
+                    notify(notification_type=Notification.NotifType.LOW_STOCK,message=f"{product.name} is low in stock")
 
             return Response(
                 {
                     "message": "Sale completed successfully.",
                     "order_id": order.id,
-                    "payment_id": payment.id,
                     "total": str(total),
+                    "amount_paid": str(order.get_amount_paid()),
+                    "balance_due": str(order.get_balance_due()),
+                    "payment_status": order.payment_status,
+                    "payment_ids": [
+                        payment.id for payment in created_payments
+                    ],
                     "customer_id": customer.id if customer else None
                 },
-                status=201
+                status=status.HTTP_201_CREATED
             )
 
     except Exception:
         import logging
+
         logging.getLogger(__name__).exception(
             "Checkout failed"
         )
+
         return Response(
             {"error": "Checkout failed. No sale was completed."},
-            status=500
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@require_model_permissions(Payment)
+def record_payment(request, order_id):
+
+    current_user = request.user
+
+    group_names = set(
+        current_user.groups.values_list("name", flat=True)
+    )
+
+    if not current_user.is_superuser and not group_names.intersection(
+        {"Admin", "Cashiers"}
+    ):
+        return Response(
+            {"error": "You are not authorized to record payments."},
+            status=status.HTTP_403_FORBIDDEN
+        )
+
+    try:
+        amount = Decimal(str(request.data.get("amount")))
+        method = request.data.get("method")
+        provider = request.data.get("provider", "")
+        reference_number = request.data.get("reference_number", "")
+
+        if (
+            not amount.is_finite()
+            or amount <= 0
+            or amount != amount.quantize(Decimal("0.01"))
+        ):
+            raise ValueError
+
+        if method not in dict(Payment.PAYMENT_METHODS):
+            raise ValueError
+
+        if not isinstance(provider, str):
+            raise ValueError
+
+        if not isinstance(reference_number, str):
+            raise ValueError
+
+    except (TypeError, ValueError, InvalidOperation):
+        return Response(
+            {"error": "Invalid payment details."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    try:
+        with transaction.atomic():
+
+            try:
+                order = OrderHistory.objects.select_for_update().get(
+                    id=order_id
+                )
+            except OrderHistory.DoesNotExist:
+                return Response(
+                    {"error": "Order does not exist."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            balance_due = order.get_balance_due()
+
+            if balance_due is None:
+                return Response(
+                    {
+                        "error": (
+                            "This order has no valid pricing snapshots. "
+                            "Its balance cannot be calculated."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            if balance_due <= 0:
+                return Response(
+                    {"error": "This order has already been fully paid."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            if amount > balance_due:
+                return Response(
+                    {
+                        "error": "Payment exceeds the outstanding balance.",
+                        "balance_due": str(balance_due)
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            payment = Payment.objects.create(
+                order=order,
+                amount=amount,
+                method=method,
+                provider=provider.strip(),
+                reference_number=reference_number.strip(),
+                recorded_by=current_user
+            )
+
+            order.refresh_from_db()
+
+            return Response(
+                {
+                    "message": "Payment recorded successfully.",
+                    "payment_id": payment.id,
+                    "order_id": order.id,
+                    "amount_paid": str(order.get_amount_paid()),
+                    "balance_due": str(order.get_balance_due()),
+                    "payment_status": order.payment_status
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+    except Exception:
+        import logging
+
+        logging.getLogger(__name__).exception(
+            "Payment recording failed"
+        )
+
+        return Response(
+            {"error": "Payment could not be recorded."},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
 
@@ -1143,7 +1362,7 @@ def product_detail(request, product_id):
 
         if serializer.is_valid():
             if product.current_stock <= product.minimum_stock_level:
-                notify(notification_type=Notification.Type.LOW_STOCK,
+                notify(notification_type=Notification.NotifType.LOW_STOCK,
                     message=f"{product.name} is low in stock",
                     )
             log_action(user=request.user,
@@ -1178,7 +1397,7 @@ def product_detail(request, product_id):
 
         if serializer.is_valid():
             if product.current_stock <= product.minimum_stock_level:
-                notify(notification_type=Notification.Type.LOW_STOCK,
+                notify(notification_type=Notification.NotifType.LOW_STOCK,
                     message=f"{product.name} is low in stock",
                     )
             log_action(user=request.user,
@@ -1995,21 +2214,31 @@ def announcement_detail(request, announcement_id):
 
         announcement.delete()
         return Response(status=204)
-    
+
+
+
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-@require_model_permissions(Payment)  
-
+@require_model_permissions(Payment)
 def payments(request):
 
-    payments = Payment.objects.all()
+    payment_records = (
+        Payment.objects
+        .select_related("order", "recorded_by")
+        .order_by("-paid_at")
+    )
 
     serializer = PaymentSerializer(
-        payments,
+        payment_records,
         many=True
     )
 
     return Response(serializer.data)
+
+
+
 
 @api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
@@ -2106,7 +2335,7 @@ def stock(request):
                     reason=reason,
                 )
                 if product.current_stock <= product.minimum_stock_level:
-                    notify(notification_type=Notification.Type.LOW_STOCK,
+                    notify(notification_type=Notification.NotifType.LOW_STOCK,
                         message=f"{product.name} is low in stock",
                         )
                 log_action(user=request.user,
@@ -2308,19 +2537,21 @@ def returns(request):
         )
 
 
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 @require_model_permissions(OrderHistory)
 def history(request):
+    histories = (
+        OrderHistory.objects
+        .select_related("customer")
+        .prefetch_related("items", "payments")
+        .all()
+    )
 
-    if request.method == "GET":
-        histories = OrderHistory.objects.all()
-        serializer = OrderHistorySerializer(
-            histories,
-            many=True
-        )
-
-        return Response(serializer.data)
+    serializer = OrderHistorySerializer(histories, many=True)
+    return Response(serializer.data)
 
     
 

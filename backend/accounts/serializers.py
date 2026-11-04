@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from decimal import Decimal
+
 
 from django.contrib.auth.models import User
 from .models import (
@@ -91,6 +93,8 @@ class DiscountSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    actual_sale_price = serializers.SerializerMethodField()
+
 
     discount_name = serializers.StringRelatedField(
         source="discount",
@@ -116,7 +120,6 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Product
-
         fields = [
             "id",
             "name",
@@ -124,23 +127,27 @@ class ProductSerializer(serializers.ModelSerializer):
             "brand",
             "net_cost",
             "selling_price_without_tax",
-
+            "actual_sale_price",
             "discount",
             "taxes",
             "category",
             "warehouse",
-
             "discount_name",
             "taxes_names",
             "category_name",
             "warehouse_name",
-
             "current_stock",
             "minimum_stock_level",
             "image",
             "barcode_number",
         ]
 
+
+
+
+
+    def get_actual_sale_price(self, obj):
+        return str(obj.get_actual_sale_price().quantize(Decimal("0.01")))
 
 class SupplierSerializer(serializers.ModelSerializer):
 
@@ -205,30 +212,60 @@ class CustomerSerializer(serializers.ModelSerializer):
 class OrderHistorySerializer(serializers.ModelSerializer):
 
     customer_name = serializers.StringRelatedField(
-        source ="customer",
-        read_only = True
+        source="customer",
+        read_only=True
     )
 
-
+    total_amount = serializers.SerializerMethodField()
+    amount_paid = serializers.SerializerMethodField()
+    balance_due = serializers.SerializerMethodField()
+    payment_status = serializers.CharField(read_only=True)
 
     class Meta:
         model = OrderHistory
         fields = [
             "id",
             "customer",
-            "time_of_purchase",
             "customer_name",
+            "time_of_purchase",
+            "total_amount",
+            "amount_paid",
+            "balance_due",
+            "payment_status",
         ]
 
+    def get_total_amount(self, obj):
+        value = obj.get_total_amount()
+        return str(value) if value is not None else None
+
+    def get_amount_paid(self, obj):
+        return str(obj.get_amount_paid())
+
+    def get_balance_due(self, obj):
+        value = obj.get_balance_due()
+        return str(value) if value is not None else None
 
 class QuantityOfAnItemBoughtSerializer(serializers.ModelSerializer):
+
+    product_name = serializers.CharField(
+        source="product.name",
+        read_only=True
+    )
+
     class Meta:
         model = QuantityOfAnItemBought
         fields = [
             "id",
             "order",
             "product",
+            "product_name",
             "amount_bought",
+            "unit_price_before_discount",
+            "discount_rate",
+            "discount_amount",
+            "tax_rate",
+            "tax_amount",
+            "unit_price",
         ]
 
 
@@ -380,6 +417,13 @@ class ReturnsSerializer(serializers.ModelSerializer):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+
+    recorded_by_username = serializers.CharField(
+        source="recorded_by.username",
+        read_only=True,
+        default=None
+    )
+
     class Meta:
         model = Payment
         fields = [
@@ -387,6 +431,16 @@ class PaymentSerializer(serializers.ModelSerializer):
             "order",
             "amount",
             "method",
+            "provider",
+            "reference_number",
+            "recorded_by",
+            "recorded_by_username",
+            "paid_at",
+        ]
+
+        read_only_fields = [
+            "id",
+            "recorded_by",
             "paid_at",
         ]
 

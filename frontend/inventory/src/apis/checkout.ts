@@ -9,26 +9,36 @@ export interface CheckoutItem {
 export interface CheckoutResponse {
     message: string;
     order_id: number;
-    payment_id: number;
     total: string;
+    amount_paid: string;
+    balance_due: string;
+    payment_status: "Unpaid" | "Partially Paid" | "Paid";
+    payment_ids: number[];
     customer_id: number | null;
 }
+
+
 
 export async function checkout(
     items: CheckoutItem[],
     customer_id: number | null,
-    payment_method: string
+    payments: {
+        amount: string;
+        method: string;
+        provider: string;
+        reference_number: string;
+    }[]
 ): Promise<CheckoutResponse> {
     const response = await apiFetch("/checkout/", {
         method: "POST",
-        headers: {
+        headers: { 
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            items,
-            customer_id,
-            payment_method,
-        }),
+    items,
+    customer_id,
+    payments,
+}),
     });
 
     const data = await response.json();

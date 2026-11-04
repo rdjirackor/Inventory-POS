@@ -57,28 +57,36 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    
     def get_total_taxrate(self):
-        total = 0
+        total = Decimal("0.00")
+
         for tax in self.taxes.all():
-            total+= tax.rate
+            total += Decimal(str(tax.rate))
+
         return total
-        
+
+
     def get_actual_sale_price(self):
-        discount_amount = Decimal("0")
+        base_price = self.selling_price_without_tax
 
-        if self.discount:
-            discount_amount = (
-                self.selling_price_without_tax *
-                self.discount.discount / Decimal("100")
-            )
-
-        total_tax_amount = (
-            self.get_total_taxrate() / Decimal("100") *
-            self.selling_price_without_tax
+        discount_rate = (
+            Decimal(str(self.discount.discount))
+            if self.discount else Decimal("0.00")
         )
 
-        return self.selling_price_without_tax - discount_amount + total_tax_amount
+        tax_rate = self.get_total_taxrate()
+
+        discount_amount = base_price * discount_rate / Decimal("100")
+        tax_amount = base_price * tax_rate / Decimal("100")
+
+        return (base_price - discount_amount + tax_amount).quantize(
+            Decimal("0.01")
+        )
+
+    
+
+        
+    
 
 class Supplier(models.Model):
     name = models.CharField(max_length=200) 
@@ -136,18 +144,15 @@ class Customer(models.Model):
         return self.user.username
     
 class OrderHistory(models.Model):
-
     customer = models.ForeignKey(
-        "Customer",
+        Customer,
         related_name="orders",
         on_delete=models.PROTECT,
         blank=True,
         null=True
     )
 
-    time_of_purchase = models.DateTimeField(
-        auto_now_add=True
-    )
+    time_of_purchase = models.DateTimeField(auto_now_add=True)
 
     def get_total_items(self):
         data = {}
@@ -171,10 +176,12 @@ class OrderHistory(models.Model):
         return total.quantize(Decimal("0.01"))
 
     def get_amount_paid(self):
-        return sum(
+        total = sum(
             (payment.amount for payment in self.payments.all()),
             Decimal("0.00")
-        ).quantize(Decimal("0.01"))
+        )
+
+        return total.quantize(Decimal("0.01"))
 
     def get_balance_due(self):
         total = self.get_total_amount()
@@ -182,9 +189,9 @@ class OrderHistory(models.Model):
         if total is None:
             return None
 
-        return (
-            total - self.get_amount_paid()
-        ).quantize(Decimal("0.01"))
+        return (total - self.get_amount_paid()).quantize(
+            Decimal("0.01")
+        )
 
     @property
     def payment_status(self):
@@ -204,7 +211,7 @@ class OrderHistory(models.Model):
         return "Partially Paid"
 
     def __str__(self):
-        return f"OH-{self.customer}-{self.time_of_purchase}"
+        return f"OH-{self.id}"
 
     
     
@@ -216,13 +223,13 @@ class QuantityOfAnItemBought(models.Model):
     )
 
     product = models.ForeignKey(
-        "Product",
+        Product,
         on_delete=models.PROTECT
     )
 
     amount_bought = models.DecimalField(
-        decimal_places=2,
-        max_digits=10
+        max_digits=10,
+        decimal_places=2
     )
 
     # Historical pricing snapshots
@@ -234,14 +241,28 @@ class QuantityOfAnItemBought(models.Model):
     )
 
     discount_rate = models.DecimalField(
-        max_digits=5,
+        max_digits=7,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+
+    discount_amount = models.DecimalField(
+        max_digits=12,
         decimal_places=2,
         null=True,
         blank=True
     )
 
     tax_rate = models.DecimalField(
-        max_digits=5,
+        max_digits=7,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+
+    tax_amount = models.DecimalField(
+        max_digits=12,
         decimal_places=2,
         null=True,
         blank=True
@@ -255,35 +276,34 @@ class QuantityOfAnItemBought(models.Model):
     )
 
     def capture_pricing_snapshot(self, product):
-        """
-        Capture the product's pricing information at the
-        time this order item is created.
-        """
+        base_price = product.selling_price_without_tax
 
-        self.unit_price_before_discount = (
-            product.selling_price_without_tax
+        discount_rate = (
+            Decimal(str(product.discount.discount))
+            if product.discount else Decimal("0.00")
         )
 
-        self.discount_rate = (
-            product.discount.discount
-            if product.discount
-            else Decimal("0.00")
+        tax_rate = product.get_total_taxrate()
+
+        discount_amount = (
+            base_price * discount_rate / Decimal("100")
         )
 
-        self.tax_rate = product.get_total_taxrate()
+  
+        tax_amount = (
+            base_price * tax_rate / Decimal("100")
+        )
 
-        # This should be sort of like  the final perunit price,
-        # after discounts and taxes.
-        self.unit_price = product.get_actual_sale_price()
+        final_price = (
+            base_price - discount_amount + tax_amount
+        ).quantize(Decimal("0.01"))
 
-    def get_net_price_at_time_of_sale(self):
-        return self.unit_price_before_discount
-
-    def get_active_discount_rate_at_sale_time(self):
-        return self.discount_rate / Decimal("100")
-
-    def get_taxes_on_individual_item(self):
-        return self.tax_rate / Decimal("100")
+        self.unit_price_before_discount = base_price
+        self.discount_rate = discount_rate
+        self.discount_amount = discount_amount.quantize(Decimal("0.01"))
+        self.tax_rate = tax_rate
+        self.tax_amount = tax_amount.quantize(Decimal("0.01"))
+        self.unit_price = final_price
 
     def get_line_total(self):
         if self.unit_price is None:
@@ -292,6 +312,21 @@ class QuantityOfAnItemBought(models.Model):
         return (
             self.unit_price * self.amount_bought
         ).quantize(Decimal("0.01"))
+
+    def get_net_price_at_time_of_sale(self):
+        return self.unit_price_before_discount
+
+    def get_active_discount_rate_at_sale_time(self):
+        if self.discount_rate is None:
+            return None
+
+        return self.discount_rate / Decimal("100")
+
+    def get_taxes_on_individual_item(self):
+        if self.tax_rate is None:
+            return None
+
+        return self.tax_rate / Decimal("100")
 
     def __str__(self):
         return f"{self.amount_bought} x {self.product.name}"
@@ -339,13 +374,13 @@ class Settings(models.Model):
 
 class Notification(models.Model):
 
-    class Type(models.TextChoices):
+    class NotifType(models.TextChoices):
             LOW_STOCK = "LOW_STOCK", "Low Stock"
             NEW_USER = "NEW_USER", "New User Deleted"
 
     notification_type = models.CharField(
             max_length=50,
-            choices=Type.choices,
+            choices=NotifType.choices,
             null=True
         )
 
@@ -616,9 +651,7 @@ class Payment(models.Model):
         blank=True
     )
 
-    paid_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    paid_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.method} - {self.amount}"

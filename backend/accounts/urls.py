@@ -62,7 +62,6 @@ urlpatterns = [
         announcement_detail
     ),
 
-    path("payments/", payments),
 
     path("checkout/", checkout),
 
@@ -82,5 +81,10 @@ urlpatterns = [
 path("read-notification/<int:notification_id>/", notification_read),    
 path("read-notification-all/", notification_read_all),    
 path("announcements/", announcements ),
-
+path("payments/", payments, name="payments"),
+path(
+    "orders/<int:order_id>/payments/",
+    record_payment,
+    name="record-payment"
+),
 ]
