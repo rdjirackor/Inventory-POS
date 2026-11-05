@@ -123,7 +123,6 @@ function CreateProduct() {
 
     return (
         <div>
-            <h1>Create Product</h1>
 
             {error && <p>{error}</p>}
 

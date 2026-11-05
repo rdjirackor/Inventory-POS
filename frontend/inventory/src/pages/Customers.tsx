@@ -65,7 +65,6 @@ function Customers() {
 
     return (
         <div>
-            <h1>Customers</h1>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
             <div className="fetch_table">

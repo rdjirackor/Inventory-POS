@@ -15,6 +15,8 @@ export interface CheckoutResponse {
     payment_status: "Unpaid" | "Partially Paid" | "Paid";
     payment_ids: number[];
     customer_id: number | null;
+    receipt_id: number;
+
 }
 
 

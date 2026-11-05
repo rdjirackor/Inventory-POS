@@ -87,4 +87,9 @@ path(
     record_payment,
     name="record-payment"
 ),
+path(
+    "receipts/<int:receipt_id>/",
+    get_receipt,
+    name="get_receipt"
+),
 ]

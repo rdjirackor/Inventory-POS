@@ -39,7 +39,6 @@ function CreateCategory() {
 
     return (
         <div>
-            <h1>Create Category</h1>
 
             {error && <p>{error}</p>}
 

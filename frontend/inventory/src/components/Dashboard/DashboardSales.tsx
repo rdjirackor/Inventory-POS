@@ -6,6 +6,9 @@ import { getCustomers } from "../../apis/customers";
 import { checkout } from "../../apis/checkout";
 import AppButton from "../AppButton";
 
+import { useNavigate } from "react-router-dom";
+
+
 type PaymentMethod =
     | "Cash"
     | "Card"
@@ -27,6 +30,10 @@ const emptyPayment = (): PaymentDraft => ({
 });
 
 function DashboardSales() {
+
+    const navigate = useNavigate();
+
+
     const [loading, setLoading] = useState(false);
     const [checkingOut, setCheckingOut] = useState(false);
 
@@ -75,7 +82,6 @@ function DashboardSales() {
     );
 
     const invalidPayments = payments.some(payment => {
-        // Empty payment rows are allowed.
         if (payment.amount.trim() === "") {
             return false;
         }
@@ -255,11 +261,15 @@ function DashboardSales() {
                     reference_number: payment.reference_number.trim(),
                 }));
 
-            const result = await checkout(
-                checkoutItems,
-                selectedCustomer === "" ? null : selectedCustomer,
-                paymentPayload
-            );
+                const result = await checkout(
+                    checkoutItems,
+                    selectedCustomer === "" ? null : selectedCustomer,
+                    paymentPayload
+                );
+
+                navigate(`/receipts/${result.receipt_id}`);
+                return;
+            
 
             setCheckoutMessage(
                 `Sale completed! Order #${result.order_id} — ` +
@@ -267,6 +277,7 @@ function DashboardSales() {
                 `Paid: GH₵ ${Number(result.amount_paid).toFixed(2)} — ` +
                 `Balance: GH₵ ${Number(result.balance_due).toFixed(2)} — ` +
                 `${result.payment_status}`
+                
             );
 
             setSaleItems({});
@@ -656,7 +667,7 @@ function DashboardSales() {
                             totalPayment > cartTotal + 0.001
                         }
                     >
-                        {checkingOut ? "Processing..." : "Complete Sale"}
+                        {checkingOut  ? "Processing..." : "Complete Sale"}
                     </AppButton>
 
 

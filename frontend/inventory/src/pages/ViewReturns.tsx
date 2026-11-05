@@ -35,7 +35,6 @@ export default function ViewReturns() {
     return (
         <div className="page-container">
             <div className="page-header">
-                <h1>Returns</h1>
                 <Link to="/returns/create">Create Return</Link>
             </div>
 

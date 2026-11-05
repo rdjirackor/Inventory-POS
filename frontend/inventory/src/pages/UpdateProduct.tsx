@@ -125,7 +125,6 @@ function UpdateProduct() {
 
     return (
         <div>
-            <h1>Update Product</h1>
 
             {error && <p>{error}</p>}
 

@@ -92,6 +92,137 @@ class DiscountSerializer(serializers.ModelSerializer):
         ]
 
 
+class ReceiptItemSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(
+        source="product.name",
+        read_only=True
+    )
+    product_sku = serializers.CharField(
+        source="product.sku",
+        read_only=True
+    )
+    line_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = QuantityOfAnItemBought
+        fields = [
+            "id",
+            "product",
+            "product_name",
+            "product_sku",
+            "amount_bought",
+            "unit_price_before_discount",
+            "discount_rate",
+            "discount_amount",
+            "tax_rate",
+            "tax_amount",
+            "unit_price",
+            "line_total",
+        ]
+
+    def get_line_total(self, obj):
+        return obj.get_line_total()
+
+class ReceiptPaymentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Payment
+        fields = [
+            "id",
+            "method",
+            "amount",
+            "provider",
+            "reference_number",
+            "paid_at",
+        ]
+
+class ReceiptSettingsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Settings
+        fields = [
+            "business_name",
+            "store_logo",
+            "currency",
+            "receipt_footer",
+        ]
+class ReceiptSerializer(serializers.ModelSerializer):
+    order_id = serializers.IntegerField(
+        source="order_history.id",
+        read_only=True
+    )
+
+    customer_name = serializers.SerializerMethodField()
+    issued_by_name = serializers.SerializerMethodField()
+
+    items = ReceiptItemSerializer(
+        source="order_history.items",
+        many=True,
+        read_only=True
+    )
+
+    payments = ReceiptPaymentSerializer(
+        source="order_history.payments",
+        many=True,
+        read_only=True
+    )
+
+    store = ReceiptSettingsSerializer(
+        source="settings",
+        read_only=True
+    )
+
+    total = serializers.SerializerMethodField()
+    amount_paid = serializers.SerializerMethodField()
+    balance_due = serializers.SerializerMethodField()
+    payment_status = serializers.CharField(
+        source="order_history.payment_status",
+        read_only=True
+    )
+
+    class Meta:
+        model = Receipt
+        fields = [
+            "id",
+            "receipt_number",
+            "order_id",
+            "created_at",
+            "issued_by",
+            "issued_by_name",
+            "customer_name",
+            "items",
+            "payments",
+            "total",
+            "amount_paid",
+            "balance_due",
+            "payment_status",
+            "store",
+        ]
+
+    def get_customer_name(self, obj):
+        customer = obj.order_history.customer
+
+        if customer is None:
+            return "Walk-in Customer"
+
+        return str(customer)
+
+    def get_issued_by_name(self, obj):
+        user = obj.issued_by
+
+        full_name = user.get_full_name()
+
+        return full_name if full_name else user.username
+
+    def get_total(self, obj):
+        return obj.order_history.get_total_amount()
+
+    def get_amount_paid(self, obj):
+        return obj.order_history.get_amount_paid()
+
+    def get_balance_due(self, obj):
+        return obj.order_history.get_balance_due()
+
 class ProductSerializer(serializers.ModelSerializer):
     actual_sale_price = serializers.SerializerMethodField()
 
@@ -142,12 +273,9 @@ class ProductSerializer(serializers.ModelSerializer):
             "barcode_number",
         ]
 
-
-
-
-
     def get_actual_sale_price(self, obj):
         return str(obj.get_actual_sale_price().quantize(Decimal("0.01")))
+
 
 class SupplierSerializer(serializers.ModelSerializer):
 
@@ -361,17 +489,6 @@ class AuditLogSerializer(serializers.ModelSerializer):
             "changes",
         ]
 
-
-class ReceiptSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Receipt
-        fields = [
-            "id",
-            "order_history",
-            "receipt_number",
-            "cashier",
-            "settings",
-        ]
 
 
 class StockMovementSerializer(serializers.ModelSerializer):

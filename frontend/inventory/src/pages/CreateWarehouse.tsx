@@ -42,7 +42,6 @@ function CreateWarehouse() {
 
     return (
         <div>
-            <h1>Create Warehouse</h1>
 
             {error && <p>{error}</p>}
 

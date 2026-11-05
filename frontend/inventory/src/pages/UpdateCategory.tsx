@@ -78,7 +78,6 @@ function UpdateCategory() {
 
     return (
         <div>
-            <h1>Update Category</h1>
 
             {error && <p>{error}</p>}
 

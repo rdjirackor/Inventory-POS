@@ -54,7 +54,6 @@ function Suppliers() {
 
     return (
         <div>
-            <h1>Suppliers</h1>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
             <div className="fetch_table">

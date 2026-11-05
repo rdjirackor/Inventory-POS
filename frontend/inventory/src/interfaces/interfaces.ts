@@ -145,12 +145,52 @@ export interface AuditLog {
     actions: string;
 }
 
+export interface ReceiptItem {
+    id: number;
+    product: number;
+    product_name: string;
+    product_sku: string;
+    amount_bought: string;
+    unit_price_before_discount: string | null;
+    discount_rate: string | null;
+    discount_amount: string | null;
+    tax_rate: string | null;
+    tax_amount: string | null;
+    unit_price: string | null;
+    line_total: string | null;
+}
+
+export interface ReceiptPayment {
+    id: number;
+    method: string;
+    amount: string;
+    provider: string;
+    reference_number: string;
+    paid_at: string;
+}
+
+export interface ReceiptStore {
+    business_name: string;
+    store_logo: string | null;
+    currency: string;
+    receipt_footer: string;
+}
+
 export interface Receipt {
     id: number;
-    order_history: number;
     receipt_number: string;
-    cashier: number;
-    settings: number;
+    order_id: number;
+    created_at: string;
+    issued_by: number;
+    issued_by_name: string;
+    customer_name: string;
+    items: ReceiptItem[];
+    payments: ReceiptPayment[];
+    total: string;
+    amount_paid: string;
+    balance_due: string;
+    payment_status: string;
+    store: ReceiptStore;
 }
 
 export interface StockMovement {
@@ -216,4 +256,4 @@ export interface User {
     username: string;
     email: string;
     role: string;
-}
+}    

@@ -94,7 +94,6 @@ function handleActiveChange(value: boolean) {
 
     return (
         <div>
-            <h1>Update Taxtype</h1>
 
             {error && <p>{error}</p>}
 

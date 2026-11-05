@@ -84,7 +84,6 @@ export default function CreateReturn() {
 
     return (
         <div className="page-container">
-            <h1>Create Return</h1>
 
             {error && <p className="error-message">{error}</p>}
 

@@ -42,7 +42,6 @@ function CreateDiscount() {
 
     return (
         <div>
-            <h1>Create Discount</h1>
 
             {error && <p>{error}</p>}
 

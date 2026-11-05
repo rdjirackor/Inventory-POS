@@ -78,7 +78,6 @@ function UpdateCashier() {
 
     return (
         <div>
-            <h1>Update Cashier</h1>
 
             {error && <p>{error}</p>}
 

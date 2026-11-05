@@ -88,7 +88,6 @@ function UpdateDiscount() {
 
     return (
         <div>
-            <h1>Update Discount</h1>
 
             {error && <p>{error}</p>}
 

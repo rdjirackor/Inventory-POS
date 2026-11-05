@@ -65,7 +65,6 @@ function Cashiers() {
 
     return (
         <div>
-            <h1>Cashiers</h1>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
             <div className="fetch_table">

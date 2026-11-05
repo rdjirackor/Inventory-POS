@@ -73,7 +73,6 @@ function CreateSupplier() {
 
     return (
         <div>
-            <h1>Create Supplier</h1>
 
             {error && <p>{error}</p>}
 

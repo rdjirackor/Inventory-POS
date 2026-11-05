@@ -92,7 +92,6 @@ function UpdateSupplier() {
 
     return (
         <div>
-            <h1>Update Supplier</h1>
 
             {error && <p>{error}</p>}
 

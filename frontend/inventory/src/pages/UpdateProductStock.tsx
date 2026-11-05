@@ -96,7 +96,6 @@ const [reason, setReason] = useState("");
 
 return (
     <div>
-        <h1>Update Product Stock</h1>
 
         <h2>{product.name}</h2>
         <p>SKU: {product.sku}</p>

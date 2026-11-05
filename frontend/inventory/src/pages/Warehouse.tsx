@@ -51,7 +51,6 @@ function Warehouses() {
 
     return (
         <div>
-            <h1>Warehouses</h1>
 
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}

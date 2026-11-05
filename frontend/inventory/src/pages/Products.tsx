@@ -61,7 +61,6 @@ async function DeleteProduct(product_id: number) {
 
     return (
         <div>
-            <h1>Products</h1>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
             <div className="fetch_table">

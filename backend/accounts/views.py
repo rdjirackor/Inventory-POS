@@ -104,9 +104,9 @@ def checkout(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    if not isinstance(payment_data, list):
+    if not isinstance(payment_data, list) or not payment_data:
         return Response(
-            {"error": "Payments must be provided as a list."},
+            {"error": "At least one payment is required."},
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -124,7 +124,6 @@ def checkout(request):
             status=status.HTTP_403_FORBIDDEN
         )
 
-
     quantities = {}
 
     try:
@@ -137,7 +136,8 @@ def checkout(request):
             quantity = Decimal(str(item["quantity"]))
 
             if (
-                not quantity.is_finite()
+                product_id <= 0
+                or not quantity.is_finite()
                 or quantity <= 0
                 or quantity != quantity.quantize(Decimal("0.01"))
             ):
@@ -153,8 +153,6 @@ def checkout(request):
             {"error": "Invalid product or quantity."},
             status=status.HTTP_400_BAD_REQUEST
         )
-
-
 
     valid_methods = dict(Payment.PAYMENT_METHODS)
     validated_payments = []
@@ -177,6 +175,9 @@ def checkout(request):
             if not isinstance(reference_number, str):
                 raise ValueError
 
+            provider = provider.strip()
+            reference_number = reference_number.strip()
+
             if (
                 not amount.is_finite()
                 or amount <= 0
@@ -190,14 +191,15 @@ def checkout(request):
             if method in ["Mobile Money", "Bank Transfer"]:
                 if not provider or not reference_number:
                     raise ValueError(
-                        "Provider and reference number are required for this payment method."
+                        "Provider and reference number are required "
+                        "for this payment method."
                     )
 
             validated_payments.append({
                 "amount": amount,
                 "method": method,
-                "provider": provider.strip(),
-                "reference_number": reference_number.strip(),
+                "provider": provider,
+                "reference_number": reference_number,
             })
 
     except (KeyError, TypeError, ValueError, InvalidOperation):
@@ -206,11 +208,10 @@ def checkout(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-  
-
     try:
         with transaction.atomic():
 
+            
             products = {
                 product.id: product
                 for product in Product.objects.select_for_update()
@@ -263,7 +264,21 @@ def checkout(request):
             amount_to_pay = sum(
                 (payment["amount"] for payment in validated_payments),
                 Decimal("0.00")
-            )
+            ).quantize(Decimal("0.01"))
+
+            if amount_to_pay < total:
+                return Response(
+                    {
+                        "error": (
+                            "The order must be paid in full before "
+                            "checkout can be completed."
+                        ),
+                        "order_total": str(total),
+                        "amount_paid": str(amount_to_pay),
+                        "remaining_balance": str(total - amount_to_pay)
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
             if amount_to_pay > total:
                 return Response(
@@ -294,10 +309,10 @@ def checkout(request):
                 order_item.order = order
                 order_item.save()
 
-
             for product_id, quantity in quantities.items():
 
                 product = products[product_id]
+                previous_stock = product.current_stock
 
                 product.current_stock -= quantity
                 product.save(update_fields=["current_stock"])
@@ -310,7 +325,14 @@ def checkout(request):
                     reason=f"Sale OH-{order.id}"
                 )
 
-
+                if (
+                    previous_stock >= product.minimum_stock_level
+                    and product.current_stock < product.minimum_stock_level
+                ):
+                    notify(
+                        notification_type=Notification.NotifType.LOW_STOCK,
+                        message=f"{product.name} is low in stock."
+                    )
 
             created_payments = []
 
@@ -327,25 +349,30 @@ def checkout(request):
 
                 created_payments.append(created_payment)
 
+            receipt_settings = Settings.load()
+
+            receipt = Receipt.objects.create(
+                order_history=order,
+                receipt_number=f"RCP-{order.id:08d}",
+                issued_by=current_user,
+                settings=receipt_settings
+            )
 
             log_action(
                 user=current_user,
                 action=AuditLog.Action.SALE_COMPLETED,
                 status=True,
-                description=(
-                    f"{current_user} completed sale OH-{order.id}"
-                ),
-                entity_type="User",
-                entity_id=current_user.id,
+                description=f"{current_user} completed sale OH-{order.id}",
+                entity_type="OrderHistory",
+                entity_id=order.id,
             )
-            for product in products.values():
-                if product.current_stock< product.minimum_stock_level:
-                    notify(notification_type=Notification.NotifType.LOW_STOCK,message=f"{product.name} is low in stock")
 
             return Response(
                 {
                     "message": "Sale completed successfully.",
                     "order_id": order.id,
+                    "receipt_id": receipt.id,
+                    "receipt_number": receipt.receipt_number,
                     "total": str(total),
                     "amount_paid": str(order.get_amount_paid()),
                     "balance_due": str(order.get_balance_due()),
@@ -361,9 +388,7 @@ def checkout(request):
     except Exception:
         import logging
 
-        logging.getLogger(__name__).exception(
-            "Checkout failed"
-        )
+        logging.getLogger(__name__).exception("Checkout failed")
 
         return Response(
             {"error": "Checkout failed. No sale was completed."},
@@ -2565,3 +2590,44 @@ def announcements(request):
     return Response(
         serializer.data,
     )
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_receipt(request, receipt_id):
+
+    if not (
+        request.user.is_superuser
+        or request.user.groups.filter(name__in=["Admin", "Cashiers"]).exists()
+    ):
+        return Response(
+            {"error": "You do not have permission to view receipts."},
+            status=status.HTTP_403_FORBIDDEN
+        )
+
+    try:
+        receipt = (
+            Receipt.objects
+            .select_related(
+                "order_history",
+                "order_history__customer",
+                "order_history__customer__user",
+                "issued_by",
+                "settings",
+            )
+            .prefetch_related(
+                "order_history__items__product",
+                "order_history__payments",
+            )
+            .get(id=receipt_id)
+        )
+
+    except Receipt.DoesNotExist:
+        return Response(
+            {"error": "Receipt not found."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    serializer = ReceiptSerializer(receipt)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)

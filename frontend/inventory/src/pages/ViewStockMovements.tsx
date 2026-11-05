@@ -35,7 +35,6 @@ function ViewStockMovements(){
 
         return(
             <div>
-                <h1>Stock Movements</h1>
                 {loading && <p>Loading...</p>}
                 {error && <p>{error}</p>}
                 <div className="stocks">

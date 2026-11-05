@@ -15,18 +15,14 @@ export async function getReceipts(): Promise<Receipt[]> {
     return data;
 }
 
-export async function getReceipt(
-    receipt_id: number
-): Promise<Receipt> {
-    const response = await apiFetch(
-        `/receipts/${receipt_id}/`
-    );
+export async function getReceipt(receipt_id: number): Promise<Receipt> {
+    const response = await apiFetch(`/receipts/${receipt_id}/`);
 
     const data = await response.json();
 
     if (!response.ok) {
         throw new Error(
-            data.message || "Get Receipt Failed"
+            data.error || "Failed to retrieve receipt."
         );
     }
 

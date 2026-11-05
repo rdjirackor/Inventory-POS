@@ -1,0 +1,110 @@
+
+.receipt-page {
+    padding: 24px;
+}
+
+.receipt-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.receipt-paper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 35px;
+    background: white;
+    color: black;
+    border: 1px solid #ddd;
+}
+
+.receipt-header,
+.receipt-footer {
+    text-align: center;
+}
+
+.receipt-logo {
+    max-width: 120px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+.receipt-information {
+    margin: 20px 0;
+}
+
+.receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.receipt-table th,
+.receipt-table td {
+    padding: 10px 6px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.receipt-table small,
+.receipt-payment small {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.receipt-totals {
+    max-width: 350px;
+    margin-left: auto;
+}
+
+.receipt-totals p,
+.receipt-payment {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.receipt-payment {
+    padding: 8px 0;
+}
+
+.receipt-footer {
+    margin-top: 25px;
+}
+
+@media print {
+    @page {
+        margin: 10mm;
+    }
+
+    body {
+        background: white !important;
+    }
+
+    .no-print,
+    .sidebar,
+    .navbar {
+        display: none !important;
+    }
+
+    .receipt-page {
+        padding: 0;
+    }
+
+    .receipt-paper {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+    .receipt-table {
+        font-size: 10px;
+    }
+
+    .receipt-table th,
+    .receipt-table td {
+        padding: 6px 3px;
+    }
+}

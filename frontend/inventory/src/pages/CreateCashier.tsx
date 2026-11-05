@@ -75,7 +75,6 @@ function CreateCashier() {
 
     return (
     <div>
-        <h1>Create Cashier</h1>
 
         {error && <p>{error}</p>}
 

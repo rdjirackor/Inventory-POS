@@ -88,7 +88,6 @@ function UpdateWarehouse() {
 
     return (
         <div>
-            <h1>Update Warehouse</h1>
 
             {error && <p>{error}</p>}
 

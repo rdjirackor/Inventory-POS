@@ -39,6 +39,11 @@ import Customers from "./pages/Customers";
 import CreateCustomer from "./pages/CreateCustomer";
 import { SettingsProvider } from "./context/SettingsContext";
 import SettingsPage from "./pages/Settings";
+import Branches from "./pages/Branches";
+import CreateBranch from "./pages/CreateBranch";
+import UpdateBranch from "./pages/UpdateBranches";
+import ReceiptPage from "./pages/ReceiptPage";
+
 
 const token = localStorage.getItem("access_token")
 
@@ -115,6 +120,10 @@ function App() {
                         <Route path="/warehouses/create" element={<CreateWarehouse />} />
                         <Route path="/warehouses/:id/edit" element={<UpdateWarehouse />} /> 
 
+                        <Route path="/branches" element={<Branches/>} />
+                        <Route path="/branches/create" element={<CreateBranch />} />
+                        <Route path="/branches/:id/edit" element={<UpdateBranch />} /> 
+
                         <Route path="/discounts" element={<Discounts/>} />
                         <Route path="/discounts/create" element={<CreateDiscount />} />
                         <Route path="/discounts/:id/edit" element={<UpdateDiscount />} /> 
@@ -123,6 +132,9 @@ function App() {
                         <Route path="/returns/create" element={<CreateReturn />} />
 
                         <Route path="/settings" element={<SettingsPage />} />
+
+
+                        <Route path="/receipts/:id" element={<ReceiptPage />} />
 
 
 

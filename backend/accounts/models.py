@@ -232,7 +232,6 @@ class QuantityOfAnItemBought(models.Model):
         decimal_places=2
     )
 
-    # Historical pricing snapshots
     unit_price_before_discount = models.DecimalField(
         max_digits=12,
         decimal_places=2,
@@ -567,16 +566,33 @@ class AuditLog(models.Model):
         return f"{self.user}-{self.action}"
 
 class Receipt(models.Model):
-    order_history = models.ForeignKey(OrderHistory,related_name="receipts",on_delete=models.PROTECT)
-    receipt_number = models.CharField(max_length=50)
-    cashier = models.ForeignKey(Cashier, related_name="receipts", on_delete=models.PROTECT)
-    settings = models.ForeignKey(Settings, on_delete=models.PROTECT, related_name="receipts")
+    order_history = models.OneToOneField(
+        OrderHistory,
+        related_name="receipt",
+        on_delete=models.PROTECT,
+        null=True
+    )
+    receipt_number = models.CharField(max_length=50, unique=True, null=True)
+    issued_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="receipts_issued",
+        on_delete=models.PROTECT,
+        null=True
+    )
+    settings = models.ForeignKey(
+        Settings,
+        on_delete=models.PROTECT,
+        related_name="receipts",
+        null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
     def __str__(self):
-        return f"{self.order_history}-{self.cashier}"
+        return self.receipt_number
 
 class StockMovement(models.Model):
     product = models.ForeignKey(Product, related_name="stock_movements", on_delete=models.PROTECT)
-    movement_type = models.CharField(max_length=50) #sale, damaged, etc
+    movement_type = models.CharField(max_length=50) 
     date = models.DateTimeField(auto_now_add=True)
     performed_by = models.ForeignKey(User, on_delete=models.PROTECT,related_name="stock_movements", null=True)
     reason = models.CharField(max_length=10000, blank=True)

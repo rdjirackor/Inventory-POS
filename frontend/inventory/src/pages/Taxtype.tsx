@@ -54,7 +54,6 @@ function Taxtype (){
         
             return (
                 <div>
-                    <h1>Tax Types</h1>
         
                     {loading && <p>Loading...</p>}
                     {error && <p>{error}</p>}

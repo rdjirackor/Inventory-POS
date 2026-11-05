@@ -43,7 +43,6 @@ function CreateTax() {
 
     return (
         <div>
-            <h1>Create TaxType</h1>
 
             {error && <p>{error}</p>}
 
