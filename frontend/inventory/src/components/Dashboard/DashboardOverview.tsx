@@ -1,7 +1,7 @@
 import {  useEffect, useState } from "react";
 import { getDashboard } from "../../apis/dashboard_overview";
 import OrdersChart from "../OrdersChart";
-import { Box, Card, Flex } from "@chakra-ui/react";
+import {  Card, Flex } from "@chakra-ui/react";
 
 function DashboardOverview() {
 
