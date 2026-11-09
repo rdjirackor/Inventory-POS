@@ -11,7 +11,7 @@ import {
 function OrdersChart({ data }: { data: any[] }) {
     return (
         <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data}>
+            <LineChart  data={data}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
                 <YAxis />
@@ -20,7 +20,7 @@ function OrdersChart({ data }: { data: any[] }) {
                 <Line
                     type="monotone"
                     dataKey="orders"
-                    stroke="#000"
+                    stroke="white"
                     dot={false}
                     activeDot={{ r: 5 }}
                 />

@@ -1,6 +1,7 @@
 import {  useEffect, useState } from "react";
 import { getDashboard } from "../../apis/dashboard_overview";
 import OrdersChart from "../OrdersChart";
+import { Box, Card, Flex } from "@chakra-ui/react";
 
 function DashboardOverview() {
 
@@ -21,8 +22,15 @@ function DashboardOverview() {
     }
 
     return (
-        <div className="dashboard">
-            <div className="top_dashboard_details">
+        <Flex
+        direction={"column"}>
+
+            <Flex
+            direction="row"
+            justify={"space-between"}
+            m={["0", "2vw", "0", "2vw"]}
+            >
+            
                 <p>Today's<br/>Sales<br/>{dashboard.todays_sales}</p>
 
                 <p>Top<br/>Order<br/>{dashboard.most_expensive_order}</p>
@@ -38,47 +46,54 @@ function DashboardOverview() {
                 <p>Number Of<br/>Orders<br/>{dashboard.number_of_orders}</p>
 
                 <p>Top Selling<br/>Product<br/>{dashboard.top_selling_product}</p>
-            </div>
-            <div className="lower_dashboard">
+                </Flex>
 
-                <div className="seven_days_chart">
-                    <p><b>Sales Last 7 Days</b></p>
-                    <OrdersChart data={dashboard.orders_last_7_days} />
-                </div>
+            <Flex direction={"row"}
+                justify={"space-evenly"}>
 
-                {dashboard.low_stock_products.length > 0 ? (
-                <div className="low_stock_items">
-                    
-                    <p><b>Low Stock (5 Lowest)</b></p>
+                    <Card.Root bgColor={"transparent"}>
+                        <Card.Header alignItems={"center"} color={"white"}><b>Sales Last 7 Days</b></Card.Header>
+                        <Card.Body width={"30vw"} bgColor={""} color={"white"}>
+                        <OrdersChart data={dashboard.orders_last_7_days}  />
+                        </Card.Body>
+                    </Card.Root>
 
-                    <ul>
-                        {dashboard.low_stock_products.map((product) => (
-                            <li key={product}>{product}</li>
-                        ))}
-                    </ul>
-                </div>   ):
-                
-                <p><b>Low Stock (5 Lowest)</b><br/>No product is low in stock</p>                             
-                }
+                    <Card.Root>
+                        
+                        {dashboard.low_stock_products.length > 0 ? (
+                        
+                            <Card.Header><b>Low Stock (5 Lowest)</b><ul>
+                                {dashboard.low_stock_products.map((product) => (
+                                    <li key={product}>{product}</li>
+                                ))}
+                            </ul></Card.Header>
+                            
+                        ):
+                        <p><b>Low Stock (5 Lowest)</b><br/>No product is low in stock</p>                       
+                        }
+                    </Card.Root>
+                    <Card.Root>
 
-                <div className="recent_activity">
-                <a href="/stock-movements"><p><b>Recent Activity (Last 5)</b></p></a>
+                      <Card.Header><b><a href="/stock-movements">Recent Activity (Last 5)</a></b></Card.Header>  
+                        <Card.Body>
+                        {dashboard.recent_activity.length > 0 ? (
+                            <ul>
+                                {dashboard.recent_activity.map((activity) => (
+                                    <li key={activity.date}>
+                                        {activity.movement_type} - {activity.product} (Quantity: {activity.quantity} By: {activity.performed_by})
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No recent activity</p>
+                        )}
+                        </Card.Body>
+                    </Card.Root>
 
-                {dashboard.recent_activity.length > 0 ? (
-                    <ul>
-                        {dashboard.recent_activity.map((activity) => (
-                            <li key={activity.date}>
-                                {activity.movement_type} - {activity.product} (Quantity: {activity.quantity} By: {activity.performed_by})
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No recent activity</p>
-                )}
-            </div>
+                </Flex>
 
-                </div>
-        </div>
+                </Flex>
+
     );
 }
 
