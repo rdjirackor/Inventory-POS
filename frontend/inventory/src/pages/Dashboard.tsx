@@ -2,10 +2,23 @@
 import { useState } from 'react';
 import DashboardOverview from '../components/Dashboard/DashboardOverview';
 import DashboardSales from '../components/Dashboard/DashboardSales';
+import { Text } from '@chakra-ui/react';
 
 
 export default function Dashboard() {
-    const [activeView, setActiveView] = useState<'overview' | 'sales'>('sales');
+    const [active, setActive] = useState<string>(localStorage.getItem("active_view") || "sales");
+
+    async function switcher(active) {
+        if (active === "sales"){
+            setActive("overview");
+            localStorage.setItem("active_view", "overview");
+        }
+        if (active === "overview"){
+            setActive("sales");
+            localStorage.setItem("active_view", "sales");
+        }
+        
+    }
 
     return (
         <div>
@@ -13,27 +26,15 @@ export default function Dashboard() {
 
                 <button
                     type="button"
-                    onClick={() => setActiveView('sales')}
-                    className={activeView === 'sales' ? 'active' : ''}
+                    onClick={() => switcher(active)}
                 >
-                    Sales
+                    Toggle
                 </button>
-
-
-
-                <button
-                    type="button"
-                    onClick={() => setActiveView('overview')}
-                    className={activeView === 'overview' ? 'active' : ''}
-                >
-                    Overview
-                </button>
-
-
+                <Text>Active: {active}</Text>
             </div>
 
             <main className="dashboard-content">
-                {activeView === 'overview' ? (
+                {active === 'overview' ? (
                     <DashboardOverview />
                 ) : (
                     <DashboardSales />
