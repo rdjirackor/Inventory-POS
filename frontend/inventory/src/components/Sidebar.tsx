@@ -102,7 +102,7 @@ export default function Sidebar() {
 
   <Flex
     direction="column"
-    w="250px"
+    w="18vw"
     h="100vh"
     bg="white"
     color="black"

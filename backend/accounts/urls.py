@@ -56,19 +56,22 @@ urlpatterns = [
 
     path("notifications/", notifications),
 
+    path("last-announcements/", last_announcements),
     path("announcements/", announcements),
+
+        path("active-announcements/", active_announcements),
+
     path(
         "announcements/<int:announcement_id>/",
         announcement_detail
     ),
 
-
     path("checkout/", checkout),
 
     path(
     "purchase-orders/<int:purchase_order_id>/receive/",
-    receive_purchase_order,
-),
+    receive_purchase_order,),
+
     path(
     "stock-movements/",
     stock,
@@ -80,7 +83,6 @@ urlpatterns = [
   path("notifications-status/", notification_receipt),
 path("read-notification/<int:notification_id>/", notification_read),    
 path("read-notification-all/", notification_read_all),    
-path("announcements/", announcements ),
 path("payments/", payments, name="payments"),
 path(
     "orders/<int:order_id>/payments/",
@@ -92,4 +94,6 @@ path(
     get_receipt,
     name="get_receipt"
 ),
+
+path("groups/", get_groups, name="get-groups"),
 ]

@@ -429,15 +429,8 @@ class Announcement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     enabled = models.BooleanField(default=False)
 
-    TARGET_CHOICES = [
-        ('all', 'Everyone (Staff + Customers)'),
-        ('staff', 'Staff Only (Admins, Cashiers)'),
-        ('customers', 'Customers Only'),
-        ('admins', 'Admins Only'),
-    ]
-    target_audience = models.CharField(max_length=20, choices=TARGET_CHOICES, default='all')
 
-    excluded_users = models.ManyToManyField(User, blank=True, related_name='excluded_announcements')   
+
 
     def __str__(self):
         return f"{self.title} ({self.target_audience})"

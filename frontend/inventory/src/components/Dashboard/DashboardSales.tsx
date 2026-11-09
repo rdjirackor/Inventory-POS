@@ -7,6 +7,7 @@ import { checkout } from "../../apis/checkout";
 import AppButton from "../AppButton";
 
 import { useNavigate } from "react-router-dom";
+import { Card, Flex, SimpleGrid } from "@chakra-ui/react";
 
 
 type PaymentMethod =
@@ -33,6 +34,9 @@ function DashboardSales() {
 
     const navigate = useNavigate();
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 2;
+
 
     const [loading, setLoading] = useState(false);
     const [checkingOut, setCheckingOut] = useState(false);
@@ -55,13 +59,21 @@ function DashboardSales() {
         emptyPayment(),
     ]);
 
-    const selectedCustomerObj = customers.find(
-        customer => customer.id === selectedCustomer
+    // const selectedCustomerObj = customers.find(
+    //     customer => customer.id === selectedCustomer
+    // );
+    const sortedProducts = [...items].sort((a, b) => 
+    a.name.localeCompare(b.name)
     );
 
-    const filteredProducts = items.filter(item =>
+    const filteredProducts = sortedProducts.filter(item =>
         item.name.toLowerCase().includes(search.toLowerCase())
     );
+
+    const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
     const cartTotal = Object.entries(saleItems).reduce(
         (total, [productId, qty]) => {
@@ -271,22 +283,22 @@ function DashboardSales() {
                 return;
             
 
-            setCheckoutMessage(
-                `Sale completed! Order #${result.order_id} — ` +
-                `Total: GH₵ ${Number(result.total).toFixed(2)} — ` +
-                `Paid: GH₵ ${Number(result.amount_paid).toFixed(2)} — ` +
-                `Balance: GH₵ ${Number(result.balance_due).toFixed(2)} — ` +
-                `${result.payment_status}`
+            // setCheckoutMessage(
+            //     `Sale completed! Order #${result.order_id} — ` +
+            //     `Total: GH₵ ${Number(result.total).toFixed(2)} — ` +
+            //     `Paid: GH₵ ${Number(result.amount_paid).toFixed(2)} — ` +
+            //     `Balance: GH₵ ${Number(result.balance_due).toFixed(2)} — ` +
+            //     `${result.payment_status}`
                 
-            );
+            // );
 
-            setSaleItems({});
-            setSelectedProduct(null);
-            setQuantity("1");
-            setSelectedCustomer("");
-            setPayments([emptyPayment()]);
+            // setSaleItems({});
+            // setSelectedProduct(null);
+            // setQuantity("1");
+            // setSelectedCustomer("");
+            // setPayments([emptyPayment()]);
 
-            await fetchProducts();
+            // await fetchProducts();
         } catch (error) {
             setError(
                 error instanceof Error
@@ -300,64 +312,158 @@ function DashboardSales() {
 
     return (
         <>
-            <h2>New Sale</h2>
-
+                <Flex
+                height={"100vh"}
+                width={"82vw"}
+                overflowY={"auto"}
+                direction={"row"}
+                >
+                <Flex
+                // flex={1}
+                overflowY={"auto"}
+                direction="column" 
+                width="62vw"
+                >
             {error && <p style={{ color: "red" }}>{error}</p>}
             {checkoutMessage && (
                 <p style={{ color: "green" }}>{checkoutMessage}</p>
             )}
 
             <section>
-                <h3>Products</h3>
+    <input
+        type="text"
+        placeholder="Search products..."
+        value={search}
+        onChange={e => {
+            setSearch(e.target.value);
+            setCurrentPage(1); 
+        }}
+    />
 
-                <input
-                    type="text"
-                    placeholder="Search products..."
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                />
+    {loading && <p>Loading products...</p>}
 
-                {loading && <p>Loading products...</p>}
+    {!loading && (
+        <>
+            {filteredProducts.length === 0 ? (
+                <p>No matching products found.</p>
+            ) : (
+                <>
+                    <SimpleGrid columns={2} gap={4} my={4}>
+                        {paginatedProducts.map(item => (
+                            <Card.Root
+                                key={item.id}
+                                onClick={() => {
+                                    setSelectedProduct(item);
+                                    setQuantity("1");
+                                    setError("");
+                                }}
+                                cursor="pointer"
+                                _hover={{ shadow: "md", borderColor: "blue.300" }}
+                            >
+                                <Card.Body p={3} alignItems="center" textAlign="center">
+                                    {item.image && (
+                                        <img
+                                            src={`http://127.0.0.1:8000${item.image}`}
+                                            alt={item.name}
+                                            width="80"
+                                            height="80"
+                                            style={{ objectFit: "cover", borderRadius: "4px", marginBottom: "8px" }}
+                                        />
+                                    )}
+                                    <p style={{ fontWeight: 600 }}>{item.name}</p>
+                                    <p style={{ color: "gray" }}>
+                                        GH₵ {Number(item.actual_sale_price).toFixed(2)}
+                                    </p>
+                                </Card.Body>
+                            </Card.Root>
+                        ))}
+                    </SimpleGrid>
 
-                {!loading && (
-                    <>
-                        {filteredProducts.length === 0 ? (
-                            <p>No matching products found.</p>
-                        ) : (
-                            <ul>
-                                {filteredProducts.map(item => (
-                                    <li
-                                        key={item.id}
-                                        onClick={() => {
-                                            setSelectedProduct(item);
-                                            setQuantity("1");
-                                            setError("");
-                                        }}
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        {item.image && (
-                                            <img
-                                                src={`http://127.0.0.1:8000${item.image}`}
-                                                alt={item.name}
-                                                width="80"
-                                                height="80"
-                                            />
-                                        )}
+                    {totalPages > 1 && (
+                        <Flex justify="space-between" align="center" my={4}>
+                            <AppButton
+                                type="button"
+                                intent="secondary"
+                                disabled={currentPage === 1}
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            >
+                                Previous
+                            </AppButton>
 
-                                        <span>
-                                            {item.name} — GH₵{" "}
-                                            {Number(item.actual_sale_price).toFixed(2)}
-                                        </span>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </>
-                )}
-            </section>
+                            <span>
+                                Page {currentPage} of {totalPages}
+                            </span>
 
+                            <AppButton
+                                type="button"
+                                intent="secondary"
+                                disabled={currentPage === totalPages}
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            >
+                                Next
+                            </AppButton>
+                        </Flex>
+                    )}
+                </>
+            )}
+        </>
+    )}
+</section>
+            </Flex>
+            <Flex
+            direction="column"
+                width="18vw"
+                position="sticky"
+                top={0}
+                alignSelf="flex-start"
+                height="100vh"
+                overflowY="auto"
+                >
+        <section>
+            <Card.Root
+
+            >
+            <Card.Body
+            bgGradient={"to-br"}
+            gradientFrom="blue.500"
+            gradientTo="blackAlpha.100"
+            shadow="sm"
+            shadowColor={"purple"}
+>
+
+              <h3>Customer</h3>
+
+                <label htmlFor="customer">
+                    Select customer:
+                </label>
+
+                <select
+                    id="customer"
+                    value={selectedCustomer}
+                    onChange={e =>
+                        setSelectedCustomer(
+                            e.target.value === ""
+                                ? ""
+                                : Number(e.target.value)
+                        )
+                    }
+                >
+                    <option value="">Walk-in customer</option>
+
+                    {customers.map(customer => (
+                        <option key={customer.id} value={customer.id}>
+                            {[
+                                customer.first_name,
+                                customer.second_name,
+                            ].filter(Boolean).join(" ") ||
+                                `Customer #${customer.id}`}
+                        </option>
+                    ))}
+                </select>
+
+    
             {selectedProduct && (
-                <section>
+                <>
                     <h3>{selectedProduct.name}</h3>
 
                     <p>
@@ -401,51 +507,12 @@ function DashboardSales() {
                     >
                         Cancel
                     </AppButton>
-                </section>
-            )}
+           </> )}
 
-            <section>
-                <h3>Customer</h3>
-
-                <label htmlFor="customer">
-                    Select customer:
-                </label>
-
-                <select
-                    id="customer"
-                    value={selectedCustomer}
-                    onChange={e =>
-                        setSelectedCustomer(
-                            e.target.value === ""
-                                ? ""
-                                : Number(e.target.value)
-                        )
-                    }
-                >
-                    <option value="">Walk-in customer</option>
-
-                    {customers.map(customer => (
-                        <option key={customer.id} value={customer.id}>
-                            {[
-                                customer.first_name,
-                                customer.second_name,
-                            ].filter(Boolean).join(" ") ||
-                                `Customer #${customer.id}`}
-                        </option>
-                    ))}
-                </select>
-
-                {selectedCustomerObj && (
-                    <p>
-                        Selected:{" "}
-                        {[
-                            selectedCustomerObj.first_name,
-                            selectedCustomerObj.second_name,
-                        ].filter(Boolean).join(" ")}
-                    </p>
-                )}
-            </section>
-
+            
+        
+              
+                
             {Object.keys(saleItems).length > 0 && (
                 <section>
                     <h3>Current Sale</h3>
@@ -670,10 +737,17 @@ function DashboardSales() {
                         {checkingOut  ? "Processing..." : "Complete Sale"}
                     </AppButton>
 
-
+                                    
                 </section>
                 </form>
             )}
+                        </Card.Body>
+        </Card.Root>
+                        </section>
+                        </Flex>
+
+
+            </Flex>
         </>
     );
 }

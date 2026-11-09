@@ -17,7 +17,7 @@ from django.db.models import Sum
 
 from rest_framework import status
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from .models import *
 from .serializers import *  
@@ -33,6 +33,13 @@ from .notify import *
 def users(request):
     queryset = User.objects.all().order_by("username")
     serializer = UserSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_groups(request):
+    groups = Group.objects.all()
+    serializer = GroupSerializer(groups, many=True)
     return Response(serializer.data)
     
 @api_view(["POST"]) 
@@ -2150,35 +2157,34 @@ def cashier_detail(request, cashier_id):
 @require_model_permissions(Announcement)
 def announcements(request):
 
-    if request.method == "GET":
+     if request.method == "GET":
 
-        announcements = Announcement.objects.all()
+         announcements = Announcement.objects.all()
 
-        serializer = AnnouncementSerializer(
-            announcements,
-            many=True
-        )
+         serializer = AnnouncementSerializer(
+             announcements,
+             many=True
+         )
 
-        return Response(serializer.data)
+         return Response(serializer.data)
 
-    elif request.method == "POST":
+     elif request.method == "POST":
+         serializer = AnnouncementSerializer(
+             data=request.data
+         )
 
-        serializer = AnnouncementSerializer(
-            data=request.data
-        )
+         if serializer.is_valid(): 
+             serializer.save()
 
-        if serializer.is_valid():
-            serializer.save()
+             return Response(
+                 serializer.data,
+                 status=201
+             )
 
-            return Response(
-                serializer.data,
-                status=201
-            )
-
-        return Response(
-            serializer.errors,
-            status=400
-        )
+         return Response(
+             serializer.errors,
+             status=400
+         )
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
@@ -2240,6 +2246,18 @@ def announcement_detail(request, announcement_id):
         announcement.delete()
         return Response(status=204)
 
+@api_view(["GET"])
+def active_announcements(request):
+     announcements = Announcement.objects.filter(enabled = True).order_by("-created_at")
+     serializer = AnnouncementSerializer(
+         announcements,
+         many=True,
+     )
+     return Response(
+         serializer.data,
+
+     )
+
 
 
 
@@ -2248,7 +2266,6 @@ def announcement_detail(request, announcement_id):
 @permission_classes([IsAuthenticated])
 @require_model_permissions(Payment)
 def payments(request):
-
     payment_records = (
         Payment.objects
         .select_related("order", "recorded_by")
@@ -2581,7 +2598,7 @@ def history(request):
     
 
 @api_view(["GET"])
-def announcements(request):
+def last_announcements(request):
     announcement = Announcement.objects.filter(enabled = True).order_by("-created_at").first()
     serializer = AnnouncementSerializer(
         announcement,

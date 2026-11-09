@@ -43,6 +43,8 @@ import Branches from "./pages/Branches";
 import CreateBranch from "./pages/CreateBranch";
 import UpdateBranch from "./pages/UpdateBranches";
 import ReceiptPage from "./pages/ReceiptPage";
+import ViewEnabledAnnouncements from "./pages/ViewEnabledAnnouncements";
+import CreateAnnouncement from "./pages/CreateAnnouncements";
 
 
 const token = localStorage.getItem("access_token")
@@ -136,6 +138,9 @@ function App() {
 
                         <Route path="/receipts/:id" element={<ReceiptPage />} />
 
+                        <Route path="/active-announcements" element={<ViewEnabledAnnouncements />} />
+
+                        <Route path="/announcements/create" element={<CreateAnnouncement />} />
 
 
 

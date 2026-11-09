@@ -10,7 +10,8 @@ function AppLayout() {
     
     return (
         <div className="app-layout">
-            <Box ml = "250px">
+            <Box ml = "18vw"
+            overflowX={"-moz-hidden-unscrollable"}>
             <Navbar />
             </Box>
 
@@ -22,7 +23,7 @@ function AppLayout() {
                     
                     <Box 
                     
-                    ml = "250px"
+                    ml = "18vw"
                     >
                         <AnnouncementBanner/>
                     <Outlet />

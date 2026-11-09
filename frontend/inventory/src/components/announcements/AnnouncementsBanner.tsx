@@ -10,10 +10,11 @@ export function AnnouncementBanner() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [announcement, setAnnouncement] = useState<Announcement | null>(null);
-    const [visible, setVisible] = useState(true);
-    const [announcementDismissed] = useState(
-        () => localStorage.getItem("announcement_dismissed") === "True"
-    );
+    const [announcementDismissed, setAnnouncementDismissed] = useState<string[]>(
+    () => JSON.parse(
+        localStorage.getItem("dismissed_announcement_ids") || "[]"
+    )
+);   
     async function fetchAnnouncements() {
         setError("");
         setLoading(true);
@@ -33,19 +34,29 @@ export function AnnouncementBanner() {
         fetchAnnouncements();
     }, []);
 
-    if (loading || error || !announcement || !visible) {
+    if (loading || error || !announcement ) {
         return null;
     }
 
 
 
-    async function handleClick() {
-        localStorage.setItem("announcement_dismissed", "True");
-        setVisible(false);
-        
-    }
+async function handleClick(announcement_id: number) {
+    const dismissed_ids: string[] = JSON.parse(
+    localStorage.getItem("dismissed_announcement_ids") || "[]"
+);
 
-    if (!announcementDismissed){
+    if (!dismissed_ids.includes(announcement_id.toString())) {
+        dismissed_ids.push(announcement_id.toString());
+
+        localStorage.setItem(
+            "dismissed_announcement_ids",
+            JSON.stringify(dismissed_ids)
+        );
+        setAnnouncementDismissed(dismissed_ids);
+    }
+}
+
+    if (!announcementDismissed.includes(String(announcement.id))) {   
     return (
 
         
@@ -56,7 +67,8 @@ export function AnnouncementBanner() {
             py={4}
             borderBottom="4px solid #b99d64"
             position="relative"
-            w="full"
+            width={"full"}
+            ml={"0"}
         >
             <Flex align="center" gap={2} mb={2}>
                 <Megaphone size={18} />
@@ -78,7 +90,7 @@ export function AnnouncementBanner() {
                 position="absolute"
                 top={2}
                 right={2}
-                onClick={() => handleClick()}
+                onClick={() => handleClick(announcement.id)}
             >
                 <X size={16} />
             </IconButton>

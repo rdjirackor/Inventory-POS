@@ -128,8 +128,6 @@ export interface Announcement {
     title: string;
     message: string;
     created_at: string;
-    target_audience: string;
-    excluded_users: number[];
 }
 
 export interface AnnouncementReadStatus {
@@ -257,3 +255,8 @@ export interface User {
     email: string;
     role: string;
 }    
+
+export interface Group {
+    id: number;
+    name: string;
+}
