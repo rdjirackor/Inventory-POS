@@ -111,7 +111,7 @@ export default function Sidebar() {
     top={0}
     left={0}
     overflowY="auto"
-  >
+    scrollbarWidth={"1vw"}  >
     
       <Flex align="center" gap={3} mb={8} px={2}>
         <Box bg="#4F7DF3" p={2} borderRadius="md">

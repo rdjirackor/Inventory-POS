@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import type { Product, Customer } from "../../interfaces/interfaces";
 import { getProducts } from "../../apis/products";
@@ -9,12 +8,7 @@ import AppButton from "../AppButton";
 import { useNavigate } from "react-router-dom";
 import { Card, Flex, SimpleGrid } from "@chakra-ui/react";
 
-
-type PaymentMethod =
-    | "Cash"
-    | "Card"
-    | "Mobile Money"
-    | "Bank Transfer";
+type PaymentMethod = "Cash" | "Card" | "Mobile Money" | "Bank Transfer";
 
 interface PaymentDraft {
     amount: string;
@@ -31,12 +25,10 @@ const emptyPayment = (): PaymentDraft => ({
 });
 
 function DashboardSales() {
-
     const navigate = useNavigate();
 
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 2;
-
 
     const [loading, setLoading] = useState(false);
     const [checkingOut, setCheckingOut] = useState(false);
@@ -52,18 +44,12 @@ function DashboardSales() {
     const [quantity, setQuantity] = useState("1");
 
     const [saleItems, setSaleItems] = useState<Record<string, number>>({});
-
     const [selectedCustomer, setSelectedCustomer] = useState<number | "">("");
 
-    const [payments, setPayments] = useState<PaymentDraft[]>([
-        emptyPayment(),
-    ]);
+    const [payments, setPayments] = useState<PaymentDraft[]>([emptyPayment()]);
 
-    // const selectedCustomerObj = customers.find(
-    //     customer => customer.id === selectedCustomer
-    // );
-    const sortedProducts = [...items].sort((a, b) => 
-    a.name.localeCompare(b.name)
+    const sortedProducts = [...items].sort((a, b) =>
+        a.name.localeCompare(b.name)
     );
 
     const filteredProducts = sortedProducts.filter(item =>
@@ -73,7 +59,10 @@ function DashboardSales() {
     const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
 
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    const paginatedProducts = filteredProducts.slice(
+        startIndex,
+        startIndex + ITEMS_PER_PAGE
+    );
 
     const cartTotal = Object.entries(saleItems).reduce(
         (total, [productId, qty]) => {
@@ -228,7 +217,7 @@ function DashboardSales() {
         );
     }
 
-    async function handleCheckout(e: React.SubmitEvent<HTMLFormElement>) {
+    async function handleCheckout(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError("");
         setCheckoutMessage("");
@@ -263,7 +252,6 @@ function DashboardSales() {
                 })
             );
 
-           
             const paymentPayload = payments
                 .filter(payment => payment.amount.trim() !== "")
                 .map(payment => ({
@@ -273,32 +261,14 @@ function DashboardSales() {
                     reference_number: payment.reference_number.trim(),
                 }));
 
-                const result = await checkout(
-                    checkoutItems,
-                    selectedCustomer === "" ? null : selectedCustomer,
-                    paymentPayload
-                );
+            const result = await checkout(
+                checkoutItems,
+                selectedCustomer === "" ? null : selectedCustomer,
+                paymentPayload
+            );
 
-                navigate(`/receipts/${result.receipt_id}`);
-                return;
-            
-
-            // setCheckoutMessage(
-            //     `Sale completed! Order #${result.order_id} — ` +
-            //     `Total: GH₵ ${Number(result.total).toFixed(2)} — ` +
-            //     `Paid: GH₵ ${Number(result.amount_paid).toFixed(2)} — ` +
-            //     `Balance: GH₵ ${Number(result.balance_due).toFixed(2)} — ` +
-            //     `${result.payment_status}`
-                
-            // );
-
-            // setSaleItems({});
-            // setSelectedProduct(null);
-            // setQuantity("1");
-            // setSelectedCustomer("");
-            // setPayments([emptyPayment()]);
-
-            // await fetchProducts();
+            navigate(`/receipts/${result.receipt_id}`);
+            return;
         } catch (error) {
             setError(
                 error instanceof Error
@@ -311,444 +281,392 @@ function DashboardSales() {
     }
 
     return (
-        <>
-                <Flex
-                height={"100vh"}
-                width={"82vw"}
-                overflowY={"auto"}
-                direction={"row"}
-                >
-                <Flex
-                // flex={1}
-                overflowY={"auto"}
-                direction="column" 
-                width="62vw"
-                >
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {checkoutMessage && (
-                <p style={{ color: "green" }}>{checkoutMessage}</p>
-            )}
-
-            <section>
-    <input
-        type="text"
-        placeholder="Search products..."
-        value={search}
-        onChange={e => {
-            setSearch(e.target.value);
-            setCurrentPage(1); 
-        }}
-    />
-
-    {loading && <p>Loading products...</p>}
-
-    {!loading && (
-        <>
-            {filteredProducts.length === 0 ? (
-                <p>No matching products found.</p>
-            ) : (
-                <>
-                    <SimpleGrid columns={2} gap={4} my={4}>
-                        {paginatedProducts.map(item => (
-                            <Card.Root
-                                key={item.id}
-                                onClick={() => {
-                                    setSelectedProduct(item);
-                                    setQuantity("1");
-                                    setError("");
-                                }}
-                                cursor="pointer"
-                                _hover={{ shadow: "md", borderColor: "blue.300" }}
-                            >
-                                <Card.Body p={3} alignItems="center" textAlign="center">
-                                    {item.image && (
-                                        <img
-                                            src={`http://127.0.0.1:8000${item.image}`}
-                                            alt={item.name}
-                                            width="80"
-                                            height="80"
-                                            style={{ objectFit: "cover", borderRadius: "4px", marginBottom: "8px" }}
-                                        />
-                                    )}
-                                    <p style={{ fontWeight: 600 }}>{item.name}</p>
-                                    <p style={{ color: "gray" }}>
-                                        GH₵ {Number(item.actual_sale_price).toFixed(2)}
-                                    </p>
-                                </Card.Body>
-                            </Card.Root>
-                        ))}
-                    </SimpleGrid>
-
-                    {totalPages > 1 && (
-                        <Flex justify="space-between" align="center" my={4}>
-                            <AppButton
-                                type="button"
-                                intent="secondary"
-                                disabled={currentPage === 1}
-                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                            >
-                                Previous
-                            </AppButton>
-
-                            <span>
-                                Page {currentPage} of {totalPages}
-                            </span>
-
-                            <AppButton
-                                type="button"
-                                intent="secondary"
-                                disabled={currentPage === totalPages}
-                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                            >
-                                Next
-                            </AppButton>
-                        </Flex>
-                    )}
-                </>
-            )}
-        </>
-    )}
-</section>
-            </Flex>
+        <Flex
+            height={"100vh"}
+            width={"80vw"}
+            overflowY={"auto"}
+            direction={"row"}
+        >
             <Flex
-            direction="column"
+                overflowY={"auto"}
+                direction="column"
+                width="62vw"
+                p={4}
+            >
+                {error && <p style={{ color: "red" }}>{error}</p>}
+                {checkoutMessage && (
+                    <p style={{ color: "green" }}>{checkoutMessage}</p>
+                )}
+
+                <section>
+                    <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={search}
+                        onChange={e => {
+                            setSearch(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                    />
+
+                    {loading && <p>Loading products...</p>}
+
+                    {!loading && (
+                        <>
+                            {filteredProducts.length === 0 ? (
+                                <p>No matching products found.</p>
+                            ) : (
+                                <>
+                                    <SimpleGrid columns={2} gap={4} my={4}>
+                                        {paginatedProducts.map(item => (
+                                            <Card.Root
+                                                key={item.id}
+                                                onClick={() => {
+                                                    setSelectedProduct(item);
+                                                    setQuantity("1");
+                                                    setError("");
+                                                }}
+                                                cursor="pointer"
+                                                _hover={{ shadow: "md", borderColor: "blue.300" }}
+                                            >
+                                                <Card.Body p={3} alignItems="center" textAlign="center">
+                                                    {item.image && (
+                                                        <img
+                                                            src={`http://127.0.0.1:8000${item.image}`}
+                                                            alt={item.name}
+                                                            width="80"
+                                                            height="80"
+                                                            style={{ objectFit: "cover", borderRadius: "4px", marginBottom: "8px" }}
+                                                        />
+                                                    )}
+                                                    <p style={{ fontWeight: 600 }}>{item.name}</p>
+                                                    <p style={{ color: "gray" }}>
+                                                        GH₵ {Number(item.actual_sale_price).toFixed(2)}
+                                                    </p>
+                                                </Card.Body>
+                                            </Card.Root>
+                                        ))}
+                                    </SimpleGrid>
+
+                                    {totalPages > 1 && (
+                                        <Flex justify="space-between" align="center" my={4}>
+                                            <AppButton
+                                                type="button"
+                                                intent="secondary"
+                                                disabled={currentPage === 1}
+                                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                            >
+                                                Previous
+                                            </AppButton>
+
+                                            <span>
+                                                Page {currentPage} of {totalPages}
+                                            </span>
+
+                                            <AppButton
+                                                type="button"
+                                                intent="secondary"
+                                                disabled={currentPage === totalPages}
+                                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                            >
+                                                Next
+                                            </AppButton>
+                                        </Flex>
+                                    )}
+                                </>
+                            )}
+                        </>
+                    )}
+                </section>
+            </Flex>
+
+            <Flex
+                direction="column"
                 width="18vw"
                 position="sticky"
                 top={0}
                 alignSelf="flex-start"
                 height="100vh"
                 overflowY="auto"
-                >
-        <section>
-            <Card.Root
-
+                p={2}
             >
-            <Card.Body
-            bgGradient={"to-br"}
-            gradientFrom="blue.500"
-            gradientTo="blackAlpha.100"
-            shadow="sm"
-            shadowColor={"purple"}
->
-
-              <h3>Customer</h3>
-
-                <label htmlFor="customer">
-                    Select customer:
-                </label>
-
-                <select
-                    id="customer"
-                    value={selectedCustomer}
-                    onChange={e =>
-                        setSelectedCustomer(
-                            e.target.value === ""
-                                ? ""
-                                : Number(e.target.value)
-                        )
-                    }
-                >
-                    <option value="">Walk-in customer</option>
-
-                    {customers.map(customer => (
-                        <option key={customer.id} value={customer.id}>
-                            {[
-                                customer.first_name,
-                                customer.second_name,
-                            ].filter(Boolean).join(" ") ||
-                                `Customer #${customer.id}`}
-                        </option>
-                    ))}
-                </select>
-
-    
-            {selectedProduct && (
-                <>
-                    <h3>{selectedProduct.name}</h3>
-
-                    <p>
-                        Selling price: GH₵{" "}
-                        {Number(selectedProduct.actual_sale_price).toFixed(2)}
-                    </p>
-
-                    <p>
-                        Available stock: {selectedProduct.current_stock}
-                    </p>
-
-                    <label htmlFor="product-quantity">
-                        Quantity:
-                    </label>
-
-                    <input
-                        id="product-quantity"
-                        type="number"
-                        min="0.01"
-                        step="0.01"
-                        placeholder="Enter quantity"
-                        value={quantity}
-                        onChange={e => setQuantity(e.target.value)}
-                    />
-
-                    <AppButton
-                        type="button"
-                        intent="primary"
-                        onClick={addProductToSale}
+                <Card.Root>
+                    <Card.Body
+                        bgGradient={"to-br"}
+                        gradientFrom="blue.500"
+                        gradientTo="blackAlpha.100"
+                        shadow="sm"
+                        shadowColor={"purple"}
                     >
-                        Add to Sale
-                    </AppButton>
-
-                    <AppButton
-                        type="button"
-                        intent="secondary"
-                        onClick={() => {
-                            setSelectedProduct(null);
-                            setQuantity("1");
-                        }}
-                    >
-                        Cancel
-                    </AppButton>
-           </> )}
-
-            
-        
-              
-                
-            {Object.keys(saleItems).length > 0 && (
-                <section>
-                    <h3>Current Sale</h3>
-
-                    <ul>
-                        {Object.entries(saleItems).map(
-                            ([productId, qty]) => {
-                                const product = items.find(
-                                    item => String(item.id) === productId
-                                );
-
-                                if (!product) return null;
-
-                                const unitPrice = Number(
-                                    product.actual_sale_price
-                                );
-
-                                return (
-                                    <li key={productId}>
-                                        <p>{product.name}</p>
-
-                                        <p>
-                                            Unit price: GH₵{" "}
-                                            {unitPrice.toFixed(2)}
-                                        </p>
-
-                                        <p>
-                                            Quantity: {qty}
-                                        </p>
-
-                                        <p>
-                                            Subtotal: GH₵{" "}
-                                            {(unitPrice * qty).toFixed(2)}
-                                        </p>
-
-                                        {qty > Number(product.current_stock) && (
-                                            <p style={{ color: "red" }}>
-                                                Insufficient stock!
-                                            </p>
-                                        )}
-
-                                        <AppButton
-                                            type="button"
-                                            intent="primary"
-                                            onClick={() =>
-                                                changeSaleQuantity(productId, 1)
-                                            }
-                                        >
-                                            +
-                                        </AppButton>
-
-                                        <AppButton
-                                            type="button"
-                                            intent="secondary"
-                                            onClick={() =>
-                                                changeSaleQuantity(productId, -1)
-                                            }
-                                        >
-                                            -
-                                        </AppButton>
-
-                                        <AppButton
-                                            type="button"
-                                            intent="secondary"
-                                            onClick={() =>
-                                                removeSaleItem(productId)
-                                            }
-                                        >
-                                            Remove
-                                        </AppButton>
-                                    </li>
-                                );
-                            }
-                        )}
-                    </ul>
-
-                    <h3>
-                        Order Total: GH₵ {cartTotal.toFixed(2)}
-                    </h3>
-                </section>
-            )}
-
-            {Object.keys(saleItems).length > 0 && (
-                <form onSubmit={handleCheckout}>
-                <section>
-                    <h3>Payments</h3>
-
-                    <p>
-                        You can record multiple payments or leave the amounts
-                        blank to create an unpaid order.
-                    </p>
-
-                    {payments.map((payment, index) => (
-                        <div key={index}>
-                            <h4>Payment {index + 1}</h4>
-
-                            <label>
-                                Amount:
-                            </label>
-
-                            <input
-                                type="number"
-                                min="0"
-                                step="0.01"
-                                placeholder="Enter amount"
-                                value={payment.amount}
-                                onChange={e =>
-                                    updatePayment(
-                                        index,
-                                        "amount",
-                                        e.target.value
-                                    )
-                                }
-                            />
-
-                            <label>
-                                Payment method:
-                            </label>
-
+                        <section style={{ marginBottom: "16px" }}>
+                            <h3>Customer</h3>
+                            <label htmlFor="customer">Select customer:</label>
                             <select
-                                value={payment.method}
+                                id="customer"
+                                value={selectedCustomer}
                                 onChange={e =>
-                                    updatePayment(
-                                        index,
-                                        "method",
-                                        e.target.value
+                                    setSelectedCustomer(
+                                        e.target.value === ""
+                                            ? ""
+                                            : Number(e.target.value)
                                     )
                                 }
                             >
-                                <option value="Cash">Cash</option>
-                                <option value="Card">Card</option>
-                                <option value="Mobile Money">Mobile Money</option>
-                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="">Walk-in customer</option>
+                                {customers.map(customer => (
+                                    <option key={customer.id} value={customer.id}>
+                                        {[
+                                            customer.first_name,
+                                            customer.second_name,
+                                        ].filter(Boolean).join(" ") ||
+                                            `Customer #${customer.id}`}
+                                    </option>
+                                ))}
                             </select>
+                        </section>
 
-                            {(payment.method === "Mobile Money" ||
-                                payment.method === "Bank Transfer") && (
-                                <>
-                                    <label>
-                                        Provider:
-                                    </label>
+                        {selectedProduct && (
+                            <section style={{ marginBottom: "16px", borderBottom: "1px solid #ccc", paddingBottom: "12px" }}>
+                                <h3>{selectedProduct.name}</h3>
+                                <p>
+                                    Selling price: GH₵{" "}
+                                    {Number(selectedProduct.actual_sale_price).toFixed(2)}
+                                </p>
+                                <p>
+                                    Available stock: {selectedProduct.current_stock}
+                                </p>
 
-                                    <input
-                                        type="text"
-                                        required
-                                        placeholder={
-                                            payment.method === "Mobile Money"
-                                                ? "e.g. MTN"
-                                                : "e.g. Bank name"
-                                        }
-                                        value={payment.provider}
-                                        onChange={e =>
-                                            updatePayment(
-                                                index,
-                                                "provider",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
+                                <label htmlFor="product-quantity">Quantity:</label>
+                                <input
+                                    id="product-quantity"
+                                    type="number"
+                                    min="0.01"
+                                    step="0.01"
+                                    placeholder="Enter quantity"
+                                    value={quantity}
+                                    onChange={e => setQuantity(e.target.value)}
+                                />
 
-                                    <label>
-                                        Reference number:
-                                    </label>
+                                <AppButton
+                                    type="button"
+                                    intent="primary"
+                                    onClick={addProductToSale}
+                                >
+                                    Add to Sale
+                                </AppButton>
 
-                                    <input
-                                        type="text"
-                                        required
-                                        placeholder="Transaction reference"
-                                        value={payment.reference_number}
-                                        onChange={e =>
-                                            updatePayment(
-                                                index,
-                                                "reference_number",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                </>
-                            )}
-
-                            {payments.length > 1 && (
                                 <AppButton
                                     type="button"
                                     intent="secondary"
-                                    onClick={() => removePayment(index)}
+                                    onClick={() => {
+                                        setSelectedProduct(null);
+                                        setQuantity("1");
+                                    }}
                                 >
-                                    Remove Payment
+                                    Cancel
                                 </AppButton>
-                            )}
-                        </div>
-                    ))}
+                            </section>
+                        )}
 
-                    <AppButton
-                        type="button"
-                        intent="secondary"
-                        onClick={addPayment}
-                    >
-                        Add Another Payment
-                    </AppButton>
+                        {Object.keys(saleItems).length > 0 && (
+                            <section style={{ marginBottom: "16px" }}>
+                                <h3>Current Sale</h3>
+                                <ul>
+                                    {Object.entries(saleItems).map(
+                                        ([productId, qty]) => {
+                                            const product = items.find(
+                                                item => String(item.id) === productId
+                                            );
 
-                    <p>
-                        Total entered: GH₵ {totalPayment.toFixed(2)}
-                    </p>
+                                            if (!product) return null;
 
-                    <p>
-                        Remaining balance: GH₵{" "}
-                        {Math.max(0, cartTotal - totalPayment).toFixed(2)}
-                    </p>
+                                            const unitPrice = Number(
+                                                product.actual_sale_price
+                                            );
 
+                                            return (
+                                                <li key={productId} style={{ marginBottom: "8px" }}>
+                                                    <p>{product.name}</p>
+                                                    <p>Unit price: GH₵ {unitPrice.toFixed(2)}</p>
+                                                    <p>Quantity: {qty}</p>
+                                                    <p>Subtotal: GH₵ {(unitPrice * qty).toFixed(2)}</p>
 
-                    <AppButton
-                        type="submit"
-                        intent="primary"
-                        disabled={
-                            checkingOut ||
-                            loading ||
-                            invalidPayments ||
-                            hasInsufficientStock ||
-                            totalPayment > cartTotal + 0.001
-                        }
-                    >
-                        {checkingOut  ? "Processing..." : "Complete Sale"}
-                    </AppButton>
+                                                    {qty > Number(product.current_stock) && (
+                                                        <p style={{ color: "red" }}>
+                                                            Insufficient stock!
+                                                        </p>
+                                                    )}
 
-                                    
-                </section>
-                </form>
-            )}
-                        </Card.Body>
-        </Card.Root>
-                        </section>
-                        </Flex>
+                                                    <AppButton
+                                                        type="button"
+                                                        intent="primary"
+                                                        onClick={() =>
+                                                            changeSaleQuantity(productId, 1)
+                                                        }
+                                                    >
+                                                        +
+                                                    </AppButton>
 
+                                                    <AppButton
+                                                        type="button"
+                                                        intent="secondary"
+                                                        onClick={() =>
+                                                            changeSaleQuantity(productId, -1)
+                                                        }
+                                                    >
+                                                        -
+                                                    </AppButton>
 
+                                                    <AppButton
+                                                        type="button"
+                                                        intent="secondary"
+                                                        onClick={() =>
+                                                            removeSaleItem(productId)
+                                                        }
+                                                    >
+                                                        Remove
+                                                    </AppButton>
+                                                </li>
+                                            );
+                                        }
+                                    )}
+                                </ul>
+
+                                <h3>Order Total: GH₵ {cartTotal.toFixed(2)}</h3>
+                            </section>
+                        )}
+
+                        {Object.keys(saleItems).length > 0 && (
+                            <form onSubmit={handleCheckout}>
+                                <section>
+                                    <h3>Payments</h3>
+                                    <p>
+                                        You can record multiple payments or leave the amounts
+                                        blank to create an unpaid order.
+                                    </p>
+
+                                    {payments.map((payment, index) => (
+                                        <div key={index} style={{ marginBottom: "10px" }}>
+                                            <h4>Payment {index + 1}</h4>
+
+                                            <label>Amount:</label>
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                step="0.01"
+                                                placeholder="Enter amount"
+                                                value={payment.amount}
+                                                onChange={e =>
+                                                    updatePayment(
+                                                        index,
+                                                        "amount",
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+
+                                            <label>Payment method:</label>
+                                            <select
+                                                value={payment.method}
+                                                onChange={e =>
+                                                    updatePayment(
+                                                        index,
+                                                        "method",
+                                                        e.target.value as PaymentMethod
+                                                    )
+                                                }
+                                            >
+                                                <option value="Cash">Cash</option>
+                                                <option value="Card">Card</option>
+                                                <option value="Mobile Money">Mobile Money</option>
+                                                <option value="Bank Transfer">Bank Transfer</option>
+                                            </select>
+
+                                            {(payment.method === "Mobile Money" ||
+                                                payment.method === "Bank Transfer") && (
+                                                <>
+                                                    <label>Provider:</label>
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        placeholder={
+                                                            payment.method === "Mobile Money"
+                                                                ? "e.g. MTN"
+                                                                : "e.g. Bank name"
+                                                        }
+                                                        value={payment.provider}
+                                                        onChange={e =>
+                                                            updatePayment(
+                                                                index,
+                                                                "provider",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+
+                                                    <label>Reference number:</label>
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        placeholder="Transaction reference"
+                                                        value={payment.reference_number}
+                                                        onChange={e =>
+                                                            updatePayment(
+                                                                index,
+                                                                "reference_number",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+                                                </>
+                                            )}
+
+                                            {payments.length > 1 && (
+                                                <AppButton
+                                                    type="button"
+                                                    intent="secondary"
+                                                    onClick={() => removePayment(index)}
+                                                >
+                                                    Remove Payment
+                                                </AppButton>
+                                            )}
+                                        </div>
+                                    ))}
+
+                                    <AppButton
+                                        type="button"
+                                        intent="secondary"
+                                        onClick={addPayment}
+                                    >
+                                        Add Another Payment
+                                    </AppButton>
+
+                                    <p>Total entered: GH₵ {totalPayment.toFixed(2)}</p>
+                                    <p>
+                                        Remaining balance: GH₵{" "}
+                                        {Math.max(0, cartTotal - totalPayment).toFixed(2)}
+                                    </p>
+
+                                    <AppButton
+                                        type="submit"
+                                        intent="primary"
+                                        disabled={
+                                            checkingOut ||
+                                            loading ||
+                                            invalidPayments ||
+                                            hasInsufficientStock ||
+                                            totalPayment > cartTotal + 0.001
+                                        }
+                                    >
+                                        {checkingOut ? "Processing..." : "Complete Sale"}
+                                    </AppButton>
+                                </section>
+                            </form>
+                        )}
+                    </Card.Body>
+                </Card.Root>
             </Flex>
-        </>
+        </Flex>
     );
 }
 
