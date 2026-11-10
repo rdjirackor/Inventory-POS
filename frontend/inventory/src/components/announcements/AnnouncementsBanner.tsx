@@ -14,19 +14,24 @@ export function AnnouncementBanner() {
     );
 
     async function fetchAnnouncements() {
-        setError("");
-        setLoading(true);
+    setError("");
+    setLoading(true);
 
-        try {
-            const data = await getLastAnnouncement();
-            setAnnouncement(data);
-        } catch (err) {
-            setError("Failed to load announcement");
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
+    try {
+        const data = await getLastAnnouncement();
+
+
+        setAnnouncement(data);
+    } catch (err) {
+        console.error("Announcement fetch error:", err);
+        setError("Failed to load announcement");
+    } finally {
+        setLoading(false);
     }
+}
+
+
+
 
     useEffect(() => {
         fetchAnnouncements();

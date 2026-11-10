@@ -57,7 +57,7 @@ urlpatterns = [
     path("notifications/", notifications),
 
     path("last-announcements/", last_announcements),
-    path("announcements/", announcements),
+    path("announcements/", active_announcements),
 
         path("active-announcements/", active_announcements),
 

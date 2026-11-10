@@ -64,6 +64,10 @@ function DashboardSales() {
         startIndex + ITEMS_PER_PAGE
     );
 
+    const hasSaleItems = Object.keys(saleItems).length > 0;
+
+    const showOrderCard = selectedProduct !== null || hasSaleItems;
+
     const cartTotal = Object.entries(saleItems).reduce(
         (total, [productId, qty]) => {
             const product = items.find(
@@ -191,6 +195,16 @@ function DashboardSales() {
             delete next[productId];
             return next;
         });
+    }
+
+    function cancelOrder() {
+        setSelectedProduct(null);
+        setQuantity("1");
+        setSaleItems({});
+        setSelectedCustomer("");
+        setPayments([emptyPayment()]);
+        setError("");
+        setCheckoutMessage("");
     }
 
     function addPayment() {
@@ -390,281 +404,294 @@ function DashboardSales() {
                 overflowY="auto"
                 p={2}
             >
-                <Card.Root>
-                    <Card.Body
-                        bgGradient={"to-br"}
-                        gradientFrom="blue.500"
-                        gradientTo="blackAlpha.100"
-                        shadow="sm"
-                        shadowColor={"purple"}
-                    >
-                        <section style={{ marginBottom: "16px" }}>
-                            <h3>Customer</h3>
-                            <label htmlFor="customer">Select customer:</label>
-                            <select
-                                id="customer"
-                                value={selectedCustomer}
-                                onChange={e =>
-                                    setSelectedCustomer(
-                                        e.target.value === ""
-                                            ? ""
-                                            : Number(e.target.value)
-                                    )
-                                }
-                            >
-                                <option value="">Walk-in customer</option>
-                                {customers.map(customer => (
-                                    <option key={customer.id} value={customer.id}>
-                                        {[
-                                            customer.first_name,
-                                            customer.second_name,
-                                        ].filter(Boolean).join(" ") ||
-                                            `Customer #${customer.id}`}
-                                    </option>
-                                ))}
-                            </select>
-                        </section>
-
-                        {selectedProduct && (
-                            <section style={{ marginBottom: "16px", borderBottom: "1px solid #ccc", paddingBottom: "12px" }}>
-                                <h3>{selectedProduct.name}</h3>
-                                <p>
-                                    Selling price: GH₵{" "}
-                                    {Number(selectedProduct.actual_sale_price).toFixed(2)}
-                                </p>
-                                <p>
-                                    Available stock: {selectedProduct.current_stock}
-                                </p>
-
-                                <label htmlFor="product-quantity">Quantity:</label>
-                                <input
-                                    id="product-quantity"
-                                    type="number"
-                                    min="0.01"
-                                    step="0.01"
-                                    placeholder="Enter quantity"
-                                    value={quantity}
-                                    onChange={e => setQuantity(e.target.value)}
-                                />
-
-                                <AppButton
-                                    type="button"
-                                    intent="primary"
-                                    onClick={addProductToSale}
-                                >
-                                    Add to Sale
-                                </AppButton>
-
+                {showOrderCard && (
+                    <Card.Root>
+                        <Card.Body
+                            bgGradient={"to-br"}
+                            gradientFrom="blue.500"
+                            gradientTo="blackAlpha.100"
+                            shadow="sm"
+                            shadowColor={"purple"}
+                        >
+                            <Flex justify="space-between" align="center" mb={3}>
+                                <h3>Order</h3>
                                 <AppButton
                                     type="button"
                                     intent="secondary"
-                                    onClick={() => {
-                                        setSelectedProduct(null);
-                                        setQuantity("1");
-                                    }}
+                                    onClick={cancelOrder}
                                 >
-                                    Cancel
+                                    Cancel Order
                                 </AppButton>
-                            </section>
-                        )}
+                            </Flex>
 
-                        {Object.keys(saleItems).length > 0 && (
                             <section style={{ marginBottom: "16px" }}>
-                                <h3>Current Sale</h3>
-                                <ul>
-                                    {Object.entries(saleItems).map(
-                                        ([productId, qty]) => {
-                                            const product = items.find(
-                                                item => String(item.id) === productId
-                                            );
-
-                                            if (!product) return null;
-
-                                            const unitPrice = Number(
-                                                product.actual_sale_price
-                                            );
-
-                                            return (
-                                                <li key={productId} style={{ marginBottom: "8px" }}>
-                                                    <p>{product.name}</p>
-                                                    <p>Unit price: GH₵ {unitPrice.toFixed(2)}</p>
-                                                    <p>Quantity: {qty}</p>
-                                                    <p>Subtotal: GH₵ {(unitPrice * qty).toFixed(2)}</p>
-
-                                                    {qty > Number(product.current_stock) && (
-                                                        <p style={{ color: "red" }}>
-                                                            Insufficient stock!
-                                                        </p>
-                                                    )}
-
-                                                    <AppButton
-                                                        type="button"
-                                                        intent="primary"
-                                                        onClick={() =>
-                                                            changeSaleQuantity(productId, 1)
-                                                        }
-                                                    >
-                                                        +
-                                                    </AppButton>
-
-                                                    <AppButton
-                                                        type="button"
-                                                        intent="secondary"
-                                                        onClick={() =>
-                                                            changeSaleQuantity(productId, -1)
-                                                        }
-                                                    >
-                                                        -
-                                                    </AppButton>
-
-                                                    <AppButton
-                                                        type="button"
-                                                        intent="secondary"
-                                                        onClick={() =>
-                                                            removeSaleItem(productId)
-                                                        }
-                                                    >
-                                                        Remove
-                                                    </AppButton>
-                                                </li>
-                                            );
-                                        }
-                                    )}
-                                </ul>
-
-                                <h3>Order Total: GH₵ {cartTotal.toFixed(2)}</h3>
+                                <h3>Customer</h3>
+                                <label htmlFor="customer">Select customer:</label>
+                                <select
+                                    id="customer"
+                                    value={selectedCustomer}
+                                    onChange={e =>
+                                        setSelectedCustomer(
+                                            e.target.value === ""
+                                                ? ""
+                                                : Number(e.target.value)
+                                        )
+                                    }
+                                >
+                                    <option value="">Walk-in customer</option>
+                                    {customers.map(customer => (
+                                        <option key={customer.id} value={customer.id}>
+                                            {[
+                                                customer.first_name,
+                                                customer.second_name,
+                                            ].filter(Boolean).join(" ") ||
+                                                `Customer #${customer.id}`}
+                                        </option>
+                                    ))}
+                                </select>
                             </section>
-                        )}
 
-                        {Object.keys(saleItems).length > 0 && (
-                            <form onSubmit={handleCheckout}>
-                                <section>
-                                    <h3>Payments</h3>
+                            {selectedProduct && (
+                                <section style={{ marginBottom: "16px", borderBottom: "1px solid #ccc", paddingBottom: "12px" }}>
+                                    <h3>{selectedProduct.name}</h3>
                                     <p>
-                                        You can record multiple payments or leave the amounts
-                                        blank to create an unpaid order.
+                                        Selling price: GH₵{" "}
+                                        {Number(selectedProduct.actual_sale_price).toFixed(2)}
+                                    </p>
+                                    <p>
+                                        Available stock: {selectedProduct.current_stock}
                                     </p>
 
-                                    {payments.map((payment, index) => (
-                                        <div key={index} style={{ marginBottom: "10px" }}>
-                                            <h4>Payment {index + 1}</h4>
+                                    <label htmlFor="product-quantity">Quantity:</label>
+                                    <input
+                                        id="product-quantity"
+                                        type="number"
+                                        min="0.01"
+                                        step="0.01"
+                                        placeholder="Enter quantity"
+                                        value={quantity}
+                                        onChange={e => setQuantity(e.target.value)}
+                                    />
 
-                                            <label>Amount:</label>
-                                            <input
-                                                type="number"
-                                                min="0"
-                                                step="0.01"
-                                                placeholder="Enter amount"
-                                                value={payment.amount}
-                                                onChange={e =>
-                                                    updatePayment(
-                                                        index,
-                                                        "amount",
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-
-                                            <label>Payment method:</label>
-                                            <select
-                                                value={payment.method}
-                                                onChange={e =>
-                                                    updatePayment(
-                                                        index,
-                                                        "method",
-                                                        e.target.value as PaymentMethod
-                                                    )
-                                                }
-                                            >
-                                                <option value="Cash">Cash</option>
-                                                <option value="Card">Card</option>
-                                                <option value="Mobile Money">Mobile Money</option>
-                                                <option value="Bank Transfer">Bank Transfer</option>
-                                            </select>
-
-                                            {(payment.method === "Mobile Money" ||
-                                                payment.method === "Bank Transfer") && (
-                                                <>
-                                                    <label>Provider:</label>
-                                                    <input
-                                                        type="text"
-                                                        required
-                                                        placeholder={
-                                                            payment.method === "Mobile Money"
-                                                                ? "e.g. MTN"
-                                                                : "e.g. Bank name"
-                                                        }
-                                                        value={payment.provider}
-                                                        onChange={e =>
-                                                            updatePayment(
-                                                                index,
-                                                                "provider",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
-
-                                                    <label>Reference number:</label>
-                                                    <input
-                                                        type="text"
-                                                        required
-                                                        placeholder="Transaction reference"
-                                                        value={payment.reference_number}
-                                                        onChange={e =>
-                                                            updatePayment(
-                                                                index,
-                                                                "reference_number",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
-                                                </>
-                                            )}
-
-                                            {payments.length > 1 && (
-                                                <AppButton
-                                                    type="button"
-                                                    intent="secondary"
-                                                    onClick={() => removePayment(index)}
-                                                >
-                                                    Remove Payment
-                                                </AppButton>
-                                            )}
-                                        </div>
-                                    ))}
+                                    <AppButton
+                                        type="button"
+                                        intent="primary"
+                                        onClick={addProductToSale}
+                                    >
+                                        Add to Sale
+                                    </AppButton>
 
                                     <AppButton
                                         type="button"
                                         intent="secondary"
-                                        onClick={addPayment}
+                                        onClick={() => {
+                                            setSelectedProduct(null);
+                                            setQuantity("1");
+                                        }}
                                     >
-                                        Add Another Payment
-                                    </AppButton>
-
-                                    <p>Total entered: GH₵ {totalPayment.toFixed(2)}</p>
-                                    <p>
-                                        Remaining balance: GH₵{" "}
-                                        {Math.max(0, cartTotal - totalPayment).toFixed(2)}
-                                    </p>
-
-                                    <AppButton
-                                        type="submit"
-                                        intent="primary"
-                                        disabled={
-                                            checkingOut ||
-                                            loading ||
-                                            invalidPayments ||
-                                            hasInsufficientStock ||
-                                            totalPayment > cartTotal + 0.001
-                                        }
-                                    >
-                                        {checkingOut ? "Processing..." : "Complete Sale"}
+                                        Clear Selection
                                     </AppButton>
                                 </section>
-                            </form>
-                        )}
-                    </Card.Body>
-                </Card.Root>
+                            )}
+
+                            {hasSaleItems && (
+                                <section style={{ marginBottom: "16px" }}>
+                                    <h3>Current Sale</h3>
+                                    <ul>
+                                        {Object.entries(saleItems).map(
+                                            ([productId, qty]) => {
+                                                const product = items.find(
+                                                    item => String(item.id) === productId
+                                                );
+
+                                                if (!product) return null;
+
+                                                const unitPrice = Number(
+                                                    product.actual_sale_price
+                                                );
+
+                                                return (
+                                                    <li key={productId} style={{ marginBottom: "8px" }}>
+                                                        <p>{product.name}</p>
+                                                        <p>Unit price: GH₵ {unitPrice.toFixed(2)}</p>
+                                                        <p>Quantity: {qty}</p>
+                                                        <p>Subtotal: GH₵ {(unitPrice * qty).toFixed(2)}</p>
+
+                                                        {qty > Number(product.current_stock) && (
+                                                            <p style={{ color: "red" }}>
+                                                                Insufficient stock!
+                                                            </p>
+                                                        )}
+
+                                                        <AppButton
+                                                            type="button"
+                                                            intent="primary"
+                                                            onClick={() =>
+                                                                changeSaleQuantity(productId, 1)
+                                                            }
+                                                        >
+                                                            +
+                                                        </AppButton>
+
+                                                        <AppButton
+                                                            type="button"
+                                                            intent="secondary"
+                                                            onClick={() =>
+                                                                changeSaleQuantity(productId, -1)
+                                                            }
+                                                        >
+                                                            -
+                                                        </AppButton>
+
+                                                        <AppButton
+                                                            type="button"
+                                                            intent="secondary"
+                                                            onClick={() =>
+                                                                removeSaleItem(productId)
+                                                            }
+                                                        >
+                                                            Remove
+                                                        </AppButton>
+                                                    </li>
+                                                );
+                                            }
+                                        )}
+                                    </ul>
+
+                                    <h3>Order Total: GH₵ {cartTotal.toFixed(2)}</h3>
+                                </section>
+                            )}
+
+                            {hasSaleItems && (
+                                <form onSubmit={handleCheckout}>
+                                    <section>
+                                        <h3>Payments</h3>
+                                        <p>
+                                            You can record multiple payments or leave the amounts
+                                            blank to create an unpaid order.
+                                        </p>
+
+                                        {payments.map((payment, index) => (
+                                            <div key={index} style={{ marginBottom: "10px" }}>
+                                                <h4>Payment {index + 1}</h4>
+
+                                                <label>Amount:</label>
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    step="0.01"
+                                                    placeholder="Enter amount"
+                                                    value={payment.amount}
+                                                    onChange={e =>
+                                                        updatePayment(
+                                                            index,
+                                                            "amount",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+
+                                                <label>Payment method:</label>
+                                                <select
+                                                    value={payment.method}
+                                                    onChange={e =>
+                                                        updatePayment(
+                                                            index,
+                                                            "method",
+                                                            e.target.value as PaymentMethod
+                                                        )
+                                                    }
+                                                >
+                                                    <option value="Cash">Cash</option>
+                                                    <option value="Card">Card</option>
+                                                    <option value="Mobile Money">Mobile Money</option>
+                                                    <option value="Bank Transfer">Bank Transfer</option>
+                                                </select>
+
+                                                {(payment.method === "Mobile Money" ||
+                                                    payment.method === "Bank Transfer") && (
+                                                    <>
+                                                        <label>Provider:</label>
+                                                        <input
+                                                            type="text"
+                                                            required
+                                                            placeholder={
+                                                                payment.method === "Mobile Money"
+                                                                    ? "e.g. MTN"
+                                                                    : "e.g. Bank name"
+                                                            }
+                                                            value={payment.provider}
+                                                            onChange={e =>
+                                                                updatePayment(
+                                                                    index,
+                                                                    "provider",
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                        />
+
+                                                        <label>Reference number:</label>
+                                                        <input
+                                                            type="text"
+                                                            required
+                                                            placeholder="Transaction reference"
+                                                            value={payment.reference_number}
+                                                            onChange={e =>
+                                                                updatePayment(
+                                                                    index,
+                                                                    "reference_number",
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                        />
+                                                    </>
+                                                )}
+
+                                                {payments.length > 1 && (
+                                                    <AppButton
+                                                        type="button"
+                                                        intent="secondary"
+                                                        onClick={() => removePayment(index)}
+                                                    >
+                                                        Remove Payment
+                                                    </AppButton>
+                                                )}
+                                            </div>
+                                        ))}
+
+                                        <AppButton
+                                            type="button"
+                                            intent="secondary"
+                                            onClick={addPayment}
+                                        >
+                                            Add Another Payment
+                                        </AppButton>
+
+                                        <p>Total entered: GH₵ {totalPayment.toFixed(2)}</p>
+                                        <p>
+                                            Remaining balance: GH₵{" "}
+                                            {Math.max(0, cartTotal - totalPayment).toFixed(2)}
+                                        </p>
+
+                                        <AppButton
+                                            type="submit"
+                                            intent="primary"
+                                            disabled={
+                                                checkingOut ||
+                                                loading ||
+                                                invalidPayments ||
+                                                hasInsufficientStock ||
+                                                totalPayment > cartTotal + 0.001
+                                            }
+                                        >
+                                            {checkingOut ? "Processing..." : "Complete Sale"}
+                                        </AppButton>
+                                    </section>
+                                </form>
+                            )}
+                        </Card.Body>
+                    </Card.Root>
+                )}
             </Flex>
         </Flex>
     );
