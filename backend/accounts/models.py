@@ -433,7 +433,7 @@ class Announcement(models.Model):
 
 
     def __str__(self):
-        return f"{self.title} ({self.target_audience})"
+        return f"{self.title}"
 
 class AnnouncementReadStatus(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, related_name='read_by')

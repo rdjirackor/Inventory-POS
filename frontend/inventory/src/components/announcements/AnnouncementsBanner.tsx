@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { getLastAnnouncement } from "../../apis/announcements";
 import type { Announcement } from "../../interfaces/interfaces";
@@ -11,10 +10,9 @@ export function AnnouncementBanner() {
     const [error, setError] = useState("");
     const [announcement, setAnnouncement] = useState<Announcement | null>(null);
     const [announcementDismissed, setAnnouncementDismissed] = useState<string[]>(
-    () => JSON.parse(
-        localStorage.getItem("dismissed_announcement_ids") || "[]"
-    )
-);   
+        () => JSON.parse(localStorage.getItem("dismissed_announcement_ids") || "[]")
+    );
+
     async function fetchAnnouncements() {
         setError("");
         setLoading(true);
@@ -22,9 +20,9 @@ export function AnnouncementBanner() {
         try {
             const data = await getLastAnnouncement();
             setAnnouncement(data);
-        } catch (error) {
+        } catch (err) {
             setError("Failed to load announcement");
-            console.error(error);
+            console.error(err);
         } finally {
             setLoading(false);
         }
@@ -34,32 +32,35 @@ export function AnnouncementBanner() {
         fetchAnnouncements();
     }, []);
 
-    if (loading || error || !announcement ) {
+    if (loading || error || !announcement || announcement.id == null) {
+        return null;
+    }
+    {console.log(announcement)}
+
+    const announcementIdStr = String(announcement.id);
+
+    if (announcementDismissed.includes(announcementIdStr)) {
         return null;
     }
 
-
-
-async function handleClick(announcement_id: number) {
-    const dismissed_ids: string[] = JSON.parse(
-    localStorage.getItem("dismissed_announcement_ids") || "[]"
-);
-
-    if (!dismissed_ids.includes(announcement_id.toString())) {
-        dismissed_ids.push(announcement_id.toString());
-
-        localStorage.setItem(
-            "dismissed_announcement_ids",
-            JSON.stringify(dismissed_ids)
+    async function handleClick(id: number | string) {
+        const idStr = String(id);
+        const dismissed_ids: string[] = JSON.parse(
+            localStorage.getItem("dismissed_announcement_ids") || "[]"
         );
-        setAnnouncementDismissed(dismissed_ids);
+
+        if (!dismissed_ids.includes(idStr)) {
+            const updatedIds = [...dismissed_ids, idStr];
+
+            localStorage.setItem(
+                "dismissed_announcement_ids",
+                JSON.stringify(updatedIds)
+            );
+            setAnnouncementDismissed(updatedIds);
+        }
     }
-}
 
-    if (!announcementDismissed.includes(String(announcement.id))) {   
     return (
-
-        
         <Box
             bg="#1a1a3e"
             color="white"
@@ -72,11 +73,11 @@ async function handleClick(announcement_id: number) {
         >
             <Flex align="center" gap={2} mb={2}>
                 <Megaphone size={18} />
-
                 <Text fontWeight="bold" fontSize="lg">
                     {announcement.title}
                 </Text>
             </Flex>
+            
 
             <Text fontSize="sm" opacity={0.9}>
                 {announcement.message}
@@ -95,6 +96,5 @@ async function handleClick(announcement_id: number) {
                 <X size={16} />
             </IconButton>
         </Box>
-    
-    );}
+    );
 }

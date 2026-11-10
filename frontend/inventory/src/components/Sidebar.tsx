@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getCurrentUser } from "../apis/auth";
 import type { User } from "../interfaces/interfaces";
-
-import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-
-import { NavLink, useLocation} from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -30,13 +27,9 @@ import {
   MapPin,
   FileText,
   HandCoins,
-  
+  SidebarClose,
 } from "lucide-react";
 import { useSettings } from "../hooks/useSettings";
-
-
-
-
 
 const palettes = ["red", "blue", "green", "purple", "orange", "teal", "pink", "cyan"];
 
@@ -69,65 +62,83 @@ const navigation = [
       { label: "Taxtype", path: "/taxtypes", icon: FileText },
       { label: "Branches", path: "/branches", icon: MapPin },
       { label: "Warehouses", path: "/warehouses", icon: Warehouse },
-      
-
       { label: "Settings", path: "/settings", icon: Set },
     ],
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }) {
   const location = useLocation();
+  const [user, setUser] = useState<User | null>(null);
+  const auth = useContext(AuthContext);
+  const { settingsData, loading, error } = useSettings();
 
-      const [user, setUser] = useState<User | null>(null);
-      const auth = useContext(AuthContext);
-      const {settingsData, loading, error} = useSettings();
+  useEffect(() => {
+    getCurrentUser()
+      .then(data => setUser(data))
+      .catch(error => console.error(error));
+  }, []);
 
-
-      useEffect(() => {
-        getCurrentUser()
-            .then(data => setUser(data))
-            .catch(error => console.error(error));
-    }, []);
-
-      function handleLogout() {
-        const confirm_logout = window.confirm("Sign out?");
-        if (confirm_logout){
-            auth?.logout();
-            window.location.reload();
-        }
+  function handleLogout() {
+    const confirm_logout = window.confirm("Sign out?");
+    if (confirm_logout) {
+      auth?.logout();
+      window.location.reload();
     }
+  }
 
   return (
+    <Flex
+      direction="column"
+      w="18vw"
+      h="100vh"
+      bg="white"
+      color="black"
+      p={4}
+      position="fixed"
+      top={0}
+      left={0}
+      overflowY="auto"
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "6px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "transparent",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#888",
+          borderRadius: "full",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "#555",
+        },
+      }}
+    >
+      <Flex align="center" mb={8} px={2} justify="space-between">
+        <Flex align="center" gap={3}>
+          <Box bg="#4F7DF3" p={2} borderRadius="md">
+            <Package size={26} />
+          </Box>
 
-  <Flex
-    direction="column"
-    w="18vw"
-    h="100vh"
-    bg="white"
-    color="black"
-    p={4}
-    position="fixed"
-    top={0}
-    left={0}
-    overflowY="auto"
-    scrollbarWidth={"1vw"}  >
-    
-      <Flex align="center" gap={3} mb={8} px={2}>
-        <Box bg="#4F7DF3" p={2} borderRadius="md">
-          <Package size={24} />
-        </Box>
+          <Box>
+            {error && <p>{error}</p>}
+            {loading && <p>Loading settings...</p>}
+            <Text fontWeight="bold">
+              {settingsData?.business_name || "Inventory POS"}
+            </Text>
+            <Text fontSize="xs" color="black">
+              Management system
+            </Text>
+          </Box>
+        </Flex>
 
         <Box>
-          
-            {error && (<p>{error}</p>)}
-            {loading && (<p>Loading settings...</p>)}
-            <Text fontWeight="bold">
-          {settingsData?.business_name || "Inventory POS"} 
-          </Text>   
-          <Text fontSize="xs" color="black">
-            Management system
-          </Text>
+          <SidebarClose
+            size={26}
+            style={{ cursor: "pointer" }}
+            onClick={onClose}
+          />
         </Box>
       </Flex>
 
@@ -155,67 +166,62 @@ export default function Sidebar() {
 
                 return (
                   <StyledNavLink
-  key={item.path}
-  to={item.path}
-  display="flex"
-  alignItems="center"
-  gap={3}
-  px={3}
-  py={2.5}
-  borderRadius="md"
-  fontSize="sm"
-  fontWeight={active ? "semibold" : "normal"}
-  bg={active ? "transparent" : "transparent"}
-  color={active ? "blue.700" : "black"}
-  _hover={{
-    bg: active ? "#30446B" : "#25334B",
-    color: "white",
-    textDecoration: "none",
-  }}
-  transition="background 0.2s"
->
-  <Icon size={18} />
-  <Text>{item.label}</Text>
-</StyledNavLink>
+                    key={item.path}
+                    to={item.path}
+                    display="flex"
+                    alignItems="center"
+                    gap={3}
+                    px={3}
+                    py={2.5}
+                    borderRadius="md"
+                    fontSize="sm"
+                    fontWeight={active ? "semibold" : "normal"}
+                    bg="transparent"
+                    color={active ? "blue.700" : "black"}
+                    _hover={{
+                      bg: active ? "#30446B" : "#25334B",
+                      color: "white",
+                      textDecoration: "none",
+                    }}
+                    transition="background 0.2s"
+                  >
+                    <Icon size={18} />
+                    <Text>{item.label}</Text>
+                  </StyledNavLink>
                 );
               })}
             </VStack>
           </Box>
         ))}
-              </VStack>
+      </VStack>
 
-   <Box mt="auto" pt={4}>
-  <chakra.button
-    onClick={handleLogout}
-    display="flex"
-    alignItems="center"
-    gap={3}
-    w="full"
-    p={3}
-    borderRadius="md"
-    textAlign="left"
-    _hover={{ bg: "#25334B", color:"white" }}
-    transition="background 0.2s"
-  >
+      <Box mt="auto" pt={4}>
+        <chakra.button
+          onClick={handleLogout}
+          display="flex"
+          alignItems="center"
+          gap={3}
+          w="full"
+          p={3}
+          borderRadius="md"
+          textAlign="left"
+          _hover={{ bg: "#25334B", color: "white" }}
+          transition="background 0.2s"
+        >
+          <Avatar.Root size="sm" colorPalette={pickPalette(user?.username)}>
+            <Avatar.Fallback name={user?.username} />
+          </Avatar.Root>
 
-    
-    <Avatar.Root size="sm" colorPalette={pickPalette(user?.username)}>
-      <Avatar.Fallback name={user?.username} />
-    </Avatar.Root>
+          <Box flex="1" minW={0}>
+            <Text fontSize="sm" fontWeight="semibold" truncate>
+              {user?.username}
+            </Text>
+            <Text fontSize="xs">{user?.role ?? "No role"}</Text>
+          </Box>
 
-    <Box flex="1" minW={0} >
-      <Text fontSize="sm" fontWeight="semibold" truncate>
-        {user?.username}
-      </Text>
-      <Text fontSize="xs" >
-        {user?.role ?? "No role"}
-      </Text>
-    </Box>
-
-    <LogOut size={16} />
-
-  </chakra.button>
-</Box>
+          <LogOut size={16} />
+        </chakra.button>
+      </Box>
     </Flex>
   );
 }

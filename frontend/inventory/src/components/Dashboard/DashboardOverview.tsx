@@ -20,6 +20,8 @@ function DashboardOverview() {
     if (!dashboard) {
         return <p>Loading...</p>;
     }
+            console.log(dashboard.orders_last_7_days)
+
 
     return (
         <Flex
@@ -51,10 +53,10 @@ function DashboardOverview() {
             <Flex direction={"row"}
                 justify={"space-evenly"}>
 
-                    <Card.Root bgColor={"transparent"}>
-                        <Card.Header alignItems={"center"} color={"white"}><b>Sales Last 7 Days</b></Card.Header>
-                        <Card.Body width={"30vw"} color={"white"}>
-                        <OrdersChart data={dashboard.orders_last_7_days}  />
+                    <Card.Root >
+                        <Card.Header alignItems={"center"}><b>Sales Last 7 Days</b></Card.Header>
+                        <Card.Body  width={"30vw"} >
+                        <OrdersChart data={dashboard.orders_last_7_days}   />
                         </Card.Body>
                     </Card.Root>
 
