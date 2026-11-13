@@ -6,7 +6,10 @@ import { checkout } from "../../apis/checkout";
 import AppButton from "../AppButton";
 
 import { useNavigate } from "react-router-dom";
-import { Card, Flex, SimpleGrid } from "@chakra-ui/react";
+import { Card, Flex, Input, InputGroup, SimpleGrid, Image, Stack, Heading, Text, NativeSelect } from "@chakra-ui/react";
+import { Plus, Minus, Trash2, X, Search } from "lucide-react";
+import AppIconButton from "../AppIconButton";
+
 
 type PaymentMethod = "Cash" | "Card" | "Mobile Money" | "Bank Transfer";
 
@@ -28,7 +31,7 @@ function DashboardSales() {
     const navigate = useNavigate();
 
     const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 2;
+    const ITEMS_PER_PAGE = 8;
 
     const [loading, setLoading] = useState(false);
     const [checkingOut, setCheckingOut] = useState(false);
@@ -295,33 +298,24 @@ function DashboardSales() {
     }
 
     return (
-        <Flex
-            height={"100vh"}
-            width={"80vw"}
-            overflowY={"auto"}
-            direction={"row"}
-        >
-            <Flex
-                overflowY={"auto"}
-                direction="column"
-                width="62vw"
-                p={4}
-            >
+        
+        <Flex height="100vh" width="80vw" bg="gray.50">
+            <Flex direction="column" flex="1" p={6} gap={4} overflowY="auto">
                 {error && <p style={{ color: "red" }}>{error}</p>}
                 {checkoutMessage && (
                     <p style={{ color: "green" }}>{checkoutMessage}</p>
                 )}
 
                 <section>
-                    <input
-                        type="text"
+                    <InputGroup  startElement={<Search size={16} />}>
+                    <Input
+                        bg="white"
+                        color={"black"}
                         placeholder="Search products..."
                         value={search}
-                        onChange={e => {
-                            setSearch(e.target.value);
-                            setCurrentPage(1);
-                        }}
+                        onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
                     />
+                    </InputGroup>
 
                     {loading && <p>Loading products...</p>}
 
@@ -331,7 +325,7 @@ function DashboardSales() {
                                 <p>No matching products found.</p>
                             ) : (
                                 <>
-                                    <SimpleGrid columns={2} gap={4} my={4}>
+                                    <SimpleGrid columns={{ base: 2, md: 3, xl: 4 }} gap={4} my={4}>
                                         {paginatedProducts.map(item => (
                                             <Card.Root
                                                 key={item.id}
@@ -340,18 +334,24 @@ function DashboardSales() {
                                                     setQuantity("1");
                                                     setError("");
                                                 }}
+
+                                                transition="all 150ms ease"
+                                                borderWidth="2px"
+                                                borderColor={selectedProduct?.id === item.id ? "blue.500" : "transparent"}
+                                                _hover={{ shadow: "md", transform: "translateY(-2px)" }}
                                                 cursor="pointer"
-                                                _hover={{ shadow: "md", borderColor: "blue.300" }}
                                             >
                                                 <Card.Body p={3} alignItems="center" textAlign="center">
                                                     {item.image && (
-                                                        <img
-                                                            src={`http://127.0.0.1:8000${item.image}`}
-                                                            alt={item.name}
-                                                            width="80"
-                                                            height="80"
-                                                            style={{ objectFit: "cover", borderRadius: "4px", marginBottom: "8px" }}
-                                                        />
+                                                        <Image 
+                                                        src={`http://127.0.0.1:8000${item.image}`}
+                                                        alt={item.name}
+                                                        w="100%"
+                                                        h="110px"
+                                                        objectFit="cover"
+                                                        borderRadius="md" />
+                                                      
+                                                        
                                                     )}
                                                     <p style={{ fontWeight: 600 }}>{item.name}</p>
                                                     <p style={{ color: "gray" }}>
@@ -394,66 +394,75 @@ function DashboardSales() {
                 </section>
             </Flex>
 
-            <Flex
-                direction="column"
-                width="18vw"
-                position="sticky"
-                top={0}
-                alignSelf="flex-start"
-                height="100vh"
-                overflowY="auto"
-                p={2}
-            >
+                  <Flex
+                    direction="column"
+                    w="360px"
+                    flexShrink={0}
+                    bg="white"
+                    borderLeftWidth="1px"
+                    borderColor="gray.200"
+                    p={4}
+                    overflowY="auto"
+                >
                 {showOrderCard && (
-                    <Card.Root>
+      // <Card.Root bg="white" borderWidth="1px" borderColor="gray.200" shadow="sm">
+                                        <Card.Root variant="subtle" bg="transparent" shadow="none">
+
                         <Card.Body
-                            bgGradient={"to-br"}
-                            gradientFrom="blue.500"
-                            gradientTo="blackAlpha.100"
-                            shadow="sm"
-                            shadowColor={"purple"}
+                            color={"black"}
+                     
+                            p={0}
+                            gap={4}
                         >
+                                    <Stack gap={5}>
+
                             <Flex justify="space-between" align="center" mb={3}>
-                                <h3>Order</h3>
-                                <AppButton
-                                    type="button"
-                                    intent="secondary"
-                                    onClick={cancelOrder}
-                                >
-                                    Cancel Order
-                                </AppButton>
+                                <Heading size="sm">Order</Heading>
+                                    <AppIconButton label="Cancel" intent="danger" onClick={() => cancelOrder()}>
+                                        <X size={16} />
+                                    </AppIconButton>
                             </Flex>
 
                             <section style={{ marginBottom: "16px" }}>
-                                <h3>Customer</h3>
+                                <Heading size="sm">Customer</Heading>
                                 <label htmlFor="customer">Select customer:</label>
-                                <select
-                                    id="customer"
-                                    value={selectedCustomer}
+
+                                <NativeSelect.Root size="sm">
+                                    <NativeSelect.Field 
+                                        bg="white"
+                                        color="black"
+                                        colorScheme="light"
+                                    
+                                    value={selectedCustomer} 
                                     onChange={e =>
                                         setSelectedCustomer(
-                                            e.target.value === ""
-                                                ? ""
-                                                : Number(e.target.value)
+                                        e.target.value === ""
+                                        ? ""
+                                        : Number(e.target.value)
                                         )
-                                    }
-                                >
-                                    <option value="">Walk-in customer</option>
-                                    {customers.map(customer => (
-                                        <option key={customer.id} value={customer.id}>
+                                    }>
+                                    
+                                    <option value="" style={{ background: "white", color: "black" }}>Walk-in customer</option>
+                                        {customers.map(customer => (
+                                            <option key={customer.id} value={customer.id} style={{ background: "white", color: "black" }}>
                                             {[
                                                 customer.first_name,
                                                 customer.second_name,
                                             ].filter(Boolean).join(" ") ||
                                                 `Customer #${customer.id}`}
-                                        </option>
-                                    ))}
-                                </select>
+                                            </option>
+                                            ))}
+                                    </NativeSelect.Field>
+                                    <NativeSelect.Indicator />
+                                </NativeSelect.Root>
+
+
+                
                             </section>
 
                             {selectedProduct && (
                                 <section style={{ marginBottom: "16px", borderBottom: "1px solid #ccc", paddingBottom: "12px" }}>
-                                    <h3>{selectedProduct.name}</h3>
+                                    <Heading size="sm">{selectedProduct.name}</Heading>
                                     <p>
                                         Selling price: GH₵{" "}
                                         {Number(selectedProduct.actual_sale_price).toFixed(2)}
@@ -462,17 +471,13 @@ function DashboardSales() {
                                         Available stock: {selectedProduct.current_stock}
                                     </p>
 
-                                    <label htmlFor="product-quantity">Quantity:</label>
-                                    <input
-                                        id="product-quantity"
-                                        type="number"
-                                        min="0.01"
-                                        step="0.01"
-                                        placeholder="Enter quantity"
-                                        value={quantity}
-                                        onChange={e => setQuantity(e.target.value)}
-                                    />
+                                    <Stack gap={1}>
+                                        <Text fontSize="sm" color="gray.600">Quantity</Text>
+                                        <Input size="sm" type="number" value={quantity}   onChange={(e) => setQuantity(e.target.value)}
+                                        />
+                                        </Stack>
 
+                                
                                     <AppButton
                                         type="button"
                                         intent="primary"
@@ -496,7 +501,7 @@ function DashboardSales() {
 
                             {hasSaleItems && (
                                 <section style={{ marginBottom: "16px" }}>
-                                    <h3>Current Sale</h3>
+                                    <Heading size="sm">Current Sale</Heading>
                                     <ul>
                                         {Object.entries(saleItems).map(
                                             ([productId, qty]) => {
@@ -510,62 +515,54 @@ function DashboardSales() {
                                                     product.actual_sale_price
                                                 );
 
-                                                return (
-                                                    <li key={productId} style={{ marginBottom: "8px" }}>
-                                                        <p>{product.name}</p>
-                                                        <p>Unit price: GH₵ {unitPrice.toFixed(2)}</p>
-                                                        <p>Quantity: {qty}</p>
-                                                        <p>Subtotal: GH₵ {(unitPrice * qty).toFixed(2)}</p>
+                                                return (<>
+                                                <Stack key={productId} gap={2} py={3} borderBottomWidth="1px" borderColor="gray.100">
+                              <Flex justify="space-between" align="center" gap={3}>
+                                    <Stack gap={0} minW={0}>
+                                    <Text fontWeight="medium" truncate>{product.name}</Text>
+                                    <Text fontSize="sm" color="gray.500">
+                                        {qty} × GH₵ {unitPrice.toFixed(2)}
+                                    </Text>
+                                    </Stack>
+                                    <Text fontWeight="semibold">GH₵ {(unitPrice * qty).toFixed(2)}</Text>
+                                </Flex>
 
-                                                        {qty > Number(product.current_stock) && (
-                                                            <p style={{ color: "red" }}>
-                                                                Insufficient stock!
-                                                            </p>
-                                                        )}
+                                {qty > Number(product.current_stock) && (
+                                    <Text fontSize="xs" color="red.600">Insufficient stock!</Text>
+                                )}
 
-                                                        <AppButton
-                                                            type="button"
-                                                            intent="primary"
-                                                            onClick={() =>
-                                                                changeSaleQuantity(productId, 1)
-                                                            }
-                                                        >
-                                                            +
-                                                        </AppButton>
+                                <Flex gap={1}>{     <> 
+                                    <AppIconButton label="Increase quantity" intent="secondary" mr={"3%"} onClick={() => changeSaleQuantity(productId, 1)}>
+                                        <Plus size={16} />
+                                    </AppIconButton>
+                                
 
-                                                        <AppButton
-                                                            type="button"
-                                                            intent="secondary"
-                                                            onClick={() =>
-                                                                changeSaleQuantity(productId, -1)
-                                                            }
-                                                        >
-                                                            -
-                                                        </AppButton>
+                                    <AppIconButton label="Decrease quantity" intent="secondary" mr={"3%"} onClick={() => changeSaleQuantity(productId, -1)}>
+                                        <Minus size={16} />
+                                    </AppIconButton>
 
-                                                        <AppButton
-                                                            type="button"
-                                                            intent="secondary"
-                                                            onClick={() =>
-                                                                removeSaleItem(productId)
-                                                            }
-                                                        >
-                                                            Remove
-                                                        </AppButton>
-                                                    </li>
-                                                );
+
+                                    <AppIconButton label="Remove item" intent="danger" onClick={() => removeSaleItem(productId)}>
+                                        <Trash2 size={16} />
+                                    </AppIconButton>
+                                    </>}</Flex>
+                                </Stack>
+                                               </> );
                                             }
                                         )}
                                     </ul>
 
-                                    <h3>Order Total: GH₵ {cartTotal.toFixed(2)}</h3>
+                                    <Flex justify="space-between" align="center" pt={3}>
+                                        <Text fontWeight="medium">Order total</Text>
+                                        <Text fontSize="xl" fontWeight="bold">GH₵ {cartTotal.toFixed(2)}</Text>
+                                    </Flex>
                                 </section>
                             )}
 
                             {hasSaleItems && (
                                 <form onSubmit={handleCheckout}>
                                     <section>
-                                        <h3>Payments</h3>
+                                        <Heading size="sm">Payments</Heading>
                                         <p>
                                             You can record multiple payments or leave the amounts
                                             blank to create an unpaid order.
@@ -575,21 +572,19 @@ function DashboardSales() {
                                             <div key={index} style={{ marginBottom: "10px" }}>
                                                 <h4>Payment {index + 1}</h4>
 
-                                                <label>Amount:</label>
-                                                <input
-                                                    type="number"
-                                                    min="0"
-                                                    step="0.01"
-                                                    placeholder="Enter amount"
-                                                    value={payment.amount}
-                                                    onChange={e =>
+                                    <Stack gap={1}>
+                                        <Text fontSize="sm" color="gray.600">Amount</Text>
+                                        <Input size="sm" type="number" value={payment.amount}   onChange={e =>
                                                         updatePayment(
                                                             index,
                                                             "amount",
                                                             e.target.value
                                                         )
                                                     }
-                                                />
+                                        />
+                                        </Stack>
+
+                                        
 
                                                 <label>Payment method:</label>
                                                 <select
@@ -611,39 +606,38 @@ function DashboardSales() {
                                                 {(payment.method === "Mobile Money" ||
                                                     payment.method === "Bank Transfer") && (
                                                     <>
-                                                        <label>Provider:</label>
-                                                        <input
-                                                            type="text"
-                                                            required
-                                                            placeholder={
-                                                                payment.method === "Mobile Money"
-                                                                    ? "e.g. MTN"
-                                                                    : "e.g. Bank name"
-                                                            }
-                                                            value={payment.provider}
-                                                            onChange={e =>
-                                                                updatePayment(
-                                                                    index,
-                                                                    "provider",
-                                                                    e.target.value
-                                                                )
-                                                            }
-                                                        />
-
-                                                        <label>Reference number:</label>
-                                                        <input
-                                                            type="text"
-                                                            required
-                                                            placeholder="Transaction reference"
-                                                            value={payment.reference_number}
-                                                            onChange={e =>
+                                                    <Stack gap={1}>
+                                                <Text fontSize="sm" color="gray.600">Provider</Text>
+                                                <Input size="sm" type="text"
+                                                value={payment.provider}
+                                                required
+                                                placeholder={
+                                                payment.method === "Mobile Money"
+                                                                ? "e.g. MTN"
+                                                                : "e.g. Bank name"
+                                                            } 
+                                                onChange={e =>
+                                                                               
+                                                            updatePayment(
+                                                            index,
+                                                            "provider",
+                                                            e.target.value
+                                                            )} />
+                                                </Stack>
+                                                            
+                                                       
+                                                <Stack gap={1}>
+                                                <Text fontSize="sm" color="gray.600">Reference number</Text>
+                                                <Input size="sm" type="text" required value={quantity} placeholder="Transaction reference" 
+                                                onChange={e =>
                                                                 updatePayment(
                                                                     index,
                                                                     "reference_number",
                                                                     e.target.value
                                                                 )
-                                                            }
-                                                        />
+                                                            } />
+                                                </Stack>
+                                                    
                                                     </>
                                                 )}
 
@@ -673,22 +667,17 @@ function DashboardSales() {
                                             {Math.max(0, cartTotal - totalPayment).toFixed(2)}
                                         </p>
 
-                                        <AppButton
-                                            type="submit"
-                                            intent="primary"
-                                            disabled={
-                                                checkingOut ||
+                                       <AppButton type="submit" intent="primary" loading={checkingOut} disabled={checkingOut ||
                                                 loading ||
                                                 invalidPayments ||
                                                 hasInsufficientStock ||
-                                                totalPayment > cartTotal + 0.001
-                                            }
-                                        >
-                                            {checkingOut ? "Processing..." : "Complete Sale"}
-                                        </AppButton>
+                                                totalPayment > cartTotal + 0.001} loadingText="Processing...">
+    Complete Sale
+</AppButton>
                                     </section>
                                 </form>
                             )}
+                            </Stack>
                         </Card.Body>
                     </Card.Root>
                 )}

@@ -78,25 +78,17 @@ function AppButton({
 
     return (
         <Button
-            {...props}
-            {...styles[intent]}
-            onClick={handleClick}
-            borderRadius="lg"
-            fontWeight="semibold"
-            height="40px"
-            px={4}
-            transition="all 150ms ease"
-            transform="translateY(0)"
-            _active={{
-                ...styles[intent]._active,
-                transform: "scale(0.97)"
-            }}
-            _disabled={{
-                opacity: 0.5,
-                cursor: "not-allowed",
-                transform: "none"
-            }}
-        >
+        {...styles[intent]}
+        onClick={handleClick}
+        borderRadius="lg"
+        fontWeight="semibold"
+        height="40px"
+        px={4}
+        transition="all 150ms ease"
+        _active={{ ...styles[intent]._active, transform: "scale(0.97)" }}
+        _disabled={{ opacity: 0.5, cursor: "not-allowed", transform: "none" }}
+        {...props}
+    >
             {feedback === "success" && (
                 <Check size={16} />
             )}

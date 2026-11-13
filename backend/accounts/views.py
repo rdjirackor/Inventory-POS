@@ -1393,6 +1393,7 @@ def product_detail(request, product_id):
         )
 
         if serializer.is_valid():
+            serializer.save()
             if product.current_stock <= product.minimum_stock_level:
                 notify(notification_type=Notification.NotifType.LOW_STOCK,
                     message=f"{product.name} is low in stock",
@@ -1428,6 +1429,7 @@ def product_detail(request, product_id):
         )
 
         if serializer.is_valid():
+            serializer.save()
             if product.current_stock <= product.minimum_stock_level:
                 notify(notification_type=Notification.NotifType.LOW_STOCK,
                     message=f"{product.name} is low in stock",
