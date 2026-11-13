@@ -3,6 +3,10 @@ import type { Product } from "../interfaces/interfaces";
 import { getProduct } from "../apis/products";
 import { useNavigate, useParams } from "react-router-dom";
 import { modify_stock } from "../apis/stock_movements";
+import { Alert, Card, Flex, Stack, Field, Input, Textarea, Heading, Badge, Text } from "@chakra-ui/react";
+import { Plus, Minus } from "lucide-react";
+import AppButton from "../components/AppButton";
+import PageShell from "../components/PageShell";
 
 
 
@@ -95,86 +99,56 @@ const [reason, setReason] = useState("");
     }
 
 return (
-    <div>
+    <PageShell title="Adjust Stock" maxW="520px">
+    {error && (
+        <Alert.Root status="error"><Alert.Indicator /><Alert.Title>{error}</Alert.Title></Alert.Root>
+    )}
+    <Card.Root>
+        <Card.Body gap={5}>
+            <Flex justify="space-between" align="center">
+                <Stack gap={0}>
+                    <Heading size="md">{product.name}</Heading>
+                    <Text fontSize="sm" color="gray.500">SKU: {product.sku}</Text>
+                </Stack>
+                <Badge size="lg" colorPalette="blue">In stock: {product.current_stock}</Badge>
+            </Flex>
 
-        <h2>{product.name}</h2>
-        <p>SKU: {product.sku}</p>
+            <form onSubmit={handleSubmit}>
+                <Stack gap={4}>
+                    <Flex gap={2}>
+                        <AppButton type="button" flex="1"
+                            intent={direction === "Increase" ? "primary" : "secondary"}
+                            onClick={() => setDirection("Increase")}>
+                            <Plus size={16} /> Increase
+                        </AppButton>
+                        <AppButton type="button" flex="1"
+                            intent={direction === "Decrease" ? "danger" : "secondary"}
+                            onClick={() => setDirection("Decrease")}>
+                            <Minus size={16} /> Decrease
+                        </AppButton>
+                    </Flex>
 
-        <p>
-            Current Stock: {product.current_stock}
-        </p>
+                    <Field.Root>
+                        <Field.Label>Quantity</Field.Label>
+                        <Input type="number" min="0.01" step="any" value={quantity}
+                            onChange={(e) => setQuantity(e.target.value)} />
+                    </Field.Root>
 
-        {error && <p>{error}</p>}
+                    <Field.Root>
+                        <Field.Label>Reason</Field.Label>
+                        <Textarea value={reason} onChange={(e) => setReason(e.target.value)}
+                            placeholder="e.g. Damaged goods, stock count correction" />
+                    </Field.Root>
 
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="direction">
-                    Adjustment Type
-                </label>
-
-                <select
-                    id="direction"
-                    
-                    onChange={(event) =>{
-                        const value = event.target.value;
-                        if (value==="Increase" || value === "Decrease"){
-                        setDirection(value);}}
-                    }
-                
-                >
-                    <option value="Increase">Increase</option>
-                    <option value="Decrease">Decrease</option>
-                </select>
-            </div>
-
-            <div>
-                <label htmlFor="quantity">
-                    Quantity
-                </label>
-
-                <input
-                    id="quantity"
-                    type="number"
-                    min="0.01"
-                    step="any"
-                    value={quantity}
-                    onChange={(event) =>
-                        setQuantity(event.target.value)
-                    }
-                    required
-                />
-            </div>
-
-            <div>
-                <label htmlFor="reason">
-                    Reason
-                </label>
-
-                <textarea
-                    id="reason"
-                    value={reason}
-                    onChange={(event) =>
-                        setReason(event.target.value)
-                    }
-                    placeholder="e.g. Damaged goods, stock count correction"
-                    required
-                />
-            </div>
-
-            <button type="submit"
-                    disabled={saving}>
-                {saving ? "Saving..." : "Save Adjustment"}
-                
-            </button>
-
-            <button
-                type="button"
-                onClick={() => navigate("/products")}
-            >
-                Cancel
-            </button>
-        </form>
-    </div>
+                    <Flex justify="flex-end" gap={3}>
+                        <AppButton type="button" intent="secondary" onClick={() => navigate("/products")}>Cancel</AppButton>
+                        <AppButton type="submit" loading={saving} loadingText="Saving...">Save Adjustment</AppButton>
+                    </Flex>
+                </Stack>
+            </form>
+        </Card.Body>
+    </Card.Root>
+</PageShell>
 );
     
 }

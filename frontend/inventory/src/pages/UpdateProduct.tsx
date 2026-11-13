@@ -7,6 +7,12 @@ import { getTaxes } from "../apis/taxes";
 import { getCategories } from "../apis/categories";
 import {  getWarehouses } from "../apis/warehouses";
 
+
+import { Card, Checkbox,Flex, Field, Image, Heading, Input, NativeSelect, SimpleGrid, Stack } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
+import PageShell from "../components/PageShell";
+import { PackagePlus } from "lucide-react";
+
 function UpdateProduct() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -74,6 +80,13 @@ function UpdateProduct() {
             [field]: value,
         });
     }
+    function handleTaxChange(id: number) {
+    setTaxes(prev =>
+        prev.includes(id)
+            ? prev.filter(t => t !== id)
+            : [...prev, id]
+    );
+}
 
     async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -127,259 +140,464 @@ function UpdateProduct() {
         <div>
 
             {error && <p>{error}</p>}
-
+<PageShell title="Edit Product" maxW="860px"
+    action={
+        <AppButton intent="secondary" onClick={() => navigateToStockAdjustment(product.id)}>
+            <PackagePlus size={16} /> Update Stock
+        </AppButton>
+    }>
             <form onSubmit={handleSubmit}>
 
-                <div>
-                    <label>Name</label>
-                    <input
-                        value={product.name}
-                        onChange={(e) =>
+                <Card.Root>
+                    <Card.Body gap={4}>
+                        <Heading size="md">Basic info</Heading>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+                            <Field.Root>
+                                <Field.Label>Name</Field.Label>
+                                <Input value={product.name}  onChange={(e) =>
                             handleChange("name", e.target.value)
-                        }
-                    />
-                </div>
-
-                <div>
-                    <label>SKU</label>
-                    <input
-                        value={product.sku}
+                        } />
+                            </Field.Root>
+                            <Field.Root>
+                                <Field.Label>SKU</Field.Label>
+                                <Input value={product.sku}
                         onChange={(e) =>
                             handleChange("sku", e.target.value)
-                        }
-                    />
-                </div>
-
-                <div>
-                    <label>Brand</label>
-                    <input
-                        value={product.brand}
+                        } />
+                            </Field.Root>
+                                        <Field.Root>
+                                <Field.Label>Brand</Field.Label>
+                                <Input value={product.brand}
                         onChange={(e) =>
                             handleChange("brand", e.target.value)
-                        }
-                    />
-                </div>
-
-                <div>
-                <label>Product Image</label>
-
-                {product.image && !removeImage && (
-                    <div>
-                        <img
-                            src={`http://127.0.0.1:8000${product.image}`}
-                            alt={product.name}
-                            width="150"
-                        />
-                    </div>
-                )}
-
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                        setImage(e.target.files?.[0] || null);
-                        setRemoveImage(true);
-                    }}
-                />
-
-                {product.image && !removeImage && (
-                    <div className="remove_image">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setImage(null);
-                                setRemoveImage(true);
-                            }}
-                        >
-                            Remove
-                        </button>
-                    </div>
-                )}
-            </div>
-
-                <div>
-                    <label>Net Cost</label>
-                    <input
-                        type="number"
+                        } />
+                            </Field.Root>
+                                        <Field.Root>
+                                <Field.Label>Net Cost</Field.Label>
+                                <Input  type="number"
                         value={product.net_cost}
                         onChange={(e) =>
                             handleChange("net_cost", e.target.value)
-                        }
-                    />
-                </div>
-
-                <div>
-                    <label>Selling Price</label>
-                    <input
-                        type="number"
+                        } />
+                            </Field.Root>
+                                        <Field.Root>
+                                <Field.Label>Selling Price</Field.Label>
+                                <Input   type="number"
                         value={product.selling_price_without_tax}
                         onChange={(e) =>
                             handleChange(
                                 "selling_price_without_tax",
                                 e.target.value
                             )
-                        }
-                    />
-                </div>
-
-                {/* <div>
-                    <label>Current Stock</label>
-                    <input
-                        type="number"
-                        value={product.current_stock}
-                        onChange={(e) =>
-                            handleChange(
-                                "current_stock",
-                                e.target.value
-                            )
-                        }
-                    />
-                </div> */}
-
-                <div>
-                    <label>Minimum Stock Level</label>
-                    <input
-                        type="number"
+                        } />
+                            </Field.Root>
+                                        
+                                        <Field.Root>
+                                <Field.Label>Minimum Stock Level</Field.Label>
+                                <Input type="number"
                         value={product.minimum_stock_level}
                         onChange={(e) =>
                             handleChange(
                                 "minimum_stock_level",
                                 e.target.value
                             )
-                        }
-                    />
-                </div>
-
-                <div>
-                    <label>Barcode</label>
-                    <input
-                        value={product.barcode_number || ""}
+                        } />
+                            </Field.Root>
+                                        <Field.Root>
+                                <Field.Label>Barcode</Field.Label>
+                                <Input   value={product.barcode_number || ""}
                         onChange={(e) =>
                             handleChange(
                                 "barcode_number",
                                 e.target.value
                             )
-                        }
-                    />
-                </div>
-                
-            <div>
-                <label htmlFor="discount">Discount</label>
+                        }/>
+                            </Field.Root>
+                                       <Field.Root>
+    <Field.Label>Product Image</Field.Label>
+    <Stack gap={2}>
+        {product.image && !removeImage && (
+            <Image
+                src={`http://127.0.0.1:8000${product.image}`}
+                alt={product.name}
+                boxSize="150px"
+                objectFit="cover"
+                borderRadius="md"
+            />
+        )}
 
-                <select
-                    id="discount"
-                    value={product.discount ?? ""}
-                    onChange={(e) =>
-                        handleChange(
-                            "discount",
-                            e.target.value === "" ? "" : Number(e.target.value)
-                        )
-                    }
-                >
-                    <option value="">No discount</option>
+        <Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+                setImage(e.target.files?.[0] || null);
+                setRemoveImage(false);
+            }}
+        />
 
-                    {discounts.map((discount) => (
-                        <option key={discount.id} value={discount.id}>
-                            {discount.name} ({discount.discount}%)
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <label htmlFor="tax">Taxes</label>
-
-                <select
-                multiple
-                value={taxes.map(String)}
-                onChange={(e) => {
-                    const selectedTaxes = Array.from(
-                        e.target.selectedOptions,
-                        (option) => Number(option.value)
-                    );
-
-                    setTaxes(selectedTaxes);
+        {product.image && !removeImage && (
+            <AppButton
+                type="button"
+                onClick={() => {
+                    setImage(null);
+                    setRemoveImage(true);
                 }}
             >
-                {availableTaxes.map((tax) => (
-                    <option
-                        key={tax.id}
-                        value={tax.id}
-                    >
-                        {tax.name}
-                    </option>
-                ))}
-            </select>
-            </div>
-
-            <div>
-                <label htmlFor="warehouse">Warehouse</label>
-
-                <select
-                    id="warehouse"
-                    value={product.warehouse ?? ""}
-                    onChange={(e) =>
-                        handleChange(
-                            "warehouse",
-                            e.target.value === "" ? "" : Number(e.target.value)
-                        )
-                    }
-                >
-
-                    {warehouses.map((warehouse) => (
-                        <option key={warehouse.id} value={warehouse.id}>
-                            {warehouse.name} 
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <label htmlFor="category">Category</label>
-
-                <select
-                    id="category"
-                    value={product.category ?? ""}
-                    onChange={(e) =>
-                        handleChange(
+                Remove
+            </AppButton>
+        )}
+    </Stack>
+</Field.Root>
+<Field.Root>
+                    <Field.Label>Category</Field.Label>
+                    <NativeSelect.Root>
+                        <NativeSelect.Field value={product.category} onChange={(e) => handleChange(
                             "category",
                             e.target.value === "" ? "" : Number(e.target.value)
-                        )
-                    }
-                >
+                        )}>
+                            <option value="">Select Category</option>
+                {categories.map((category) => (
+                                            <option
+                                                key={category.id}
+                                                value={category.id}
+                                            >
+                                                {category.name}
+                                            </option>
+                                        ))}        </NativeSelect.Field>
+                        <NativeSelect.Indicator />
+                    </NativeSelect.Root>
+                </Field.Root>
+                                        <Field.Root>
+                    <Field.Label>Warehouse</Field.Label>
+                    <NativeSelect.Root>
+                        <NativeSelect.Field value={product.warehouse} onChange={(e) => handleChange(
+                            "warehouse",
+                            e.target.value === "" ? "" : Number(e.target.value)
+                        )}>
+                             <option value="">Select Warehouse</option>
+                
+                                        {warehouses.map((warehouse) => (
+                                            <option
+                                                key={warehouse.id}
+                                                value={warehouse.id}
+                                            >
+                                                {warehouse.name}
+                                            </option>
+                                        ))}
+                        </NativeSelect.Field>
+                        <NativeSelect.Indicator />
+                    </NativeSelect.Root>
+                </Field.Root>
+                
+                
+                
+                
+                
+                
+                                        <Field.Root>
+                    <Field.Label>Discount</Field.Label>
+                    <NativeSelect.Root>
+                        <NativeSelect.Field value={product.discount} onChange={(e) => handleChange(
+                            "discount",
+                            e.target.value === "" ? "" : Number(e.target.value)
+                        )}>
+                            <option value="">No Discount</option>
+                 {discounts.map((discount) => (
+                                            <option
+                                                key={discount.id}
+                                                value={discount.id}
+                                            >
+                                                {discount.name} - {discount.discount}%
+                                            </option>
+                                        ))}        </NativeSelect.Field>
+                        <NativeSelect.Indicator />
+                    </NativeSelect.Root>
+                </Field.Root>
+        <Field.Root>
+    <Field.Label>Taxes</Field.Label>
+    <Stack gap={2}>
+        {availableTaxes.map(tax => (
+            <Checkbox.Root
+                key={tax.id}
+                checked={taxes.includes(tax.id)}
+                onCheckedChange={() => handleTaxChange(tax.id)}
+            >
+                <Checkbox.HiddenInput />
+                <Checkbox.Control />
+                <Checkbox.Label>{tax.name}</Checkbox.Label>
+            </Checkbox.Root>
+        ))}
+    </Stack>
+</Field.Root>
+                                        
+                                        
+                        </SimpleGrid>
+                    </Card.Body>
+                </Card.Root>
 
-                    {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
 
-           
-        
-
-
-                <button type="submit" disabled={saving}>
-                    {saving ? "Saving..." : "Save Changes"}
-                </button>
-                 <div>
-                    
-                <button 
-                    type="button"
-                onClick={()=>navigateToStockAdjustment(product.id)}>Update Stock</button>
-            </div>
-
-                <button
-                    type="button"
-                    onClick={() => navigate("/products")}
-                >
-                    Cancel
-                </button>
+<Flex justify="flex-end" gap={3}>
+    <AppButton type="button" intent="secondary" onClick={() => navigate("/products")}>
+        Cancel
+    </AppButton>
+    <AppButton type="submit" loading={saving} loadingText="Updating...">
+        Save Changes
+    </AppButton>
+</Flex>
+              
 
             </form>
+            </PageShell>
         </div>
     );
 }
 
 export default UpdateProduct;
+
+
+//   <div>
+//                     <label>Name</label>
+//                     <input
+//                         value={product.name}
+//                         onChange={(e) =>
+//                             handleChange("name", e.target.value)
+//                         }
+//                     />
+//                 </div>
+
+//                 <div>
+//                     <label>SKU</label>
+//                     <input
+//                         value={product.sku}
+//                         onChange={(e) =>
+//                             handleChange("sku", e.target.value)
+//                         }
+//                     />
+//                 </div>
+
+//                 <div>
+//                     <label>Brand</label>
+//                     <input
+//                         value={product.brand}
+//                         onChange={(e) =>
+//                             handleChange("brand", e.target.value)
+//                         }
+//                     />
+//                 </div>
+
+//                 <div>
+//                 <label>Product Image</label>
+
+//                 {product.image && !removeImage && (
+//                     <div>
+//                         <img
+//                             src={`http://127.0.0.1:8000${product.image}`}
+//                             alt={product.name}
+//                             width="150"
+//                         />
+//                     </div>
+//                 )}
+
+//                 <input
+//                     type="file"
+//                     accept="image/*"
+//                     onChange={(e) => {
+//                         setImage(e.target.files?.[0] || null);
+//                         setRemoveImage(true);
+//                     }}
+//                 />
+
+//                 {product.image && !removeImage && (
+//                     <div className="remove_image">
+//                         <button
+//                             type="button"
+//                             onClick={() => {
+//                                 setImage(null);
+//                                 setRemoveImage(true);
+//                             }}
+//                         >
+//                             Remove
+//                         </button>
+//                     </div>
+//                 )}
+//             </div>
+
+//                 <div>
+//                     <label>Net Cost</label>
+//                     <input
+//                         type="number"
+//                         value={product.net_cost}
+//                         onChange={(e) =>
+//                             handleChange("net_cost", e.target.value)
+//                         }
+//                     />
+//                 </div>
+
+//                 <div>
+//                     <label>Selling Price</label>
+//                     <input
+//                         type="number"
+//                         value={product.selling_price_without_tax}
+//                         onChange={(e) =>
+//                             handleChange(
+//                                 "selling_price_without_tax",
+//                                 e.target.value
+//                             )
+//                         }
+//                     />
+//                 </div>
+
+//                 {/* <div>
+//                     <label>Current Stock</label>
+//                     <input
+//                         type="number"
+//                         value={product.current_stock}
+//                         onChange={(e) =>
+//                             handleChange(
+//                                 "current_stock",
+//                                 e.target.value
+//                             )
+//                         }
+//                     />
+//                 </div> */}
+
+//                 <div>
+//                     <label>Minimum Stock Level</label>
+//                     <input
+//                         type="number"
+//                         value={product.minimum_stock_level}
+//                         onChange={(e) =>
+//                             handleChange(
+//                                 "minimum_stock_level",
+//                                 e.target.value
+//                             )
+//                         }
+//                     />
+//                 </div>
+
+//                 <div>
+//                     <label>Barcode</label>
+//                     <input
+//                         value={product.barcode_number || ""}
+//                         onChange={(e) =>
+//                             handleChange(
+//                                 "barcode_number",
+//                                 e.target.value
+//                             )
+//                         }
+//                     />
+//                 </div>
+                
+//             <div>
+//                 <label htmlFor="discount">Discount</label>
+
+//                 <select
+//                     id="discount"
+//                     value={product.discount ?? ""}
+//                     onChange={(e) =>
+//                         handleChange(
+//                             "discount",
+//                             e.target.value === "" ? "" : Number(e.target.value)
+//                         )
+//                     }
+//                 >
+//                     <option value="">No discount</option>
+
+//                     {discounts.map((discount) => (
+//                         <option key={discount.id} value={discount.id}>
+//                             {discount.name} ({discount.discount}%)
+//                         </option>
+//                     ))}
+//                 </select>
+//             </div>
+
+//             <div>
+//                 <label htmlFor="tax">Taxes</label>
+
+//                 <select
+//                 multiple
+//                 value={taxes.map(String)}
+//                 onChange={(e) => {
+//                     const selectedTaxes = Array.from(
+//                         e.target.selectedOptions,
+//                         (option) => Number(option.value)
+//                     );
+
+//                     setTaxes(selectedTaxes);
+//                 }}
+//             >
+//                 {availableTaxes.map((tax) => (
+//                     <option
+//                         key={tax.id}
+//                         value={tax.id}
+//                     >
+//                         {tax.name}
+//                     </option>
+//                 ))}
+//             </select>
+//             </div>
+
+//             <div>
+//                 <label htmlFor="warehouse">Warehouse</label>
+
+//                 <select
+//                     id="warehouse"
+//                     value={product.warehouse ?? ""}
+//                     onChange={(e) =>
+//                         handleChange(
+//                             "warehouse",
+//                             e.target.value === "" ? "" : Number(e.target.value)
+//                         )
+//                     }
+//                 >
+
+//                     {warehouses.map((warehouse) => (
+//                         <option key={warehouse.id} value={warehouse.id}>
+//                             {warehouse.name} 
+//                         </option>
+//                     ))}
+//                 </select>
+//             </div>
+
+//             <div>
+//                 <label htmlFor="category">Category</label>
+
+//                 <select
+//                     id="category"
+//                     value={product.category ?? ""}
+//                     onChange={(e) =>
+//                         handleChange(
+//                             "category",
+//                             e.target.value === "" ? "" : Number(e.target.value)
+//                         )
+//                     }
+//                 >
+
+//                     {categories.map((category) => (
+//                         <option key={category.id} value={category.id}>
+//                             {category.name}
+//                         </option>
+//                     ))}
+//                 </select>
+//             </div>
+
+           
+        
+
+
+//                 <button type="submit" disabled={saving}>
+//                     {saving ? "Saving..." : "Save Changes"}
+//                 </button>
+//                  <div>
+                    
+//                 <button 
+//                     type="button"
+//                 onClick={()=>navigateToStockAdjustment(product.id)}>Update Stock</button>
+//             </div>
+
+//                 <button
+//                     type="button"
+//                     onClick={() => navigate("/products")}
+//                 >
+//                     Cancel
+//                 </button>

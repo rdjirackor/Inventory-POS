@@ -13,6 +13,8 @@ import type {
     Discount,
     TaxType,
 } from "../interfaces/interfaces";
+import { Card, Checkbox, Field, Flex, Heading, Input, NativeSelect, SimpleGrid, Stack } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
 
 function CreateProduct() {
     const navigate = useNavigate();
@@ -125,113 +127,72 @@ function CreateProduct() {
         <div>
 
             {error && <p>{error}</p>}
-
             <form onSubmit={handleSubmit}>
-
-                <div>
-                    <label>Name</label>
-                    <input
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-
-                <div>
-                    <label>SKU</label>
-                    <input
-                        value={sku}
-                        onChange={(e) => setSku(e.target.value)}
-                    />
-                </div>
-
-                <div>
-                    <label>Brand</label>
-                    <input
-                        value={brand}
-                        onChange={(e) => setBrand(e.target.value)}
-                    />
-                </div>
-
-                <div>
-                    <label>Net Cost</label>
-                    <input
-                        type="number"
-                        value={netCost}
-                        onChange={(e) => setNetCost(e.target.value)}
-                    />
-                </div>
-
-                <div>
-                    <label>Selling Price</label>
-                    <input
-                        type="number"
-                        value={sellingPrice}
-                        onChange={(e) => setSellingPrice(e.target.value)}
-                    />
-                </div>
-
-                <div>
-                    <label>Current Stock</label>
-                    <input
-                        type="number"
-                        value={currentStock}
-                        onChange={(e) => setCurrentStock(e.target.value)}
-                    />
-                </div>
-
-                <div>
-                    <label>Minimum Stock Level</label>
-                    <input
-                        type="number"
-                        value={minimumStock}
-                        onChange={(e) => setMinimumStock(e.target.value)}
-                    />
-                </div>
-
-                <div>
-                    <label>Barcode</label>
-                    <input
-                        value={barcode}
-                        onChange={(e) => setBarcode(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Product Image</label>
-                    <input
-                        type="file"
+            <Card.Root>
+    <Card.Body gap={4}>
+        <Heading size="md">Basic info</Heading>
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+            <Field.Root>
+                <Field.Label>Name</Field.Label>
+                <Input value={name} onChange={(e) => setName(e.target.value)} />
+            </Field.Root>
+            <Field.Root>
+                <Field.Label>SKU</Field.Label>
+                <Input value={sku} onChange={(e) => setSku(e.target.value)} />
+            </Field.Root>
+                        <Field.Root>
+                <Field.Label>Brand</Field.Label>
+                <Input value={brand} onChange={(e) => setBrand(e.target.value)} />
+            </Field.Root>
+                        <Field.Root>
+                <Field.Label>Net Cost</Field.Label>
+                <Input value={netCost} onChange={(e) => setNetCost(e.target.value)} />
+            </Field.Root>
+                        <Field.Root>
+                <Field.Label>Selling Price</Field.Label>
+                <Input value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} />
+            </Field.Root>
+                        <Field.Root>
+                <Field.Label>Current Stock</Field.Label>
+                <Input value={currentStock} onChange={(e) => setCurrentStock(e.target.value)} />
+            </Field.Root>
+                        <Field.Root>
+                <Field.Label>Minimum Stock Level</Field.Label>
+                <Input value={minimumStock} onChange={(e) => setMinimumStock(e.target.value)} />
+            </Field.Root>
+                        <Field.Root>
+                <Field.Label>Barcode</Field.Label>
+                <Input value={barcode} onChange={(e) => setBarcode(e.target.value)} />
+            </Field.Root>
+                        <Field.Root>
+                <Field.Label>Product Image</Field.Label>
+                <Input  type="file"
                         accept="image/*"
                         onChange={(e) => {
                             setImage(e.target.files?.[0] || null);
-                        }}
-                    />
-                </div>
-
-                <div>
-                    <label>Category</label>
-                    <select
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                    >
-                        <option value="">Select Category</option>
-
-                        {categories.map((category) => (
+                        }} />
+            </Field.Root>
+                        <Field.Root>
+    <Field.Label>Category</Field.Label>
+    <NativeSelect.Root>
+        <NativeSelect.Field value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="">Select Category</option>
+{categories.map((category) => (
                             <option
                                 key={category.id}
                                 value={category.id}
                             >
                                 {category.name}
                             </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div>
-                    <label>Warehouse</label>
-                    <select
-                        value={warehouse}
-                        onChange={(e) => setWarehouse(e.target.value)}
-                    >
-                        <option value="">Select Warehouse</option>
+                        ))}        </NativeSelect.Field>
+        <NativeSelect.Indicator />
+    </NativeSelect.Root>
+</Field.Root>
+                        <Field.Root>
+    <Field.Label>Warehouse</Field.Label>
+    <NativeSelect.Root>
+        <NativeSelect.Field value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
+             <option value="">Select Warehouse</option>
 
                         {warehouses.map((warehouse) => (
                             <option
@@ -241,59 +202,65 @@ function CreateProduct() {
                                 {warehouse.name}
                             </option>
                         ))}
-                    </select>
-                </div>
+        </NativeSelect.Field>
+        <NativeSelect.Indicator />
+    </NativeSelect.Root>
+</Field.Root>
 
-                <div>
-                    <label>Discount</label>
-                    <select
-                        value={discount}
-                        onChange={(e) => setDiscount(e.target.value)}
-                    >
-                        <option value="">No Discount</option>
 
-                        {discounts.map((discount) => (
+
+
+
+
+                        <Field.Root>
+    <Field.Label>Discount</Field.Label>
+    <NativeSelect.Root>
+        <NativeSelect.Field value={discount} onChange={(e) => setDiscount(e.target.value)}>
+            <option value="">Select Discount</option>
+ {discounts.map((discount) => (
                             <option
                                 key={discount.id}
                                 value={discount.id}
                             >
                                 {discount.name} - {discount.discount}%
                             </option>
-                        ))}
-                    </select>
-                </div>
+                        ))}        </NativeSelect.Field>
+        <NativeSelect.Indicator />
+    </NativeSelect.Root>
+</Field.Root>
 
-                <div>
-                    <label>Taxes</label>
+<Field.Root>
+    <Field.Label>Taxes</Field.Label>
+    <Stack gap={2}>
+        {taxTypes.map(tax => (
+            <Checkbox.Root key={tax.id} checked={taxes.includes(tax.id)}
+        onCheckedChange={() => handleTaxChange(tax.id)}>
+        <Checkbox.HiddenInput />
+        <Checkbox.Control />
+        <Checkbox.Label>{tax.name} - {tax.rate}%</Checkbox.Label>
+    </Checkbox.Root>
+        ))}
+    </Stack>
+</Field.Root>
+                        
+                        
+        </SimpleGrid>
+    </Card.Body>
+</Card.Root>
 
-                    {taxTypes.map((tax) => (
-                        <div key={tax.id}>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={taxes.includes(tax.id)}
-                                    onChange={() =>
-                                        handleTaxChange(tax.id)
-                                    }
-                                />
-                                {tax.name} - {tax.rate}%
-                            </label>
-                        </div>
-                    ))}
-                </div>
+<Flex justify="flex-end" gap={3}>
+    <AppButton type="button" intent="secondary" onClick={() => navigate("/products")}>
+        Cancel
+    </AppButton>
+    <AppButton type="submit" loading={loading} disabled={loading} loadingText="Creating...">
+        Create Product
+    </AppButton>
+</Flex>
 
-                <button type="submit" disabled={loading}>
-                    {loading ? "Creating..." : "Create Product"}
-                </button>
+</form>
+            
 
-                <button
-                    type="button"
-                    onClick={() => navigate("/products")}
-                >
-                    Cancel
-                </button>
-
-            </form>
+            
         </div>
     );
 }
