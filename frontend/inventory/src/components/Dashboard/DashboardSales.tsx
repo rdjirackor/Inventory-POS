@@ -424,8 +424,9 @@ function DashboardSales() {
                             </Flex>
 
                             <section style={{ marginBottom: "16px" }}>
-                                <Heading size="sm">Customer</Heading>
-                                <label htmlFor="customer">Select customer:</label>
+                                <Stack gap={1}>
+  <Text fontSize="sm" color="gray.600">Select customer</Text>
+</Stack>
 
                                 <NativeSelect.Root size="sm">
                                     <NativeSelect.Field 
