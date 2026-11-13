@@ -47,26 +47,6 @@ async function DeleteProduct(product: Product) {
     }
 }
 
-// async function DeleteProduct(product_id: number) {
-//     try {
-//         const product = await getProduct(product_id);
-//         const confirmed = confirm(`Delete ${product.name}?`);
-//         if (!confirmed){
-//             return ;
-//         }
-//         await deleteProduct(product_id);
-
-        
-//         await fetchProducts();
-//     } catch (error) {
-//         if (error instanceof Error && error.message === "Protected") {
-//             setError(
-//                 "Cannot delete this product because it is used in existing orders or stock movements."
-//             );
-//         }
-//     }
-// }
-
 
     useEffect(() => {
         fetchProducts()
