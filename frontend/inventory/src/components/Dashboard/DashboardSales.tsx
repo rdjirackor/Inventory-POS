@@ -587,23 +587,23 @@ function DashboardSales() {
                                         
 
                                                 <label>Payment method:</label>
-                                                <select
-                                                    value={payment.method}
-                                                    onChange={e =>
+
+                                        <NativeSelect.Root size="sm">
+                                            <NativeSelect.Field value={payment.method} onChange={e =>
                                                         updatePayment(
                                                             index,
                                                             "method",
                                                             e.target.value as PaymentMethod
                                                         )
-                                                    }
-                                                >
-                                                    <option value="Cash">Cash</option>
-                                                    <option value="Card">Card</option>
-                                                    <option value="Mobile Money">Mobile Money</option>
-                                                    <option value="Bank Transfer">Bank Transfer</option>
-                                                </select>
+                                                    }>
 
-                                                {(payment.method === "Mobile Money" ||
+                                                    <option value="Cash" style={{ background: "white", color: "black" }}>Cash</option>
+                                                    <option style={{ background: "white", color: "black" }} value="Card">Card</option>
+                                                    <option style={{ background: "white", color: "black" }} value="Mobile Money">Mobile Money</option>
+                                                    <option style={{ background: "white", color: "black" }} value="Bank Transfer">Bank Transfer</option>  </NativeSelect.Field>
+                                            <NativeSelect.Indicator />
+                                        </NativeSelect.Root>
+                                       {(payment.method === "Mobile Money" ||
                                                     payment.method === "Bank Transfer") && (
                                                     <>
                                                     <Stack gap={1}>
