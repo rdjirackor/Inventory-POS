@@ -3,6 +3,12 @@ import {  deleteBranch, getBranch, getBranches } from "../apis/branches";
 import type { Branch } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus, Pencil, Trash2} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
+
 function Branches() {
     const navigate = useNavigate();
 
@@ -50,39 +56,69 @@ function Branches() {
     }, []);
 
     return (
-        <div>
 
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {branches.map((branch) => (
-                        <tr key={branch.id}>
-                            <td>{branch.name}</td>
-                            <td>{branch.location}</td>
-                            <td>
-                                <button onClick={() => navigate(`/branches/${branch.id}/edit`)}>Update</button>
-                                <button onClick={()=> DeleteBranch(branch.id)}>Delete</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <div className="create_button">
-                <button onClick={()=>{navigate(`/branches/create`)}}>Create</button>
-            </div>
-            </div>
-        </div>
+            <PageShell
+            title="Branchs"
+            action={
+                <AppButton onClick={() => navigate("/branchs/create")}>
+                    <Plus size={16} /> Create Branch
+                </AppButton>
+            }
+        >
+            {error && (
+                <Alert.Root status="error">
+                    <Alert.Indicator />
+                    <Alert.Title>{error}</Alert.Title>
+                </Alert.Root>
+            )}
+        
+            {loading ? (
+                <Spinner />
+            ) : branches.length === 0 ? (
+                <Text color="gray.500">No branchs yet.</Text>
+            ) : (
+                <Card.Root>
+                    <Table.ScrollArea>
+                        <Table.Root interactive>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.ColumnHeader>Name</Table.ColumnHeader>
+                                    <Table.ColumnHeader>Location</Table.ColumnHeader>
+                                    <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
+                             
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                {branches.map(branch => (
+                                    <Table.Row key={branch.id}>
+        
+                                        <Table.Cell>{branch.name}</Table.Cell>
+                                        <Table.Cell>{branch.location}</Table.Cell>
+                                      
+        
+                                   
+                                        <Table.Cell>
+                                            <Flex justify="flex-end" gap={1}>
+                                           
+                                                <AppIconButton label="Edit branch" intent="secondary"
+                                                    onClick={() => navigate(`/branchs/${branch.id}/edit`)}>
+                                                    <Pencil size={16} />
+                                                </AppIconButton>
+                                                <AppIconButton label="Delete branch" intent="danger"
+                                                    onClick={() => DeleteBranch(branch.id)}>
+                                                    <Trash2 size={16} />
+                                                </AppIconButton>
+                                            </Flex>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
+                            </Table.Body>
+                        </Table.Root>
+                    </Table.ScrollArea>
+                </Card.Root>
+            )}
+        </PageShell>
+        
     );
 }
 

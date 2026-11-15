@@ -3,6 +3,12 @@ import { deleteCashier, getCashier, getCashiers } from "../apis/cashiers";
 import type { Cashier } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus, Pencil, Trash2} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
+
 
 
 function Cashiers() {
@@ -64,46 +70,73 @@ function Cashiers() {
     },[]);
 
     return (
-        <div>
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
+
+        <PageShell
+    title="Cashiers"
+    action={
+        <AppButton onClick={() => navigate("/cashiers/create")}>
+            <Plus size={16} /> Create Cashier
+        </AppButton>
+    }
+>
+    {error && (
+        <Alert.Root status="error">
+            <Alert.Indicator />
+            <Alert.Title>{error}</Alert.Title>
+        </Alert.Root>
+    )}
+
+    {loading ? (
+        <Spinner />
+    ) : cashiers.length === 0 ? (
+        <Text color="gray.500">No cashiers yet.</Text>
+    ) : (
+        <Card.Root>
+            <Table.ScrollArea>
+                <Table.Root interactive>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeader>First Name</Table.ColumnHeader>
+                            <Table.ColumnHeader>Second Name</Table.ColumnHeader>
+                            <Table.ColumnHeader >Branch Name</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
+                     
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {cashiers.map(cashier => (
+                            <Table.Row key={cashier.id}>
+
+                                <Table.Cell>{cashier.first_name}</Table.Cell>
+                                <Table.Cell>{cashier.second_name}</Table.Cell>
+                              
+                                <Table.Cell>{cashier.branch_name}</Table.Cell>
+
+                           
+                                <Table.Cell>
+                                    <Flex justify="flex-end" gap={1}>
+                                   
+                                        <AppIconButton label="Edit cashier" intent="secondary"
+                                            onClick={() => navigate(`/cashiers/${cashier.id}/edit`)}>
+                                            <Pencil size={16} />
+                                        </AppIconButton>
+                                        <AppIconButton label="Delete cashier" intent="danger"
+                                            onClick={() => DeleteCashier(cashier.id)}>
+                                            <Trash2 size={16} />
+                                        </AppIconButton>
+                                    </Flex>
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>
+            </Table.ScrollArea>
+        </Card.Root>
+    )}
+</PageShell>
 
 
-            {!error && (<table>
-                <thead>
-                    <tr>
-                    <th>First Name</th>
-                    <th>Second Name</th>
-                    <th>Date Employed</th>
-                    <th>Branch</th>
-                    <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {cashiers.map((cashier)=>(
-                        <tr key={cashier.id}>
-                        <td>{cashier.first_name}</td>
-                        <td>{cashier.second_name}</td>
-                        <td>{cashier.date_employed}</td>
-                        <td>{cashier.branch_name}</td>
-                        <td>
-                            <button onClick={() => navigate(`/cashiers/${cashier.id}/edit`)}>Update</button>
-                            <button onClick={() => DeleteCashier(cashier.id)}>Delete</button>
-                        </td>
-
-                        </tr>
-                    ))}
-                </tbody>
-            </table>)}
-
-            </div>
-
-            <button onClick={() => navigate("/cashiers/create")}>
-    Create Cashier
-</button>
-
-        </div>
+       
     );
 }
 

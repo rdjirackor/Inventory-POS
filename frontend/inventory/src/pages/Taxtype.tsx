@@ -4,7 +4,7 @@ import type { TaxType } from "../interfaces/interfaces";
 import { deleteTax, getTax, getTaxes } from "../apis/taxes";
 
 import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
-import { Plus,  PackagePlus, Pencil, Trash2} from "lucide-react";
+import { Plus, Pencil, Trash2} from "lucide-react";
 import AppButton from "../components/AppButton";
 import AppIconButton from "../components/AppIconButton";
 import PageShell from "../components/PageShell";
@@ -102,10 +102,7 @@ function Taxtype (){
                            
                                 <Table.Cell>
                                     <Flex justify="flex-end" gap={1}>
-                                        <AppIconButton label="Adjust stock" intent="secondary"
-                                            onClick={() => navigate(`/taxtypes/${taxtype.id}/stock`)}>
-                                            <PackagePlus size={16} />
-                                        </AppIconButton>
+                                       
                                         <AppIconButton label="Edit taxtype" intent="secondary"
                                             onClick={() => navigate(`/taxtypes/${taxtype.id}/edit`)}>
                                             <Pencil size={16} />
