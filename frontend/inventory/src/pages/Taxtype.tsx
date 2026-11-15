@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 import type { TaxType } from "../interfaces/interfaces";
 import { deleteTax, getTax, getTaxes } from "../apis/taxes";
 
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus,  PackagePlus, Pencil, Trash2} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
+
 
 
 function Taxtype (){
@@ -53,41 +59,71 @@ function Taxtype (){
             }, []);
         
             return (
-                <div>
-        
-                    {loading && <p>Loading...</p>}
-                    {error && <p>{error}</p>}
-                    <div className="fetch_table">
-        
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Rate</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-        
-                        <tbody>
-                            {taxtypes.map((taxtype) => (
-                                <tr key={taxtype.id}>
-                                    <td>{taxtype.name}</td>
-                                    <td>{taxtype.rate}</td>
-                                    <td>{taxtype.active? "Active": "Inactive"}</td>
-                                    <td>
-                                        <button onClick={() => navigate(`/taxtypes/${taxtype.id}/edit`)}>Update</button>
-                                        <button onClick={()=> DeleteTaxes(taxtype.id)}>Delete</button></td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-        
-                    <div className="create_entity_button">
-                        <button onClick={()=>{navigate(`/taxtypes/create`)}}>Create</button>
-                    </div>
-                    </div>
-                </div>
+               <PageShell
+    title="Taxtypes"
+    action={
+        <AppButton onClick={() => navigate("/taxtypes/create")}>
+            <Plus size={16} /> Create Taxtype
+        </AppButton>
+    }
+>
+    {error && (
+        <Alert.Root status="error">
+            <Alert.Indicator />
+            <Alert.Title>{error}</Alert.Title>
+        </Alert.Root>
+    )}
+
+    {loading ? (
+        <Spinner />
+    ) : taxtypes.length === 0 ? (
+        <Text color="gray.500">No taxtypes yet.</Text>
+    ) : (
+        <Card.Root>
+            <Table.ScrollArea>
+                <Table.Root interactive>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeader>Name</Table.ColumnHeader>
+                            <Table.ColumnHeader>Active</Table.ColumnHeader>
+                            <Table.ColumnHeader >Rate</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
+                     
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {taxtypes.map(taxtype => (
+                            <Table.Row key={taxtype.id}>
+
+                                <Table.Cell>{taxtype.name}</Table.Cell>
+                                <Table.Cell>{taxtype.active ? "Active": "Inactive"}</Table.Cell>
+                              
+                                <Table.Cell>{taxtype.rate}</Table.Cell>
+                           
+                                <Table.Cell>
+                                    <Flex justify="flex-end" gap={1}>
+                                        <AppIconButton label="Adjust stock" intent="secondary"
+                                            onClick={() => navigate(`/taxtypes/${taxtype.id}/stock`)}>
+                                            <PackagePlus size={16} />
+                                        </AppIconButton>
+                                        <AppIconButton label="Edit taxtype" intent="secondary"
+                                            onClick={() => navigate(`/taxtypes/${taxtype.id}/edit`)}>
+                                            <Pencil size={16} />
+                                        </AppIconButton>
+                                        <AppIconButton label="Delete taxtype" intent="danger"
+                                            onClick={() => DeleteTaxes(taxtype.id)}>
+                                            <Trash2 size={16} />
+                                        </AppIconButton>
+                                    </Flex>
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>
+            </Table.ScrollArea>
+        </Card.Root>
+    )}
+</PageShell>
             );
         }
         
