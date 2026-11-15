@@ -287,14 +287,24 @@ export async function patchProduct(
             fields.barcode_number
         );
 
+    // if (fields.taxes !== undefined) {
+    //     fields.taxes.forEach((tax) => {
+    //         formData.append(
+    //             "taxes",
+    //             tax.toString()
+    //         );
+    //     });
+    // }
+
     if (fields.taxes !== undefined) {
+    if (fields.taxes.length === 0) {
+        formData.append("clear_taxes", "true");
+    } else {
         fields.taxes.forEach((tax) => {
-            formData.append(
-                "taxes",
-                tax.toString()
-            );
+            formData.append("taxes", tax.toString());
         });
     }
+}
 
     if (fields.category !== undefined)
         formData.append(

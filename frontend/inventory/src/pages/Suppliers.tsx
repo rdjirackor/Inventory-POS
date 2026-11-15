@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { deleteSupplier, getSuppliers } from "../apis/suppliers";
 import type { Supplier } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus,  PackagePlus, Pencil, Trash2} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
 
 function Suppliers() {
     const [loading, setLoading] = useState(false);
@@ -53,51 +58,82 @@ function Suppliers() {
    }
 
     return (
-        <div>
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
 
-           <table>
-                <thead>
-        <tr>
-            <th>Name</th>
-            <th>Products</th>
-            <th>Phone Number</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Contact Person</th>
-            <th>Tax Number</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+        <PageShell
+    title="Suppliers"
+    action={
+        <AppButton onClick={() => navigate("/suppliers/create")}>
+            <Plus size={16} /> Create Supplier
+        </AppButton>
+    }
+>
+    {error && (
+        <Alert.Root status="error">
+            <Alert.Indicator />
+            <Alert.Title>{error}</Alert.Title>
+        </Alert.Root>
+    )}
 
-    <tbody>
-        {suppliers.map((supplier) => (
-            <tr key={supplier.id}>
-                
-                <td>{supplier.name}</td>
-                <td>{supplier.product_names.length > 0
-                    ? supplier.product_names.join(",")
-                    : "No products"
-                    }</td>
-                <td>{supplier.phone_number}</td>
-                <td>{supplier.email}</td>
-                <td>{supplier.address}</td>
-                <td>{supplier.contact_person}</td>
-                <td>{supplier.tax_number}</td>
-                <td>
-                    <button onClick={() => UpdateSuppliers(supplier.id)}>Update</button>
-                    <button onClick={() => DeleteSupplier(supplier.id)}>Delete</button>     
-                </td>
-            </tr>
-        ))}
-    </tbody>
-</table>
+    {loading ? (
+        <Spinner />
+    ) : suppliers.length === 0 ? (
+        <Text color="gray.500">No suppliers yet.</Text>
+    ) : (
+        <Card.Root>
+            <Table.ScrollArea>
+                <Table.Root interactive>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeader>Name</Table.ColumnHeader>
+                            <Table.ColumnHeader>Phone Number</Table.ColumnHeader>
+                            <Table.ColumnHeader>Product Names</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign="end">Address</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign="end">Email</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign="end">Contact Person</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign="end">Tax Number</Table.ColumnHeader>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {suppliers.map(supplier => (
+                            <Table.Row key={supplier.id}>
 
-        </div>
-        </div>
+                                <Table.Cell>{supplier.name}</Table.Cell>
+                                <Table.Cell>{supplier.phone_number}</Table.Cell>
+                                <Table.Cell textAlign="end">
+                                           {supplier.product_names? supplier.product_names.join(", ") : "No supplied Products!" }
+                                </Table.Cell>
+                                <Table.Cell>{supplier.address}</Table.Cell>
+                                <Table.Cell>{supplier.email}</Table.Cell>
+                                <Table.Cell>{supplier.contact_person}</Table.Cell>
+                                <Table.Cell>{supplier.tax_number}</Table.Cell>
+                                <Table.Cell>
+                                    <Flex justify="flex-end" gap={1}>
+                                        <AppIconButton label="Adjust stock" intent="secondary"
+                                            onClick={() => navigate(`/suppliers/${supplier.id}/stock`)}>
+                                            <PackagePlus size={16} />
+                                        </AppIconButton>
+                                        <AppIconButton label="Edit supplier" intent="secondary"
+                                            onClick={() => UpdateSuppliers(supplier.id)}>
+                                            <Pencil size={16} />
+                                        </AppIconButton>
+                                        <AppIconButton label="Delete supplier" intent="danger"
+                                            onClick={() => DeleteSupplier(supplier.id)}>
+                                            <Trash2 size={16} />
+                                        </AppIconButton>
+                                    </Flex>
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>
+            </Table.ScrollArea>
+        </Card.Root>
+    )}
+</PageShell>
+        
+       
     );
 }
 
 export default Suppliers;
+

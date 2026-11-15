@@ -283,6 +283,15 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_actual_sale_price(self, obj):
         return str(obj.get_actual_sale_price().quantize(Decimal("0.01")))
+    
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+
+        if str(self.initial_data.get("clear_taxes", "")).lower() == "true":
+            instance.taxes.clear()
+
+
+        return instance
 
 
 class SupplierSerializer(serializers.ModelSerializer):

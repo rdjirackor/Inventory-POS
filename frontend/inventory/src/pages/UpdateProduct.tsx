@@ -8,7 +8,7 @@ import { getCategories } from "../apis/categories";
 import {  getWarehouses } from "../apis/warehouses";
 
 
-import { Card, Checkbox,Flex, Field, Image, Heading, Input, NativeSelect, SimpleGrid, Stack } from "@chakra-ui/react";
+import { Card,Text, Checkbox,Flex, Field, Image, Heading, Input, NativeSelect, SimpleGrid, Stack } from "@chakra-ui/react";
 import AppButton from "../components/AppButton";
 import PageShell from "../components/PageShell";
 import { PackagePlus } from "lucide-react";
@@ -80,15 +80,26 @@ function UpdateProduct() {
             [field]: value,
         });
     }
-    function handleTaxChange(id: number) {
+
+    function handleTaxChange(taxId: number) {
+    console.log("clicked tax:", taxId);
     setTaxes(prev =>
-        prev.includes(id)
-            ? prev.filter(t => t !== id)
-            : [...prev, id]
+        prev.includes(taxId)
+            ? prev.filter(t => t !== taxId)
+            : [...prev, taxId]
     );
 }
 
+//     function handleTaxChange(id: number) {
+//     setTaxes(prev =>
+//         prev.includes(id)
+//             ? prev.filter(t => t !== id)
+//             : [...prev, id]
+//     );
+// }
+
     async function handleSubmit(event: React.FormEvent) {
+        console.log("taxes being saved:", taxes);
     event.preventDefault();
     
 
@@ -108,7 +119,7 @@ function UpdateProduct() {
             current_stock: Number(product.current_stock),
             minimum_stock_level: Number(product.minimum_stock_level),
             barcode_number: product.barcode_number || "",
-            taxes: product.taxes,
+            taxes: taxes,
             category: product.category,
             warehouse: product.warehouse,
             image : image || undefined,
@@ -313,22 +324,25 @@ function UpdateProduct() {
                         <NativeSelect.Indicator />
                     </NativeSelect.Root>
                 </Field.Root>
-        <Field.Root>
-    <Field.Label>Taxes</Field.Label>
-    <Stack gap={2}>
-        {availableTaxes.map(tax => (
-            <Checkbox.Root
-                key={tax.id}
-                checked={taxes.includes(tax.id)}
-                onCheckedChange={() => handleTaxChange(tax.id)}
-            >
-                <Checkbox.HiddenInput />
-                <Checkbox.Control />
-                <Checkbox.Label>{tax.name}</Checkbox.Label>
-            </Checkbox.Root>
-        ))}
-    </Stack>
-</Field.Root>
+
+
+    <Stack gap={2} gridColumn="1 / -1">
+    <Text fontSize="sm" fontWeight="medium">Taxes</Text>
+    {availableTaxes.map(tax => (
+        <Checkbox.Root
+            key={tax.id}
+            checked={taxes.includes(tax.id)}
+            onCheckedChange={() => handleTaxChange(tax.id)}
+        >
+            <Checkbox.HiddenInput />
+            <Checkbox.Control />
+            <Checkbox.Label>{tax.name}</Checkbox.Label>
+        </Checkbox.Root>
+    ))}
+</Stack>
+
+
+
                                         
                                         
                         </SimpleGrid>
