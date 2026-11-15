@@ -3,6 +3,12 @@ import { deleteCustomer, getCustomer, getCustomers } from "../apis/customers";
 import type { Customer } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus,  PackagePlus, Pencil, Trash2} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
+
 
 
 function Customers() {
@@ -64,46 +70,74 @@ function Customers() {
     },[]);
 
     return (
-        <div>
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
+        <PageShell
+    title="Customers"
+    action={
+        <AppButton onClick={() => navigate("/customers/create")}>
+            <Plus size={16} /> Create Customer
+        </AppButton>
+    }
+>
+    {error && (
+        <Alert.Root status="error">
+            <Alert.Indicator />
+            <Alert.Title>{error}</Alert.Title>
+        </Alert.Root>
+    )}
 
+    {loading ? (
+        <Spinner />
+    ) : customers.length === 0 ? (
+        <Text color="gray.500">No customers yet.</Text>
+    ) : (
+        <Card.Root>
+            <Table.ScrollArea>
+                <Table.Root interactive>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeader>First Name</Table.ColumnHeader>
+                            <Table.ColumnHeader>Second Name Number</Table.ColumnHeader>
+                            <Table.ColumnHeader>Reward Points</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign="end">Credit Balance</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
+                     
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {customers.map(customer => (
+                            <Table.Row key={customer.id}>
 
-            {!error && (<table>
-                <thead>
-                    <tr>
-                    <th>First Name</th>
-                    <th>Second Name</th>
-                    <th>Credit Balance</th>
-                    <th>Reward Points</th>
-                    <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {customers.map((customer)=>(
-                        <tr key={customer.id}>
-                        <td>{customer.first_name}</td>
-                        <td>{customer.second_name}</td>
-                        <td>{customer.credit_balance}</td>
-                        <td>{customer.reward_points}</td>
-                        <td>
-                            <button onClick={() => navigate(`/customers/${customer.id}/edit`)}>Update</button>
-                            <button onClick={() => DeleteCustomer(customer.id)}>Delete</button>
-                        </td>
-
-                        </tr>
-                    ))}
-                </tbody>
-            </table>)}
-
-            </div>
-
-            <button onClick={() => navigate("/customers/create")}>
-    Create Customer
-</button>
-
-        </div>
+                                <Table.Cell>{customer.first_name}</Table.Cell>
+                                <Table.Cell>{customer.second_name}</Table.Cell>
+                                <Table.Cell>{customer.reward_points}</Table.Cell>
+                              
+                                <Table.Cell>{customer.credit_balance}</Table.Cell>
+                           
+                                <Table.Cell>
+                                    <Flex justify="flex-end" gap={1}>
+                                        <AppIconButton label="Adjust stock" intent="secondary"
+                                            onClick={() => navigate(`/customers/${customer.id}/stock`)}>
+                                            <PackagePlus size={16} />
+                                        </AppIconButton>
+                                        <AppIconButton label="Edit customer" intent="secondary"
+                                            onClick={() => navigate(`/customers/${customer.id}/edit`)}>
+                                            <Pencil size={16} />
+                                        </AppIconButton>
+                                        <AppIconButton label="Delete customer" intent="danger"
+                                            onClick={() => DeleteCustomer(customer.id)}>
+                                            <Trash2 size={16} />
+                                        </AppIconButton>
+                                    </Flex>
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>
+            </Table.ScrollArea>
+        </Card.Root>
+    )}
+</PageShell>
+      
     );
 }
 

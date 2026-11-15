@@ -42,3 +42,44 @@
 
         </div>
         </div>
+
+  <div>
+            {loading && <p>Loading...</p>}
+            {error && <p>{error}</p>}
+            <div className="fetch_table">
+
+
+            {!error && (<table>
+                <thead>
+                    <tr>
+                    <th>First Name</th>
+                    <th>Second Name</th>
+                    <th>Credit Balance</th>
+                    <th>Reward Points</th>
+                    <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {customers.map((customer)=>(
+                        <tr key={customer.id}>
+                        <td>{customer.first_name}</td>
+                        <td>{customer.second_name}</td>
+                        <td>{customer.credit_balance}</td>
+                        <td>{customer.reward_points}</td>
+                        <td>
+                            <button onClick={() => navigate(`/customers/${customer.id}/edit`)}>Update</button>
+                            <button onClick={() => DeleteCustomer(customer.id)}>Delete</button>
+                        </td>
+
+                        </tr>
+                    ))}
+                </tbody>
+            </table>)}
+
+            </div>
+
+            <button onClick={() => navigate("/customers/create")}>
+    Create Customer
+</button>
+
+        </div>
