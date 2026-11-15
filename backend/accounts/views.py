@@ -848,7 +848,7 @@ def categories(request):
 
     if request.method == "GET":
 
-        categories = Category.objects.all()
+        categories = Category.objects.all().order_by("name")
 
         serializer = CategorySerializer(
             categories,

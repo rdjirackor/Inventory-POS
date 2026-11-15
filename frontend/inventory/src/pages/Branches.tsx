@@ -58,7 +58,7 @@ function Branches() {
     return (
 
             <PageShell
-            title="Branchs"
+            title="Branches"
             action={
                 <AppButton onClick={() => navigate("/branchs/create")}>
                     <Plus size={16} /> Create Branch
