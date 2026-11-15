@@ -3,6 +3,13 @@ import { useEffect, useState } from "react";
 import type { OrderHistory } from "../interfaces/interfaces";
 import { getOrderHistories } from "../apis/order_history";
 
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus, Pencil, Trash2, Badge} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
+import { useNavigate } from "react-router-dom";
+
 
 const timeLabel = (dateStr: string): string => {
             const date = new Date(dateStr);
@@ -20,6 +27,8 @@ export default function ViewHistories() {
     const [histories, setHistories] = useState<OrderHistory[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         async function fetchHistories() {
@@ -43,38 +52,62 @@ export default function ViewHistories() {
     if (loading) return <p>Loading histories...</p>;
 
     return (
-        <div className="page-container">
-          
 
-            {error && <p className="error-message">{error}</p>}
+        <PageShell
+    title="Histories"
+    action={
+        <AppButton onClick={() => navigate("/histories/create")}>
+            <Plus size={16} /> Create History
+        </AppButton>
+    }
+>
+    {error && (
+        <Alert.Root status="error">
+            <Alert.Indicator />
+            <Alert.Title>{error}</Alert.Title>
+        </Alert.Root>
+    )}
 
-            {!error && histories.length === 0 && (
-                <p>No histories have been recorded yet.</p>
-            )}
+    {loading ? (
+        <Spinner />
+    ) : histories.length === 0 ? (
+        <Text color="gray.500">No histories yet.</Text>
+    ) : (
+        <Card.Root>
+                <Table.Root interactive>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeader>Customer Name</Table.ColumnHeader>
+                            <Table.ColumnHeader>Time of Purchase</Table.ColumnHeader>
+                     
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {histories.map(item => (
+                            <Table.Row key={item.id}>
 
-            {histories.length > 0 && (
-                <div className="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Customer Name</th>
-                                <th>Time of Purchase</th>
-                   
-                            </tr>
-                        </thead>
+                               
 
-                        <tbody>
-                            {histories.map((item) => (
-                                <tr key={item.id}>
-                                    <td>{item.customer_name || "Walk In Customer"}</td>
-                                    <td>{timeLabel(item.time_of_purchase)}</td>
-                        
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </div>
+                                <Table.Cell
+                                    
+                                    color={
+                                        item.customer_name
+                                        ? "green"
+                                        : "white"
+                                    }>
+                                
+        {item.customer_name || "Unregistered Customer"}
+</Table.Cell>   
+                                <Table.Cell>{timeLabel(item.time_of_purchase)}</Table.Cell>
+                                  
+                         
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>
+        </Card.Root>
+    )}
+</PageShell>
+        
     );
 }

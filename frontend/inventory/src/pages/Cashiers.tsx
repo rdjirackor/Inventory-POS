@@ -92,7 +92,6 @@ function Cashiers() {
         <Text color="gray.500">No cashiers yet.</Text>
     ) : (
         <Card.Root>
-            <Table.ScrollArea>
                 <Table.Root interactive>
                     <Table.Header>
                         <Table.Row>
@@ -130,7 +129,6 @@ function Cashiers() {
                         ))}
                     </Table.Body>
                 </Table.Root>
-            </Table.ScrollArea>
         </Card.Root>
     )}
 </PageShell>

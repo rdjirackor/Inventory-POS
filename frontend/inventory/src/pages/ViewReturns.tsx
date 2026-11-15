@@ -1,8 +1,14 @@
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getReturns } from "../apis/returns";
+import { Link, useNavigate } from "react-router-dom";
+import { getReturn, getReturns } from "../apis/returns";
 import type { Return } from "../interfaces/interfaces";
+
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus, Pencil, Trash2} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
 
 
 
@@ -10,6 +16,8 @@ export default function ViewReturns() {
     const [returns, setReturns] = useState<Return[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchReturns() {
@@ -30,47 +38,65 @@ export default function ViewReturns() {
         fetchReturns();
     }, []);
 
+        
+
     if (loading) return <p>Loading returns...</p>;
 
     return (
-        <div className="page-container">
-            <div className="page-header">
-                <Link to="/returns/create">Create Return</Link>
-            </div>
+        <PageShell
+    title="Returns"
+    action={
+        <AppButton onClick={() => navigate("/returns/create")}>
+            <Plus size={16} /> Create Return
+        </AppButton>
+    }
+>
+    {error && (
+        <Alert.Root status="error">
+            <Alert.Indicator />
+            <Alert.Title>{error}</Alert.Title>
+        </Alert.Root>
+    )}
 
-            {error && <p className="error-message">{error}</p>}
+    {loading ? (
+        <Spinner />
+    ) : returns.length === 0 ? (
+        <Text color="gray.500">No returns yet.</Text>
+    ) : (
+        <Card.Root>
+                <Table.Root interactive>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeader>Username</Table.ColumnHeader>
+                            <Table.ColumnHeader>Order ID</Table.ColumnHeader>
+                            <Table.ColumnHeader >Product Name</Table.ColumnHeader>
 
-            {!error && returns.length === 0 && (
-                <p>No returns have been recorded yet.</p>
-            )}
+                            <Table.ColumnHeader >Quantity</Table.ColumnHeader>
+                            <Table.ColumnHeader >Reason</Table.ColumnHeader>
+                     
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {returns.map(item => (
+                            <Table.Row key={item.id}>
 
-            {returns.length > 0 && (
-                <div className="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Sale ID</th>
-                                <th>Customer Name</th>
-                                <th>Quantity</th>
-                                <th>Reason</th>
-                            </tr>
-                        </thead>
+                                <Table.Cell>{item.customer_name ? item.customer_name: "Unregistered Customer"}</Table.Cell>
+                                <Table.Cell>{item.order_history}</Table.Cell>
+                              
+                                <Table.Cell>{item.product_name}</Table.Cell>
+                                <Table.Cell>{item.quantity}</Table.Cell>
+                                <Table.Cell>{item.reason}</Table.Cell>
 
-                        <tbody>
-                            {returns.map((item) => (
-                                <tr key={item.id}>
-                                    <td>{item.product_name}</td>
-                                    <td>{item.order_history}</td>
-                                    <td>{item.customer_name ?? "Walk-in"}</td>
-                                    <td>{item.quantity}</td>
-                                    <td>{item.reason || "—"}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </div>
+                           
+                         
+                                  
+    
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>
+        </Card.Root>
+    )}
+</PageShell>
     );
 }

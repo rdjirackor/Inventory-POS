@@ -225,3 +225,147 @@
             </div>
             </div>
         </div>
+
+         <div>
+
+            {loading && <p>Loading...</p>}
+            {error && <p>{error}</p>}
+            <Button>Test</Button>
+            <div className="fetch_table">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Discounts</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {discounts.map((discount) => (
+                        <tr key={discount.id}>
+                            <td>{discount.name}</td>
+                            <td>{discount.discount}</td>
+                            <td>
+                                <button onClick={() => navigate(`/discounts/${discount.id}/edit`)}>Update</button>
+                                <button onClick={()=> DeleteDiscount(discount.id)}>Delete</button></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            <div className="create_discount_button">
+                <button onClick={()=>{navigate(`/discounts/create`)}}>Create</button>
+            </div>
+            </div>
+        </div>
+
+
+        <div>
+
+            {loading && <p>Loading...</p>}
+            {error && <p>{error}</p>}
+            <div className="fetch_table">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {warehouses.map((warehouse) => (
+                        <tr key={warehouse.id}>
+                            <td>{warehouse.name}</td>
+                            <td>{warehouse.location}</td>
+                            <td>
+                                <button onClick={() => navigate(`/warehouses/${warehouse.id}/edit`)}>Update</button>
+                                <button onClick={()=> DeleteWarehouse(warehouse.id)}>Delete</button></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            <div className="create_button">
+                <button onClick={()=>{navigate(`/warehouses/create`)}}>Create</button>
+            </div>
+            </div>
+        </div>
+
+        <div className="page-container">
+            <div className="page-header">
+                <Link to="/returns/create">Create Return</Link>
+            </div>
+
+            {error && <p className="error-message">{error}</p>}
+
+            {!error && returns.length === 0 && (
+                <p>No returns have been recorded yet.</p>
+            )}
+
+            {returns.length > 0 && (
+                <div className="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Sale ID</th>
+                                <th>Customer Name</th>
+                                <th>Quantity</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {returns.map((item) => (
+                                <tr key={item.id}>
+                                    <td>{item.product_name}</td>
+                                    <td>{item.order_history}</td>
+                                    <td>{item.customer_name ?? "Walk-in"}</td>
+                                    <td>{item.quantity}</td>
+                                    <td>{item.reason || "—"}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+
+<div className="page-container">
+          
+
+            {error && <p className="error-message">{error}</p>}
+
+            {!error && histories.length === 0 && (
+                <p>No histories have been recorded yet.</p>
+            )}
+
+            {histories.length > 0 && (
+                <div className="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer Name</th>
+                                <th>Time of Purchase</th>
+                   
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {histories.map((item) => (
+                                <tr key={item.id}>
+                                    <td>{item.customer_name || "Walk In Customer"}</td>
+                                    <td>{timeLabel(item.time_of_purchase)}</td>
+                        
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>

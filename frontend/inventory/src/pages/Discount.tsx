@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { deleteDiscount, getDiscounts, getDiscount } from "../apis/discounts";
 import type { Discount } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@chakra-ui/react";
 
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus, Pencil, Trash2} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
 function Discounts() {
     const navigate = useNavigate();
 
@@ -51,40 +55,68 @@ function Discounts() {
     }, []);
 
     return (
-        <div>
-
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <Button>Test</Button>
-            <div className="fetch_table">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Discounts</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {discounts.map((discount) => (
-                        <tr key={discount.id}>
-                            <td>{discount.name}</td>
-                            <td>{discount.discount}</td>
-                            <td>
-                                <button onClick={() => navigate(`/discounts/${discount.id}/edit`)}>Update</button>
-                                <button onClick={()=> DeleteDiscount(discount.id)}>Delete</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <div className="create_discount_button">
-                <button onClick={()=>{navigate(`/discounts/create`)}}>Create</button>
-            </div>
-            </div>
-        </div>
+        <PageShell
+            title="Discounts"
+            action={
+                <AppButton onClick={() => navigate("/discounts/create")}>
+                    <Plus size={16} /> Create Discount
+                </AppButton>
+            }
+        >
+            {error && (
+                <Alert.Root status="error">
+                    <Alert.Indicator />
+                    <Alert.Title>{error}</Alert.Title>
+                </Alert.Root>
+            )}
+        
+            {loading ? (
+                <Spinner />
+            ) : discounts.length === 0 ? (
+                <Text color="gray.500">No discounts yet.</Text>
+            ) : (
+                <Card.Root>
+                    <Table.ScrollArea>
+                        <Table.Root interactive>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.ColumnHeader>Name</Table.ColumnHeader>
+                                    <Table.ColumnHeader>Discount</Table.ColumnHeader>
+                                    <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
+                             
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                {discounts.map(discount => (
+                                    <Table.Row key={discount.id}>
+        
+                                        <Table.Cell>{discount.name}</Table.Cell>
+                                        <Table.Cell>{discount.discount}</Table.Cell>
+                                      
+        
+                                   
+                                        <Table.Cell>
+                                            <Flex justify="flex-end" gap={1}>
+                                           
+                                                <AppIconButton label="Edit discount" intent="secondary"
+                                                    onClick={() => navigate(`/discounts/${discount.id}/edit`)}>
+                                                    <Pencil size={16} />
+                                                </AppIconButton>
+                                                <AppIconButton label="Delete discount" intent="danger"
+                                                    onClick={() => DeleteDiscount(discount.id)}>
+                                                    <Trash2 size={16} />
+                                                </AppIconButton>
+                                            </Flex>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
+                            </Table.Body>
+                        </Table.Root>
+                    </Table.ScrollArea>
+                </Card.Root>
+            )}
+        </PageShell>
+       
     );
 }
 

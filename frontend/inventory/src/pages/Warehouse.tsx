@@ -3,6 +3,12 @@ import {  deleteWarehouse, getWarehouse, getWarehouses } from "../apis/warehouse
 import type { Warehouse } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus, Pencil, Trash2} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
+
 function Warehouses() {
     const navigate = useNavigate();
 
@@ -50,39 +56,67 @@ function Warehouses() {
     }, []);
 
     return (
-        <div>
-
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {warehouses.map((warehouse) => (
-                        <tr key={warehouse.id}>
-                            <td>{warehouse.name}</td>
-                            <td>{warehouse.location}</td>
-                            <td>
-                                <button onClick={() => navigate(`/warehouses/${warehouse.id}/edit`)}>Update</button>
-                                <button onClick={()=> DeleteWarehouse(warehouse.id)}>Delete</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <div className="create_button">
-                <button onClick={()=>{navigate(`/warehouses/create`)}}>Create</button>
-            </div>
-            </div>
-        </div>
+         <PageShell
+            title="Warehouses"
+            action={
+                <AppButton onClick={() => navigate("/warehouses/create")}>
+                    <Plus size={16} /> Create Warehouse
+                </AppButton>
+            }
+        >
+            {error && (
+                <Alert.Root status="error">
+                    <Alert.Indicator />
+                    <Alert.Title>{error}</Alert.Title>
+                </Alert.Root>
+            )}
+        
+            {loading ? (
+                <Spinner />
+            ) : warehouses.length === 0 ? (
+                <Text color="gray.500">No warehouses yet.</Text>
+            ) : (
+                <Card.Root>
+                    <Table.ScrollArea>
+                        <Table.Root interactive>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.ColumnHeader>Name</Table.ColumnHeader>
+                                    <Table.ColumnHeader>Location</Table.ColumnHeader>
+                                    <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
+                             
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                {warehouses.map(warehouse => (
+                                    <Table.Row key={warehouse.id}>
+        
+                                        <Table.Cell>{warehouse.name}</Table.Cell>
+                                        <Table.Cell>{warehouse.location}</Table.Cell>
+                                      
+        
+                                   
+                                        <Table.Cell>
+                                            <Flex justify="flex-end" gap={1}>
+                                           
+                                                <AppIconButton label="Edit warehouse" intent="secondary"
+                                                    onClick={() => navigate(`/warehouses/${warehouse.id}/edit`)}>
+                                                    <Pencil size={16} />
+                                                </AppIconButton>
+                                                <AppIconButton label="Delete warehouse" intent="danger"
+                                                    onClick={() => DeleteWarehouse(warehouse.id)}>
+                                                    <Trash2 size={16} />
+                                                </AppIconButton>
+                                            </Flex>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
+                            </Table.Body>
+                        </Table.Root>
+                    </Table.ScrollArea>
+                </Card.Root>
+            )}
+        </PageShell>
     );
 }
 

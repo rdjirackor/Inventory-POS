@@ -80,7 +80,6 @@ function Suppliers() {
         <Text color="gray.500">No suppliers yet.</Text>
     ) : (
         <Card.Root>
-            <Table.ScrollArea>
                 <Table.Root interactive>
                     <Table.Header>
                         <Table.Row>
@@ -126,7 +125,6 @@ function Suppliers() {
                         ))}
                     </Table.Body>
                 </Table.Root>
-            </Table.ScrollArea>
         </Card.Root>
     )}
 </PageShell>
