@@ -405,3 +405,120 @@
                 </div>
 
             </div>
+
+
+            {error && <p>{error}</p>}
+
+            <form onSubmit={handleSubmit}>
+
+                <div>
+                    <label>Name</label>
+                    <input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <label>Location</label>
+                    <input
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                    />
+                </div>
+
+                
+
+                <button type="submit" disabled={loading}>
+                    {loading ? "Creating..." : "Create Branch"}
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => navigate("/branches")}
+                >
+                    Cancel
+                </button>
+
+            </form>
+        </div>
+
+
+
+ <div>
+
+
+ <div className="page-container">
+
+            {error && <p className="error-message">{error}</p>}
+
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="product">Product</label>
+                    <select
+                        id="product"
+                        value={productId}
+                        onChange={(e) => setProductId(e.target.value)}
+                        required
+                    >
+                        <option value="">Select a product</option>
+                        {products.map((product) => (
+                            <option
+                                key={product.id}
+                                value={product.id}
+                            >
+                                {product.name} — {product.sku}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="order">Original Sale ID</label>
+                    <input
+                        id="order"
+                        type="number"
+                        min="1"
+                        value={orderId}
+                        onChange={(e) => setOrderId(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="quantity">Return Quantity</label>
+                    <input
+                        id="quantity"
+                        type="number"
+                        min="0.01"
+                        step="0.01"
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="reason">Reason for Return</label>
+                    <textarea
+                        id="reason"
+                        value={reason}
+                        onChange={(e) => setReason(e.target.value)}
+                        placeholder="Enter the reason for the return"
+                        required
+                    />
+                </div>
+
+                <button type="submit" disabled={saving}>
+                    {saving ? "Processing..." : "Create Return"}
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => navigate("/returns")}
+                    disabled={saving}
+                >
+                    Cancel
+                </button>
+            </form>
+        </div>

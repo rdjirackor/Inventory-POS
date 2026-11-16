@@ -60,7 +60,7 @@ function Branches() {
             <PageShell
             title="Branches"
             action={
-                <AppButton onClick={() => navigate("/branchs/create")}>
+                <AppButton onClick={() => navigate("/branches/create")}>
                     <Plus size={16} /> Create Branch
                 </AppButton>
             }
@@ -75,7 +75,7 @@ function Branches() {
             {loading ? (
                 <Spinner />
             ) : branches.length === 0 ? (
-                <Text color="gray.500">No branchs yet.</Text>
+                <Text color="gray.500">No branches yet.</Text>
             ) : (
                 <Card.Root>
                     <Table.ScrollArea>
@@ -101,7 +101,7 @@ function Branches() {
                                             <Flex justify="flex-end" gap={1}>
                                            
                                                 <AppIconButton label="Edit branch" intent="secondary"
-                                                    onClick={() => navigate(`/branchs/${branch.id}/edit`)}>
+                                                    onClick={() => navigate(`/branches/${branch.id}/edit`)}>
                                                     <Pencil size={16} />
                                                 </AppIconButton>
                                                 <AppIconButton label="Delete branch" intent="danger"

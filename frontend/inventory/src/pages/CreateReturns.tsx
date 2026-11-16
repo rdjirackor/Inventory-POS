@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import type { Product } from "../interfaces/interfaces";
 import { getProducts } from "../apis/products";
 import { createReturn } from "../apis/returns";
+import { Card, Field, Flex, Heading, Input, NativeSelect, SimpleGrid, Textarea } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
 
 export default function CreateReturn() {
     const navigate = useNavigate();
@@ -14,7 +16,7 @@ export default function CreateReturn() {
     const [quantity, setQuantity] = useState("1");
     const [reason, setReason] = useState("");
     const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
+    const [, setSaving] = useState(false);
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -83,79 +85,67 @@ export default function CreateReturn() {
     if (loading) return <p>Loading products...</p>;
 
     return (
-        <div className="page-container">
+        <div>
+        
+                    {error && <p>{error}</p>}
+                    <form onSubmit={handleSubmit}>
+                    <Card.Root>
+            <Card.Body gap={4}>
+                <Heading size="md">Basic info</Heading>
+                <SimpleGrid columns={{ base: 2, md: 2 }} gap={4}>
 
-            {error && <p className="error-message">{error}</p>}
-
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="product">Product</label>
-                    <select
-                        id="product"
-                        value={productId}
-                        onChange={(e) => setProductId(e.target.value)}
-                        required
-                    >
-                        <option value="">Select a product</option>
-                        {products.map((product) => (
-                            <option
-                                key={product.id}
-                                value={product.id}
-                            >
-                                {product.name} — {product.sku}
-                            </option>
-                        ))}
-                    </select>
+                      <Field.Root>
+            <NativeSelect.Root>
+                <NativeSelect.Field value={productId}  onChange={(e) => setProductId(e.target.value)}>
+                    <option value="">Select Product</option>
+        {products.map((product) => (
+                                    <option
+                                        key={product.id}
+                                        value={product.id}
+                                    >
+                                        {product.name}
+                                    </option>
+                                ))}        </NativeSelect.Field>
+                <NativeSelect.Indicator />
+            </NativeSelect.Root>
+        </Field.Root>
+             <Field.Root>
+                        <Field.Label>Order ID</Field.Label>
+                        <Input value={orderId} type="number"  onChange={(e) => setOrderId(e.target.value)} />
+                    </Field.Root>
+                      <Field.Root>
+                        <Field.Label>Return Quantity</Field.Label>
+                        <Input value={quantity} type="number" onChange={(e) => setQuantity(e.target.value)} />
+                    </Field.Root>
+                   
+                                <Field.Root>
+                        <Field.Label>Reason for Return</Field.Label>
+                        <Textarea value={reason} placeholder="Enter the reason for the return" onChange={(e) => setReason(e.target.value)} />
+                    </Field.Root>
+                              
+                           
+                               
+                              
+                           
+                                
+                                
+                </SimpleGrid>
+            </Card.Body>
+        </Card.Root>
+        
+        <Flex justify="flex-end" gap={3}>
+            <AppButton type="button" intent="secondary" onClick={() => navigate("/products")}>
+                Cancel
+            </AppButton>
+            <AppButton type="submit" loading={loading} disabled={loading} loadingText="Creating...">
+                Create Product
+            </AppButton>
+        </Flex>
+        
+        </form>
+                    
+        
+                    
                 </div>
-
-                <div className="form-group">
-                    <label htmlFor="order">Original Sale ID</label>
-                    <input
-                        id="order"
-                        type="number"
-                        min="1"
-                        value={orderId}
-                        onChange={(e) => setOrderId(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="quantity">Return Quantity</label>
-                    <input
-                        id="quantity"
-                        type="number"
-                        min="0.01"
-                        step="0.01"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="reason">Reason for Return</label>
-                    <textarea
-                        id="reason"
-                        value={reason}
-                        onChange={(e) => setReason(e.target.value)}
-                        placeholder="Enter the reason for the return"
-                        required
-                    />
-                </div>
-
-                <button type="submit" disabled={saving}>
-                    {saving ? "Processing..." : "Create Return"}
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => navigate("/returns")}
-                    disabled={saving}
-                >
-                    Cancel
-                </button>
-            </form>
-        </div>
     );
 }
