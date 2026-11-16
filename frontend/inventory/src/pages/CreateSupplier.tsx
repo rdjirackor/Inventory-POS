@@ -5,6 +5,10 @@ import { createSupplier } from "../apis/suppliers";
 import { type Product } from "../interfaces/interfaces";
 import { getProducts } from "../apis/products";
 
+import { Card, Field, Flex, Heading, Input, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
+import CheckboxField from "../components/CheckboxField";
+
 function CreateSupplier() {
     const navigate = useNavigate();
 
@@ -34,13 +38,6 @@ function CreateSupplier() {
         fetchOptions();
     }, []);
 
-    function handleProductChange(productId: number, checked: boolean) {
-        setSelectedProducts((current) =>
-            checked
-                ? [...current, productId]
-                : current.filter((id) => id !== productId)
-        );
-    }
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -75,101 +72,76 @@ function CreateSupplier() {
         <div>
 
             {error && <p>{error}</p>}
+                                <form onSubmit={handleSubmit}>
+                                <Card.Root>
+                        <Card.Body gap={4}>
+                            <Heading size="md">Basic info</Heading>
+                            <SimpleGrid columns={{ base: 2, md: 2 }} gap={4}>
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="name">Supplier Name</label>
-                    <input
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </div>
+                            
+            
+                               
+                         <Field.Root>
+                                    <Field.Label>Supplier Name</Field.Label>
+                                    <Input value={name} onChange={(e) => setName(e.target.value)} />
+                                </Field.Root>
 
-                <div>
-                    <label>Products Supplied</label>
-                    {products.map((product) => (
-                        <div key={product.id}>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedProducts.includes(product.id)}
-                                    onChange={(e) =>
-                                        handleProductChange(
-                                            product.id,
-                                            e.target.checked
-                                        )
-                                    }
+                                <CheckboxField
+                                    label="Products Supplied"
+                                    options={products.map((p) => ({ value: p.id, label: p.name }))}
+                                    selected={selectedProducts}
+                                    onChange={setSelectedProducts}
                                 />
-                                {product.name}
-                            </label>
-                        </div>
-                    ))}
-                </div>
 
-                <div>
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <input
-                        id="phoneNumber"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        required
-                    />
-                </div>
 
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
 
-                <div>
-                    <label htmlFor="address">Address</label>
-                    <input
-                        id="address"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        required
-                    />
-                </div>
+                                  <Field.Root>
+                                    <Field.Label>Phone Number</Field.Label>
+                                    <Input value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                </Field.Root>
+                               
+                                            <Field.Root>
+                                    <Field.Label>Email</Field.Label>
+                                    <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+                                </Field.Root>
 
-                <div>
-                    <label htmlFor="contactPerson">Contact Person</label>
-                    <input
-                        id="contactPerson"
-                        value={contactPerson}
-                        onChange={(e) => setContactPerson(e.target.value)}
-                        required
-                    />
-                </div>
+                                    <Field.Root>
+                                    <Field.Label>Address</Field.Label>
+                                    <Input value={address} onChange={(e) => setAddress(e.target.value)} />
+                                </Field.Root>
 
-                <div>
-                    <label htmlFor="taxNumber">Tax Number</label>
-                    <input
-                        id="taxNumber"
-                        value={taxNumber}
-                        onChange={(e) => setTaxNumber(e.target.value)}
-                        required
-                    />
-                </div>
+                                    <Field.Root>
+                                    <Field.Label>Contact Person</Field.Label>
+                                    <Input value={contactPerson} onChange={(e) => setContactPerson(e.target.value)} />
+                                </Field.Root>
 
-                <button type="submit" disabled={loading}>
-                    {loading ? "Creating..." : "Create Supplier"}
-                </button>
+                                    <Field.Root>
+                                    <Field.Label>Tax Number</Field.Label>
+                                    <Input value={taxNumber} onChange={(e) => setTaxNumber(e.target.value)} />
+                                </Field.Root>
+                                          
+                                       
+                                           
+                                          
+                                       
+                                            
+                                            
+                            </SimpleGrid>
+                        </Card.Body>
+                    </Card.Root>
+                    
+                    <Flex justify="flex-end" gap={3}>
+                        <AppButton type="button" intent="secondary" onClick={() => navigate("/products")}>
+                            Cancel
+                        </AppButton>
+                        <AppButton type="submit" loading={loading} disabled={loading} loadingText="Creating...">
+                            Create Product
+                        </AppButton>
+                    </Flex>
+                    
+                    </form>
 
-                <button
-                    type="button"
-                    onClick={() => navigate("/suppliers")}
-                >
-                    Cancel
-                </button>
-            </form>
+          
         </div>
     );
 }

@@ -5,6 +5,10 @@ import { type Branch, type User } from "../interfaces/interfaces";
 import { getBranches } from "../apis/branches";
 
 import { getUsers } from "../apis/users";
+import { Card, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
+import FormField from "../components/FormField";
+import SelectField from "../components/SelectField";
 
 
 
@@ -74,83 +78,41 @@ function CreateCashier() {
   
 
     return (
-    <div>
 
-        {error && <p>{error}</p>}
+         <div>
+                        {error && <p>{error}</p>}
+        
+                    <form onSubmit={handleSubmit}>
+                     <Card.Root>
+                                <Card.Body gap={4}>
+                                    <Heading size="md">Basic info</Heading>
+                                    <SimpleGrid columns={{ base: 2, md: 2 }} gap={4}>
+                    <SelectField label="User" value={userId} onChange={setUserId} options={users.map((c) => ({ value: c.id, label: c.username }))} placeholder="Select User" />
+                    <FormField label="First Name" value={firstName} onChange={setFirstName} />
+                    <FormField label="Second Name" value={secondName} onChange={setSecondName} />
+                    <FormField label="Date Employed" value={dateEmployed} onChange={setDateEmployed} />
+                    <SelectField label="Branch" value={branchId} onChange={setBranchId} options={branches.map((c) => ({ value: c.id, label: c.name }))} placeholder="Select Branch" />
 
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>User</label>
-                <select
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                    required
-                >
-                    <option value="">Select a user</option>
-                    {users.map((user) => (
-                        <option key={user.id} value={user.id}>
-                            {user.username}
-                        </option>
-                    ))}
-                </select>
-            </div>
+                     </SimpleGrid>
+                                </Card.Body>
+                            </Card.Root>              
+        
+                      
+                          <Flex justify="flex-end" gap={3}>
+                    <AppButton type="button" intent="secondary" onClick={() => navigate("/categories")}>
+                        Cancel
+                    </AppButton>
+                    <AppButton type="submit" loading={loading} disabled={loading} loadingText="Creating...">
+                        Create Category
+                    </AppButton>
+                </Flex>
+        
+                    </form>
+                </div>
 
-            <div>
-                <label>First Name</label>
-                <input
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                />
-            </div>
 
-            <div>
-                <label>Second Name</label>
-                <input
-                    value={secondName}
-                    onChange={(e) => setSecondName(e.target.value)}
-                    required
-                />
-            </div>
 
-            <div>
-                <label>Date Employed</label>
-                <input
-                    type="date"
-                    value={dateEmployed}
-                    onChange={(e) => setDateEmployed(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div>
-                <label>Branch</label>
-                <select
-                    value={branchId}
-                    onChange={(e) => setBranchId(e.target.value)}
-                    required
-                >
-                    <option value="">Select a branch</option>
-                    {branches.map((branch) => (
-                        <option key={branch.id} value={branch.id}>
-                            {branch.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <button type="submit" disabled={loading}>
-                {loading ? "Creating..." : "Create Cashier"}
-            </button>
-
-            <button
-                type="button"
-                onClick={() => navigate("/cashiers")}
-            >
-                Cancel
-            </button>
-        </form>
-    </div>
+   
 );
 
                
