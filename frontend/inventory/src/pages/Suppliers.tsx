@@ -86,11 +86,13 @@ function Suppliers() {
                             <Table.ColumnHeader>Name</Table.ColumnHeader>
                             <Table.ColumnHeader>Phone Number</Table.ColumnHeader>
                             <Table.ColumnHeader>Product Names</Table.ColumnHeader>
-                            <Table.ColumnHeader textAlign="end">Address</Table.ColumnHeader>
-                            <Table.ColumnHeader textAlign="end">Email</Table.ColumnHeader>
-                            <Table.ColumnHeader textAlign="end">Contact Person</Table.ColumnHeader>
-                            <Table.ColumnHeader textAlign="end">Tax Number</Table.ColumnHeader>
+                            <Table.ColumnHeader >Address</Table.ColumnHeader>
+                            <Table.ColumnHeader>Email</Table.ColumnHeader>
+                            <Table.ColumnHeader >Contact Person</Table.ColumnHeader>
+                            <Table.ColumnHeader >Tax Number</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
                         </Table.Row>
+
                     </Table.Header>
                     <Table.Body>
                         {suppliers.map(supplier => (
@@ -98,7 +100,7 @@ function Suppliers() {
 
                                 <Table.Cell>{supplier.name}</Table.Cell>
                                 <Table.Cell>{supplier.phone_number}</Table.Cell>
-                                <Table.Cell textAlign="end">
+                                <Table.Cell >
                                            {supplier.product_names? supplier.product_names.join(", ") : "No supplied Products!" }
                                 </Table.Cell>
                                 <Table.Cell>{supplier.address}</Table.Cell>
@@ -107,10 +109,7 @@ function Suppliers() {
                                 <Table.Cell>{supplier.tax_number}</Table.Cell>
                                 <Table.Cell>
                                     <Flex justify="flex-end" gap={1}>
-                                        <AppIconButton label="Adjust stock" intent="secondary"
-                                            onClick={() => navigate(`/suppliers/${supplier.id}/stock`)}>
-                                            <PackagePlus size={16} />
-                                        </AppIconButton>
+                                    
                                         <AppIconButton label="Edit supplier" intent="secondary"
                                             onClick={() => UpdateSuppliers(supplier.id)}>
                                             <Pencil size={16} />

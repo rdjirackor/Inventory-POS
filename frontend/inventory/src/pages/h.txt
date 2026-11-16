@@ -369,3 +369,39 @@
                 </div>
             )}
         </div>
+
+
+         <div>
+                {loading && <p>Loading...</p>}
+                {error && <p>{error}</p>}
+                <div className="stocks">
+
+                    {movements.map(movement => {
+
+                    const user = users.find(
+                        user => user.id === movement.performed_by
+                    );
+
+                    
+
+                        return (
+                            <li key={movement.id}>
+                        <p>
+                            Staff: {user
+                                ? user.username
+                                : movement.performed_by === null
+                                    ? "System / Unassigned"
+                                    : "User not found"}
+                        </p>                               
+                            <p>Movement: {movement.movement_type}</p>
+                                <p>Product ID: {movement.product}</p>
+                                <p>Quantity: {movement.quantity}</p>
+                                <p>Reason: {movement.reason}</p>
+                            </li>
+                        );
+                    })}
+                    
+                    
+                </div>
+
+            </div>

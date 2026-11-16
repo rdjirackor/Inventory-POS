@@ -326,7 +326,7 @@ def checkout(request):
 
                 StockMovement.objects.create(
                     product=product,
-                    quantity=-quantity,
+                    quantity=quantity,
                     movement_type="sale",
                     performed_by=current_user,
                     reason=f"Sale OH-{order.id}"

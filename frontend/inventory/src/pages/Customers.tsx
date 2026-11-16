@@ -96,10 +96,10 @@ function Customers() {
                     <Table.Header>
                         <Table.Row>
                             <Table.ColumnHeader>First Name</Table.ColumnHeader>
-                            <Table.ColumnHeader>Second Name Number</Table.ColumnHeader>
+                            <Table.ColumnHeader>Second Name</Table.ColumnHeader>
                             <Table.ColumnHeader>Reward Points</Table.ColumnHeader>
-                            <Table.ColumnHeader textAlign="end">Credit Balance</Table.ColumnHeader>
-                            <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
+                            <Table.ColumnHeader >Credit Balance</Table.ColumnHeader>
+                            <Table.ColumnHeader >Actions</Table.ColumnHeader>
                      
                         </Table.Row>
                     </Table.Header>

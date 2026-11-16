@@ -507,6 +507,10 @@ class AuditLogSerializer(serializers.ModelSerializer):
 
 
 class StockMovementSerializer(serializers.ModelSerializer):
+    product_name = serializers.StringRelatedField(
+        source = "product",
+        read_only = True
+    )
     class Meta:
         model = StockMovement
         fields = [
@@ -517,6 +521,7 @@ class StockMovementSerializer(serializers.ModelSerializer):
             "date",
             "performed_by",
             "reason",
+            "product_name"
         ]
 
 

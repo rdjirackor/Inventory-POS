@@ -199,6 +199,7 @@ export interface StockMovement {
     date: string;
     performed_by: number;
     reason: string;
+    product_name: String;
 }
 
 export interface Return {

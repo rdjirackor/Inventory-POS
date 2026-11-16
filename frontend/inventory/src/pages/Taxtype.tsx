@@ -85,7 +85,7 @@ function Taxtype (){
                     <Table.Header>
                         <Table.Row>
                             <Table.ColumnHeader>Name</Table.ColumnHeader>
-                            <Table.ColumnHeader>Active</Table.ColumnHeader>
+                            <Table.ColumnHeader>Status</Table.ColumnHeader>
                             <Table.ColumnHeader >Rate</Table.ColumnHeader>
                             <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
                      

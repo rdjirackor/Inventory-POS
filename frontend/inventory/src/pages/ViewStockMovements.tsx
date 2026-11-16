@@ -3,11 +3,21 @@ import type { StockMovement, User } from "../interfaces/interfaces";
 import { getStockMovements } from "../apis/stock_movements";
 import { getUsers } from "../apis/users";
 
+import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
+import { Plus, Pencil, Trash2} from "lucide-react";
+import AppButton from "../components/AppButton";
+import AppIconButton from "../components/AppIconButton";
+import PageShell from "../components/PageShell";
+import { useNavigate } from "react-router-dom";
+
+
 function ViewStockMovements(){
     const [movements, setMovements] = useState<StockMovement []>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] =useState("");
     const [users, setUsers] = useState<User[]>([]);
+    const navigate = useNavigate();
+    
     
 
     async function fetchMovements() {
@@ -34,40 +44,69 @@ function ViewStockMovements(){
         },[]);
 
         return(
-            <div>
-                {loading && <p>Loading...</p>}
-                {error && <p>{error}</p>}
-                <div className="stocks">
 
-                    {movements.map(movement => {
+              <PageShell
+    title="Movements"
+    action={
+        <AppButton onClick={() => navigate("/movements/create")}>
+            <Plus size={16} /> Create Movement
+        </AppButton>
+    }
+>
+    {error && (
+        <Alert.Root status="error">
+            <Alert.Indicator />
+            <Alert.Title>{error}</Alert.Title>
+        </Alert.Root>
+    )}
 
-                    const user = users.find(
-                        user => user.id === movement.performed_by
-                    );
+    {loading ? (
+        <Spinner />
+    ) : movements.length === 0 ? (
+        <Text color="gray.500">No movements yet.</Text>
+    ) : (
+        
+        <Card.Root>
+                <Table.Root interactive>
+                    <Table.Header>
+                        <Table.Row>
+                            
+                            <Table.ColumnHeader >Product</Table.ColumnHeader>
+                            <Table.ColumnHeader>Performed By</Table.ColumnHeader>
+                            <Table.ColumnHeader>Movement Type</Table.ColumnHeader>
 
-                    
+                            <Table.ColumnHeader >Quantity</Table.ColumnHeader>
+                            <Table.ColumnHeader >Reason</Table.ColumnHeader>
+                     
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                       {movements.map(movement => {
+    const user = users.find(u => u.id === movement.performed_by);
 
-                        return (
-                            <li key={movement.id}>
-                        <p>
-                            Staff: {user
+    return (
+                    <Table.Row key={movement.id}>
+                        <Table.Cell>{movement.product_name}</Table.Cell>
+                        <Table.Cell>   Staff: {user
                                 ? user.username
                                 : movement.performed_by === null
                                     ? "System / Unassigned"
-                                    : "User not found"}
-                        </p>                               
-                            <p>Movement: {movement.movement_type}</p>
-                                <p>Product ID: {movement.product}</p>
-                                <p>Quantity: {movement.quantity}</p>
-                                <p>Reason: {movement.reason}</p>
-                            </li>
-                        );
-                    })}
-                    
-                    
-                </div>
+                                    : "User not found"}</Table.Cell>
+                        <Table.Cell>{movement.movement_type}</Table.Cell>
+                                
+                              
+                        <Table.Cell>{movement.quantity}</Table.Cell>
+                        <Table.Cell>{movement.reason}</Table.Cell>
 
-            </div>
+                    </Table.Row>
+    );
+})}
+                    </Table.Body>
+                </Table.Root>
+        </Card.Root>
+    )}
+</PageShell>
+           
         )
 }
 export default ViewStockMovements;
