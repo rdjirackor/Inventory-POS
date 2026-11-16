@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import type { OrderHistory } from "../interfaces/interfaces";
 import { getOrderHistories } from "../apis/order_history";
 
-import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
-import { Plus, Pencil, Trash2, Badge} from "lucide-react";
+import { Alert, Spinner, Card, Text, Table} from "@chakra-ui/react";
+import { Plus} from "lucide-react";
 import AppButton from "../components/AppButton";
-import AppIconButton from "../components/AppIconButton";
+import { useSettings } from "../hooks/useSettings";
 import PageShell from "../components/PageShell";
 import { useNavigate } from "react-router-dom";
 
@@ -25,9 +25,12 @@ const timeLabel = (dateStr: string): string => {
 
 export default function ViewHistories() {
     const [histories, setHistories] = useState<OrderHistory[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [loadingLocal, setLoading] = useState(true);
+    const [errorLocal, setError] = useState("");
     const navigate = useNavigate();
+
+    const { settingsData } = useSettings();
+
 
 
     useEffect(() => {
@@ -49,7 +52,7 @@ export default function ViewHistories() {
         fetchHistories();
     }, []);
 
-    if (loading) return <p>Loading histories...</p>;
+    if (loadingLocal) return <p>Loading histories...</p>;
 
     return (
 
@@ -61,14 +64,14 @@ export default function ViewHistories() {
         </AppButton>
     }
 >
-    {error && (
+    {errorLocal && (
         <Alert.Root status="error">
             <Alert.Indicator />
-            <Alert.Title>{error}</Alert.Title>
+            <Alert.Title>{errorLocal}</Alert.Title>
         </Alert.Root>
     )}
 
-    {loading ? (
+    {loadingLocal ? (
         <Spinner />
     ) : histories.length === 0 ? (
         <Text color="gray.500">No histories yet.</Text>
@@ -78,6 +81,8 @@ export default function ViewHistories() {
                     <Table.Header>
                         <Table.Row>
                             <Table.ColumnHeader>Customer Name</Table.ColumnHeader>
+                            <Table.ColumnHeader>Amount Paid</Table.ColumnHeader>
+                            
                             <Table.ColumnHeader>Time of Purchase</Table.ColumnHeader>
                      
                         </Table.Row>
@@ -96,8 +101,9 @@ export default function ViewHistories() {
                                         : "white"
                                     }>
                                 
-        {item.customer_name || "Unregistered Customer"}
-</Table.Cell>   
+                                    {item.customer_name || "Unregistered Customer"}
+                            </Table.Cell>   
+                            <Table.Cell>{settingsData?.currency} {item.amount_paid}</Table.Cell>
                                 <Table.Cell>{timeLabel(item.time_of_purchase)}</Table.Cell>
                                   
                          
