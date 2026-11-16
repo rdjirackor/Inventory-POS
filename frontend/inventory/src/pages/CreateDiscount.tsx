@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createDiscount } from "../apis/discounts";
+import { Card, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
+import FormField from "../components/FormField";
 
 
 
@@ -46,35 +49,32 @@ function CreateDiscount() {
             {error && <p>{error}</p>}
 
             <form onSubmit={handleSubmit}>
+                 <Card.Root>
+                            <Card.Body gap={4}>
+                                <Heading size="md">Basic info</Heading>
+                                <SimpleGrid columns={{ base: 2, md: 2 }} gap={4}>
 
-                <div>
-                    <label>Name</label>
-                    <input
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
+                                    <FormField label="Name" value={name} onChange={setName} />
+                                    <FormField label="Discount" value={discount} onChange={setDiscount} />
 
-                <div>
-                    <label>Discount</label>
-                    <input
-                        value={discount}
-                        onChange={(e) => setDiscount(e.target.value)}
-                    />
-                </div>
+
+
+
+                                </SimpleGrid>
+                                </Card.Body>
+                                </Card.Root>
 
                 
 
-                <button type="submit" disabled={loading}>
-                    {loading ? "Creating..." : "Create Discount"}
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => navigate("/discounts")}
-                >
-                    Cancel
-                </button>
+                
+      <Flex justify="flex-end" gap={3}>
+            <AppButton type="button" intent="secondary" onClick={() => navigate("/discount")}>
+                Cancel
+            </AppButton>
+            <AppButton type="submit" loading={loading} disabled={loading} loadingText="Creating Discount...">
+                Create Discount
+            </AppButton>
+        </Flex>
 
             </form>
         </div>
