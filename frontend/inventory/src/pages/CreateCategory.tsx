@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createCategory } from "../apis/categories";
+import FormField from "../components/FormField";
+import { Card, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
 
 
 
@@ -39,31 +42,27 @@ function CreateCategory() {
 
     return (
         <div>
-
-            {error && <p>{error}</p>}
+                {error && <p>{error}</p>}
 
             <form onSubmit={handleSubmit}>
+             <Card.Root>
+                        <Card.Body gap={4}>
+                            <Heading size="md">Basic info</Heading>
+                            <SimpleGrid columns={{ base: 2, md: 2 }} gap={4}>
+            <FormField label="Name" value={name} onChange={setName} />
+             </SimpleGrid>
+                        </Card.Body>
+                    </Card.Root>              
 
-                <div>
-                    <label>Name</label>
-                    <input
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-
-                
-
-                <button type="submit" disabled={loading}>
-                    {loading ? "Creating..." : "Create Category"}
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => navigate("/categories")}
-                >
-                    Cancel
-                </button>
+              
+                  <Flex justify="flex-end" gap={3}>
+            <AppButton type="button" intent="secondary" onClick={() => navigate("/categories")}>
+                Cancel
+            </AppButton>
+            <AppButton type="submit" loading={loading} disabled={loading} loadingText="Creating...">
+                Create Category
+            </AppButton>
+        </Flex>
 
             </form>
         </div>

@@ -60,7 +60,7 @@ function Categories() {
         <PageShell
             title="Categories"
             action={
-                <AppButton onClick={() => navigate("/categorys/create")}>
+                <AppButton onClick={() => navigate("/categories/create")}>
                     <Plus size={16} /> Create Category
                 </AppButton>
             }
