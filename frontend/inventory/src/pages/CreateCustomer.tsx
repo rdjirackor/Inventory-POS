@@ -6,6 +6,9 @@ import { getBranches } from "../apis/branches";
 
 import { getUsers } from "../apis/users";
 
+import { Card, Field, Flex, Heading, Input, NativeSelect, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
+
 
 
 function CreateCustomer() {
@@ -69,78 +72,70 @@ function CreateCustomer() {
   
 
     return (
-    <div>
-
-        {error && <p>{error}</p>}
-
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>User</label>
-                <select
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                    required
-                >
-                    <option value="">Select a user</option>
-                    {users.map((user) => (
+         <div>
+                
+                            {error && <p>{error}</p>}
+                            <form onSubmit={handleSubmit}>
+                            <Card.Root>
+                    <Card.Body gap={4}>
+                        <Heading size="md">Basic info</Heading>
+                        <SimpleGrid columns={{ base: 2, md: 2 }} gap={4}>
+        
+                              <Field.Root>
+                    <NativeSelect.Root>
+                        <NativeSelect.Field value={userId}  onChange={(e) => setUserId(e.target.value)}>
+                            <option value="">Select a User</option>
+                   {users.map((user) => (
                         <option key={user.id} value={user.id}>
                             {user.username}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <label>First Name</label>
-                <input
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div>
-                <label>Second Name</label>
-                <input
-                    value={secondName}
-                    onChange={(e) => setSecondName(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div>
-                <label>Reward Points</label>
-                <input
-                    value={rewardPoints}
-                    onChange={(e) => setRewardPoints(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div>
-                <label>Credit Balance</label>
-                <input
-                    value={creditBalance}
-                    onChange={(e) => setCreditBalance(e.target.value)}
-                    required
-                >
-      
-                    
-                </input>
-            </div>
-
-            <button type="submit" disabled={loading}>
-                {loading ? "Creating..." : "Create Customer"}
-            </button>
-
-            <button
-                type="button"
-                onClick={() => navigate("/customers")}
-            >
-                Cancel
-            </button>
-        </form>
-    </div>
+                                            </option>
+                                        ))}        </NativeSelect.Field>
+                        <NativeSelect.Indicator />
+                    </NativeSelect.Root>
+                </Field.Root>
+                     <Field.Root>
+                                <Field.Label>First Name</Field.Label>
+                                <Input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                            </Field.Root>
+                              <Field.Root>
+                                <Field.Label>Second Name</Field.Label>
+                                <Input value={secondName} onChange={(e) => setSecondName(e.target.value)} />
+                            </Field.Root>
+                           
+                                        <Field.Root>
+                                <Field.Label>Reward Points</Field.Label>
+                                <Input value={rewardPoints} onChange={(e) => setRewardPoints(e.target.value)} />
+                            </Field.Root>
+                                      
+                                 <Field.Root>
+                                <Field.Label>Credit Balance</Field.Label>
+                                <Input value={creditBalance} onChange={(e) => setCreditBalance(e.target.value)} />
+                            </Field.Root>
+                                   
+                                       
+                                      
+                                   
+                                        
+                                        
+                        </SimpleGrid>
+                    </Card.Body>
+                </Card.Root>
+                
+                <Flex justify="flex-end" gap={3}>
+                    <AppButton type="button" intent="secondary" onClick={() => navigate("/customers")}>
+                        Cancel
+                    </AppButton>
+                    <AppButton type="submit" loading={loading} disabled={loading} loadingText="Creating...">
+                        Create Customer
+                    </AppButton>
+                </Flex>
+                
+                </form>
+                            
+                
+                            
+                        </div>
+   
 );
 
                

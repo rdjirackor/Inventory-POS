@@ -3,12 +3,8 @@ import type { StockMovement, User } from "../interfaces/interfaces";
 import { getStockMovements } from "../apis/stock_movements";
 import { getUsers } from "../apis/users";
 
-import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
-import { Plus, Pencil, Trash2} from "lucide-react";
-import AppButton from "../components/AppButton";
-import AppIconButton from "../components/AppIconButton";
+import { Alert, Spinner, Card, Text, Table} from "@chakra-ui/react";
 import PageShell from "../components/PageShell";
-import { useNavigate } from "react-router-dom";
 
 
 function ViewStockMovements(){
@@ -16,7 +12,6 @@ function ViewStockMovements(){
     const [loading, setLoading] = useState(false);
     const [error, setError] =useState("");
     const [users, setUsers] = useState<User[]>([]);
-    const navigate = useNavigate();
     
     
 
@@ -47,11 +42,7 @@ function ViewStockMovements(){
 
               <PageShell
     title="Movements"
-    action={
-        <AppButton onClick={() => navigate("/movements/create")}>
-            <Plus size={16} /> Create Movement
-        </AppButton>
-    }
+   
 >
     {error && (
         <Alert.Root status="error">

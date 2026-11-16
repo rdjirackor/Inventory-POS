@@ -99,7 +99,7 @@ function Customers() {
                             <Table.ColumnHeader>Second Name</Table.ColumnHeader>
                             <Table.ColumnHeader>Reward Points</Table.ColumnHeader>
                             <Table.ColumnHeader >Credit Balance</Table.ColumnHeader>
-                            <Table.ColumnHeader >Actions</Table.ColumnHeader>
+                            <Table.ColumnHeader textAlign={"end"} >Actions</Table.ColumnHeader>
                      
                         </Table.Row>
                     </Table.Header>

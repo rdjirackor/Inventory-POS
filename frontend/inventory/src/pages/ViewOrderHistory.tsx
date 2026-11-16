@@ -4,11 +4,8 @@ import type { OrderHistory } from "../interfaces/interfaces";
 import { getOrderHistories } from "../apis/order_history";
 
 import { Alert, Spinner, Card, Text, Table} from "@chakra-ui/react";
-import { Plus} from "lucide-react";
-import AppButton from "../components/AppButton";
 import { useSettings } from "../hooks/useSettings";
 import PageShell from "../components/PageShell";
-import { useNavigate } from "react-router-dom";
 
 
 const timeLabel = (dateStr: string): string => {
@@ -27,7 +24,6 @@ export default function ViewHistories() {
     const [histories, setHistories] = useState<OrderHistory[]>([]);
     const [loadingLocal, setLoading] = useState(true);
     const [errorLocal, setError] = useState("");
-    const navigate = useNavigate();
 
     const { settingsData } = useSettings();
 
@@ -58,11 +54,7 @@ export default function ViewHistories() {
 
         <PageShell
     title="Histories"
-    action={
-        <AppButton onClick={() => navigate("/histories/create")}>
-            <Plus size={16} /> Create History
-        </AppButton>
-    }
+
 >
     {errorLocal && (
         <Alert.Root status="error">

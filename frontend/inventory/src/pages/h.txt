@@ -522,3 +522,76 @@
                 </button>
             </form>
         </div>
+
+         <div>
+
+        {error && <p>{error}</p>}
+
+        <form onSubmit={handleSubmit}>
+            <div>
+                <label>User</label>
+                <select
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
+                    required
+                >
+                    <option value="">Select a user</option>
+                    {users.map((user) => (
+                        <option key={user.id} value={user.id}>
+                            {user.username}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div>
+                <label>First Name</label>
+                <input
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                />
+            </div>
+
+            <div>
+                <label>Second Name</label>
+                <input
+                    value={secondName}
+                    onChange={(e) => setSecondName(e.target.value)}
+                    required
+                />
+            </div>
+
+            <div>
+                <label>Reward Points</label>
+                <input
+                    value={rewardPoints}
+                    onChange={(e) => setRewardPoints(e.target.value)}
+                    required
+                />
+            </div>
+
+            <div>
+                <label>Credit Balance</label>
+                <input
+                    value={creditBalance}
+                    onChange={(e) => setCreditBalance(e.target.value)}
+                    required
+                >
+      
+                    
+                </input>
+            </div>
+
+            <button type="submit" disabled={loading}>
+                {loading ? "Creating..." : "Create Customer"}
+            </button>
+
+            <button
+                type="button"
+                onClick={() => navigate("/customers")}
+            >
+                Cancel
+            </button>
+        </form>
+    </div>
