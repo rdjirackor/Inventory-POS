@@ -45,6 +45,7 @@ import UpdateBranch from "./pages/UpdateBranches";
 import ReceiptPage from "./pages/ReceiptPage";
 import ViewEnabledAnnouncements from "./pages/ViewEnabledAnnouncements";
 import CreateAnnouncement from "./pages/CreateAnnouncements";
+import UpdateCustomer from "./pages/UpdateCustomer";
 
 
 const token = localStorage.getItem("access_token")
@@ -111,7 +112,7 @@ function App() {
 
                         <Route path="/customers" element={<Customers />} />
                         <Route path="/customers/create" element={<CreateCustomer />} />
-                        <Route path="/customers/:id/edit" element={<UpdateCashier />} />
+                        <Route path="/customers/:id/edit" element={<UpdateCustomer />} />
 
 
                         <Route path="/taxtypes" element={<Taxtype/>} />

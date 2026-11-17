@@ -3,7 +3,7 @@ import { deleteSupplier, getSuppliers } from "../apis/suppliers";
 import type { Supplier } from "../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
 import { Alert, Spinner, Card, Flex, Text, Table} from "@chakra-ui/react";
-import { Plus,  PackagePlus, Pencil, Trash2} from "lucide-react";
+import { Plus, Pencil, Trash2} from "lucide-react";
 import AppButton from "../components/AppButton";
 import AppIconButton from "../components/AppIconButton";
 import PageShell from "../components/PageShell";

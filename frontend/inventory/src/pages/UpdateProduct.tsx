@@ -90,13 +90,6 @@ function UpdateProduct() {
     );
 }
 
-//     function handleTaxChange(id: number) {
-//     setTaxes(prev =>
-//         prev.includes(id)
-//             ? prev.filter(t => t !== id)
-//             : [...prev, id]
-//     );
-// }
 
     async function handleSubmit(event: React.FormEvent) {
         console.log("taxes being saved:", taxes);

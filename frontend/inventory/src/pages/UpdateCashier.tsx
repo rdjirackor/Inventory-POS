@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Cashier } from "../interfaces/interfaces";
+import type { Branch, Cashier, User } from "../interfaces/interfaces";
 import { getCashier, patchCashier } from "../apis/cashiers";
+import { Card, Field, Flex, Heading, NativeSelect, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
+import FormField from "../components/FormField";
+import PageShell from "../components/PageShell";
+import { getBranches } from "../apis/branches";
+import { getUsers } from "../apis/users";
 
 function UpdateCashier() {
     const { id } = useParams();
@@ -12,13 +18,24 @@ function UpdateCashier() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
 
+    const [branches, setBranches] = useState<Branch[]>([]);
+
+    const [users, setUsers] = useState<User[]>([]);
+
+
     useEffect(() => {
         async function fetchCashier() {
             try {
                 const data = await getCashier(Number(id));
                 setCashier(data);
+
+                  const branchData = await getBranches();
+                  setBranches(branchData);
+
+                  const userData = await getUsers();
+                  setUsers(userData);
             } catch (error) {
-                setError("Failed to load Cashier");
+                setError("Failed to load Branches");
             } finally {
                 setLoading(false);
             }
@@ -77,71 +94,97 @@ function UpdateCashier() {
     }
 
     return (
-        <div>
 
-            {error && <p>{error}</p>}
+           <div>
+        
+                    {error && <p>{error}</p>}
+        <PageShell title="Edit Product" maxW="860px">
+     
+                    <form onSubmit={handleSubmit}>
+        
+                        <Card.Root>
+                            <Card.Body gap={4}>
+                                <Heading size="md">Basic info</Heading>
+                                <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
 
-            <form onSubmit={handleSubmit}>
+                                    <Field.Root>
+                    <Field.Label>User</Field.Label>
+                    <NativeSelect.Root>
+                        <NativeSelect.Field value={cashier.user} onChange={(e) => handleChange(
+                            "user",
+                            e.target.value 
+                        )}>
+                            <option value="">Select User</option>
+                 {users.map((user) => (
+                                            <option
+                                                key={user.id}
+                                                value={user.id}
+                                            >
+                                                {user.username}
+                                            </option>
+                                        ))}        </NativeSelect.Field>
+                        <NativeSelect.Indicator />
+                    </NativeSelect.Root>
+                </Field.Root>
 
-                <div>
-                    <label>First Name</label>
-                    <input
-                        value={cashier.first_name}
-                        onChange={(e) =>
-                            handleChange("first_name", e.target.value)
-                        }
-                    />
+
+
+                                    <FormField label="Name" value={cashier.first_name} onChange={(val) =>
+                                    handleChange("first_name", val)} />
+
+                                    <FormField label="Second Name" value={cashier.second_name} onChange={(val) =>
+                                    handleChange("second_name", val)} />
+
+
+
+ <Field.Root>
+                    <Field.Label>Branch Name</Field.Label>
+                    <NativeSelect.Root>
+                        <NativeSelect.Field value={cashier.branch_name} onChange={(e) => handleChange(
+                            "branch_name",
+                            e.target.value 
+                        )}>
+                            <option value="">Select Branch</option>
+                 {branches.map((branch) => (
+                                            <option
+                                                key={branch.id}
+                                                value={branch.id}
+                                            >
+                                                {branch.name} - {branch.location}
+                                            </option>
+                                        ))}        </NativeSelect.Field>
+                        <NativeSelect.Indicator />
+                    </NativeSelect.Root>
+                </Field.Root>
+
+                                 
+
+
+                                    <FormField label="Date Employed" value={cashier.date_employed} type="date" onChange={(val) =>
+                                    handleChange("date_employed", val)} />
+                                              
+                                                
+                                </SimpleGrid>
+                            </Card.Body>
+                        </Card.Root>
+        
+        
+        <Flex justify="flex-end" gap={3}>
+            <AppButton type="button" intent="secondary" onClick={() => navigate("/cashiers")}>
+                Cancel
+            </AppButton>
+            <AppButton type="submit" loading={saving} loadingText="Updating...">
+                Save Changes
+            </AppButton>
+        </Flex>
+                      
+        
+                    </form>
+                    </PageShell>
                 </div>
 
-                <div>
-                    <label>Second Name</label>
-                    <input
-                        value={cashier.second_name}
-                        onChange={(e) =>
-                            handleChange("second_name", e.target.value)
-                        }
-                    />
-                </div>
 
-                <div>
-                    <label>Date Employed</label>
-                    <input
-                        type="date"
-                        value={cashier.date_employed}
-                        onChange={(e) =>
-                            handleChange("date_employed", e.target.value)
-                        }
-                    />
-                </div>
-
-                <div>
-                    <label>Branch Stationed At</label>
-                    <input
-                        type="number"
-                        value={cashier.branch_stationed_at}
-                        onChange={(e) =>
-                            handleChange(
-                                "branch_stationed_at",
-                                Number(e.target.value)
-                            )
-                        }
-                    />
-                </div>
-                
-
-                <button type="submit" disabled={saving}>
-                    {saving ? "Saving..." : "Save Changes"}
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => navigate("/cashiers")}
-                >
-                    Cancel
-                </button>
-
-            </form>
-        </div>
+       
     );
 }
 

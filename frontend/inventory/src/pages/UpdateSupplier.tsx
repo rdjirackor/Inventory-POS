@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import type { Supplier, Product } from "../interfaces/interfaces";
 import { getSupplier, patchSupplier } from "../apis/suppliers";
 import { getProducts } from "../apis/products";
+import { Card, Field, Flex, Heading, Input, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
+import CheckboxField from "../components/CheckboxField";
 
 function UpdateSupplier() {
     const { id } = useParams();
@@ -14,7 +17,7 @@ function UpdateSupplier() {
 
     const [supplier, setSupplier] = useState<Supplier | null>(null);
     const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
+    const [, setSaving] = useState(false);
     const [error, setError] = useState("");
 
 
@@ -38,10 +41,10 @@ function UpdateSupplier() {
     fetchSupplier();
 }, [id]);
 
-    function handleChange(
-        field: keyof Supplier,
-        value: string | number
-    ) {
+   function handleChange(
+    field: keyof Supplier,
+    value: string | number | number[]
+) {
         if (!supplier) return;
 
         setSupplier({
@@ -91,120 +94,92 @@ function UpdateSupplier() {
     }
 
     return (
-        <div>
+
+         <div>
 
             {error && <p>{error}</p>}
+                                <form onSubmit={handleSubmit}>
+                                <Card.Root>
+                        <Card.Body gap={4}>
+                            <Heading size="md">Basic info</Heading>
+                            <SimpleGrid columns={{ base: 2, md: 2 }} gap={4}>
 
-            <form onSubmit={handleSubmit}>
+                            
+            
+                               
+                         <Field.Root>
+                                    <Field.Label>Supplier Name</Field.Label>
+                                    <Input value={supplier.name}  onChange={(e) =>
+                       handleChange("name", e.target.value)
+                       } />
+                                </Field.Root>                           
 
-                <div>
-                    <label>Name</label>
-                    <input
-                        value={supplier.name}
-                        onChange={(e) =>
-                            handleChange("name", e.target.value)
-                        }
-                    />
-                </div>
+                                        <Field.Root>
+                                    <Field.Label>Phone Number</Field.Label>
+                                    <Input value={supplier.phone_number}  onChange={(e) =>
+                       handleChange("phone_number", e.target.value)
+                       } />
+                                </Field.Root>
+                              
+                               
+                                            <Field.Root>
+                                    <Field.Label>Email</Field.Label>
+                                    <Input value={supplier.email} onChange={(e) =>
+                       handleChange("email", e.target.value)
+                       } />
+                                </Field.Root>
 
+                                    <Field.Root>
+                                    <Field.Label>Address</Field.Label>
+                                    <Input value={supplier.address} onChange={(e) =>
+                       handleChange("address", e.target.value)
+                       } />
+                                </Field.Root>
 
+                                    <Field.Root>
+                                    <Field.Label>Contact Person</Field.Label>
+                                    <Input value={supplier.contact_person} onChange={(e) =>
+                       handleChange("contact_person", e.target.value)
+                       } />
+                                </Field.Root>
 
-        <div>
-            <label>Products</label>
-
-            <select
-                multiple
-                value={products.map(String)}
-                onChange={(e) => {
-                    const selectedProducts = Array.from(
-                        e.target.selectedOptions,
-                        (option) => Number(option.value)
-                    );
-
-                    setProducts(selectedProducts);
-                }}
-            >
-                {availableProducts.map((product) => (
-                    <option
-                        key={product.id}
-                        value={product.id}
-                    >
-                        {product.name}
-                    </option>
-                ))}
-            </select>
-        </div>
-
-
-
-
-
-                <div>
-                    <label>Phone Number</label>
-                    <input
-                        value={supplier.phone_number}
-                        onChange={(e) =>
-                            handleChange("phone_number", e.target.value)
-                        }
-                    />
-                </div>
-
-                <div>
-                    <label>Email</label>
-                    <input
-                        value={supplier.email}
-                        onChange={(e) =>
-                            handleChange("email", e.target.value)
-                        }
-                    />
-                </div>
+                                    <Field.Root>
+                                    <Field.Label>Tax Number</Field.Label>
+                                    <Input value={supplier.tax_number} onChange={(e) =>
+                       handleChange("tax_number", e.target.value)
+                       } />
+                                </Field.Root>
 
 
-                <div>
-                    <label>Address</label>
-                    <input
-                        type="string"
-                        value={supplier.address}
-                        onChange={(e) =>
-                            handleChange("address", e.target.value)
-                        }
-                    />
-                </div>
+                    <CheckboxField
+    label="Products"
+    options={availableProducts.map((p) => ({ value: p.id, label: p.name }))}
+    selected={supplier.products}
+    onChange={(selected) => handleChange("products", selected)}
+/>
+                                          
+                                       
+                                           
+                                          
+                                       
+                                            
+                                            
+                            </SimpleGrid>
+                        </Card.Body>
+                    </Card.Root>
+                    
+                    <Flex justify="flex-end" gap={3}>
+                        <AppButton type="button" intent="secondary" onClick={() => navigate("/suppliers")}>
+                            Cancel
+                        </AppButton>
+                        <AppButton type="submit" loading={loading} disabled={loading} loadingText="Updating...">
+                            Update Supplier
+                        </AppButton>
+                    </Flex>
+                    
+                    </form>
 
-                <div>
-                    <label>Contact Person</label>
-                    <input
-                        type="string"
-                        value={supplier.contact_person}
-                        onChange={(e) =>
-                            handleChange("contact_person", e.target.value)
-                        }
-                    />
-                </div>
-                <div>
-                    <label>Tax Number</label>
-                    <input
-                        type="string"
-                        value={supplier.tax_number}
-                        onChange={(e) =>
-                            handleChange("tax_number", e.target.value)
-                        }
-                    />
-                </div>
- 
-
-                <button type="submit" disabled={saving}>
-                    {saving ? "Saving..." : "Save Changes"}
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => navigate("/suppliers")}
-                >
-                    Cancel
-                </button>
-
-            </form>
+          
         </div>
     );
 }

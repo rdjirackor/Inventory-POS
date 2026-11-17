@@ -2005,7 +2005,7 @@ def customer_detail(request, customer_id):
             log_action(user=request.user,
                                                                                    action=AuditLog.Action.CUSTOMER_UPDATED,
                                                                                                            status=True,
-                                                                                                            description=f"{request.user} updated customer, {customer.name}",
+                                                                                                            description=f"{request.user} updated customer, {customer.first_name}",
                                                                                                             entity_id=customer.id,
                                                                                                             entity_type="Customer",
                                                                                                 )

@@ -1,597 +1,65 @@
  <div>
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
-
-           <table>
-                <thead>
-        <tr>
-            <th>Name</th>
-            <th>Products</th>
-            <th>Phone Number</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Contact Person</th>
-            <th>Tax Number</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {suppliers.map((supplier) => (
-            <tr key={supplier.id}>
-                
-                <td>{supplier.name}</td>
-                <td>{supplier.product_names.length > 0
-                    ? supplier.product_names.join(",")
-                    : "No products"
-                    }</td>
-                <td>{supplier.phone_number}</td>
-                <td>{supplier.email}</td>
-                <td>{supplier.address}</td>
-                <td>{supplier.contact_person}</td>
-                <td>{supplier.tax_number}</td>
-                <td>
-                    <button onClick={() => UpdateSuppliers(supplier.id)}>Update</button>
-                    <button onClick={() => DeleteSupplier(supplier.id)}>Delete</button>     
-                </td>
-            </tr>
-        ))}
-    </tbody>
-</table>
-
-        </div>
-        </div>
-
-  <div>
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
-
-
-            {!error && (<table>
-                <thead>
-                    <tr>
-                    <th>First Name</th>
-                    <th>Second Name</th>
-                    <th>Credit Balance</th>
-                    <th>Reward Points</th>
-                    <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {customers.map((customer)=>(
-                        <tr key={customer.id}>
-                        <td>{customer.first_name}</td>
-                        <td>{customer.second_name}</td>
-                        <td>{customer.credit_balance}</td>
-                        <td>{customer.reward_points}</td>
-                        <td>
-                            <button onClick={() => navigate(`/customers/${customer.id}/edit`)}>Update</button>
-                            <button onClick={() => DeleteCustomer(customer.id)}>Delete</button>
-                        </td>
-
-                        </tr>
-                    ))}
-                </tbody>
-            </table>)}
-
-            </div>
-
-            <button onClick={() => navigate("/customers/create")}>
-    Create Customer
-</button>
-
-        </div>
-
- <div>
-        
-                    {loading && <p>Loading...</p>}
-                    {error && <p>{error}</p>}
-                    <div className="fetch_table">
-        
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Rate</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-        
-                        <tbody>
-                            {taxtypes.map((taxtype) => (
-                                <tr key={taxtype.id}>
-                                    <td>{taxtype.name}</td>
-                                    <td>{taxtype.rate}</td>
-                                    <td>{taxtype.active? "Active": "Inactive"}</td>
-                                    <td>
-                                        <button onClick={() => navigate(`/taxtypes/${taxtype.id}/edit`)}>Update</button>
-                                        <button onClick={()=> DeleteTaxes(taxtype.id)}>Delete</button></td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-        
-                    <div className="create_entity_button">
-                        <button onClick={()=>{navigate(`/taxtypes/create`)}}>Create</button>
-                    </div>
-                    </div>
-                </div>
-
-                 <div>
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
-
-
-            {!error && (<table>
-                <thead>
-                    <tr>
-                    <th>First Name</th>
-                    <th>Second Name</th>
-                    <th>Date Employed</th>
-                    <th>Branch</th>
-                    <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {cashiers.map((cashier)=>(
-                        <tr key={cashier.id}>
-                        <td>{cashier.first_name}</td>
-                        <td>{cashier.second_name}</td>
-                        <td>{cashier.date_employed}</td>
-                        <td>{cashier.branch_name}</td>
-                        <td>
-                            <button onClick={() => navigate(`/cashiers/${cashier.id}/edit`)}>Update</button>
-                            <button onClick={() => DeleteCashier(cashier.id)}>Delete</button>
-                        </td>
-
-                        </tr>
-                    ))}
-                </tbody>
-            </table>)}
-
-            </div>
-
-            <button onClick={() => navigate("/cashiers/create")}>
-    Create Cashier
-</button>
-
-        </div>
-
-<div>
-
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {branches.map((branch) => (
-                        <tr key={branch.id}>
-                            <td>{branch.name}</td>
-                            <td>{branch.location}</td>
-                            <td>
-                                <button onClick={() => navigate(`/branches/${branch.id}/edit`)}>Update</button>
-                                <button onClick={()=> DeleteBranch(branch.id)}>Delete</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <div className="create_button">
-                <button onClick={()=>{navigate(`/branches/create`)}}>Create</button>
-            </div>
-            </div>
-        </div>
-
-
-        {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {categories.map((category) => (
-                        <tr key={category.id}>
-                            <td>{category.name}</td>
-                            <td>
-                                <button onClick={() => navigate(`/categories/${category.id}/edit`)}>Update</button>
-                                <button onClick={()=> DeleteCategory(category.id)}>Delete</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <div className="create_category_button">
-                <button onClick={()=>{navigate(`/categories/create`)}}>Create</button>
-            </div>
-            </div>
-        </div>
-
-         <div>
-
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <Button>Test</Button>
-            <div className="fetch_table">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Discounts</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {discounts.map((discount) => (
-                        <tr key={discount.id}>
-                            <td>{discount.name}</td>
-                            <td>{discount.discount}</td>
-                            <td>
-                                <button onClick={() => navigate(`/discounts/${discount.id}/edit`)}>Update</button>
-                                <button onClick={()=> DeleteDiscount(discount.id)}>Delete</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <div className="create_discount_button">
-                <button onClick={()=>{navigate(`/discounts/create`)}}>Create</button>
-            </div>
-            </div>
-        </div>
-
-
-        <div>
-
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            <div className="fetch_table">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {warehouses.map((warehouse) => (
-                        <tr key={warehouse.id}>
-                            <td>{warehouse.name}</td>
-                            <td>{warehouse.location}</td>
-                            <td>
-                                <button onClick={() => navigate(`/warehouses/${warehouse.id}/edit`)}>Update</button>
-                                <button onClick={()=> DeleteWarehouse(warehouse.id)}>Delete</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <div className="create_button">
-                <button onClick={()=>{navigate(`/warehouses/create`)}}>Create</button>
-            </div>
-            </div>
-        </div>
-
-        <div className="page-container">
-            <div className="page-header">
-                <Link to="/returns/create">Create Return</Link>
-            </div>
-
-            {error && <p className="error-message">{error}</p>}
-
-            {!error && returns.length === 0 && (
-                <p>No returns have been recorded yet.</p>
-            )}
-
-            {returns.length > 0 && (
-                <div className="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Sale ID</th>
-                                <th>Customer Name</th>
-                                <th>Quantity</th>
-                                <th>Reason</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {returns.map((item) => (
-                                <tr key={item.id}>
-                                    <td>{item.product_name}</td>
-                                    <td>{item.order_history}</td>
-                                    <td>{item.customer_name ?? "Walk-in"}</td>
-                                    <td>{item.quantity}</td>
-                                    <td>{item.reason || "—"}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </div>
-
-<div className="page-container">
-          
-
-            {error && <p className="error-message">{error}</p>}
-
-            {!error && histories.length === 0 && (
-                <p>No histories have been recorded yet.</p>
-            )}
-
-            {histories.length > 0 && (
-                <div className="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Customer Name</th>
-                                <th>Time of Purchase</th>
-                   
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {histories.map((item) => (
-                                <tr key={item.id}>
-                                    <td>{item.customer_name || "Walk In Customer"}</td>
-                                    <td>{timeLabel(item.time_of_purchase)}</td>
-                        
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </div>
-
-
-         <div>
-                {loading && <p>Loading...</p>}
-                {error && <p>{error}</p>}
-                <div className="stocks">
-
-                    {movements.map(movement => {
-
-                    const user = users.find(
-                        user => user.id === movement.performed_by
-                    );
-
-                    
-
-                        return (
-                            <li key={movement.id}>
-                        <p>
-                            Staff: {user
-                                ? user.username
-                                : movement.performed_by === null
-                                    ? "System / Unassigned"
-                                    : "User not found"}
-                        </p>                               
-                            <p>Movement: {movement.movement_type}</p>
-                                <p>Product ID: {movement.product}</p>
-                                <p>Quantity: {movement.quantity}</p>
-                                <p>Reason: {movement.reason}</p>
-                            </li>
-                        );
-                    })}
-                    
-                    
-                </div>
-
-            </div>
-
 
             {error && <p>{error}</p>}
 
             <form onSubmit={handleSubmit}>
 
                 <div>
-                    <label>Name</label>
+                    <label>First Name</label>
                     <input
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={cashier.first_name}
+                        onChange={(e) =>
+                            handleChange("first_name", e.target.value)
+                        }
                     />
                 </div>
 
                 <div>
-                    <label>Location</label>
+                    <label>Second Name</label>
                     <input
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
+                        value={cashier.second_name}
+                        onChange={(e) =>
+                            handleChange("second_name", e.target.value)
+                        }
                     />
                 </div>
 
+                <div>
+                    <label>Date Employed</label>
+                    <input
+                        type="date"
+                        value={cashier.date_employed}
+                        onChange={(e) =>
+                            handleChange("date_employed", e.target.value)
+                        }
+                    />
+                </div>
+
+                <div>
+                    <label>Branch Stationed At</label>
+                    <input
+                        type="number"
+                        value={cashier.branch_stationed_at}
+                        onChange={(e) =>
+                            handleChange(
+                                "branch_stationed_at",
+                                Number(e.target.value)
+                            )
+                        }
+                    />
+                </div>
                 
-
-                <button type="submit" disabled={loading}>
-                    {loading ? "Creating..." : "Create Branch"}
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => navigate("/branches")}
-                >
-                    Cancel
-                </button>
-
-            </form>
-        </div>
-
-
-
- <div>
-
-
- <div className="page-container">
-
-            {error && <p className="error-message">{error}</p>}
-
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="product">Product</label>
-                    <select
-                        id="product"
-                        value={productId}
-                        onChange={(e) => setProductId(e.target.value)}
-                        required
-                    >
-                        <option value="">Select a product</option>
-                        {products.map((product) => (
-                            <option
-                                key={product.id}
-                                value={product.id}
-                            >
-                                {product.name} — {product.sku}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="order">Original Sale ID</label>
-                    <input
-                        id="order"
-                        type="number"
-                        min="1"
-                        value={orderId}
-                        onChange={(e) => setOrderId(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="quantity">Return Quantity</label>
-                    <input
-                        id="quantity"
-                        type="number"
-                        min="0.01"
-                        step="0.01"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="reason">Reason for Return</label>
-                    <textarea
-                        id="reason"
-                        value={reason}
-                        onChange={(e) => setReason(e.target.value)}
-                        placeholder="Enter the reason for the return"
-                        required
-                    />
-                </div>
 
                 <button type="submit" disabled={saving}>
-                    {saving ? "Processing..." : "Create Return"}
+                    {saving ? "Saving..." : "Save Changes"}
                 </button>
 
                 <button
                     type="button"
-                    onClick={() => navigate("/returns")}
-                    disabled={saving}
+                    onClick={() => navigate("/cashiers")}
                 >
                     Cancel
                 </button>
+
             </form>
         </div>
-
-         <div>
-
-        {error && <p>{error}</p>}
-
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>User</label>
-                <select
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                    required
-                >
-                    <option value="">Select a user</option>
-                    {users.map((user) => (
-                        <option key={user.id} value={user.id}>
-                            {user.username}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <label>First Name</label>
-                <input
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div>
-                <label>Second Name</label>
-                <input
-                    value={secondName}
-                    onChange={(e) => setSecondName(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div>
-                <label>Reward Points</label>
-                <input
-                    value={rewardPoints}
-                    onChange={(e) => setRewardPoints(e.target.value)}
-                    required
-                />
-            </div>
-
-            <div>
-                <label>Credit Balance</label>
-                <input
-                    value={creditBalance}
-                    onChange={(e) => setCreditBalance(e.target.value)}
-                    required
-                >
-      
-                    
-                </input>
-            </div>
-
-            <button type="submit" disabled={loading}>
-                {loading ? "Creating..." : "Create Customer"}
-            </button>
-
-            <button
-                type="button"
-                onClick={() => navigate("/customers")}
-            >
-                Cancel
-            </button>
-        </form>
-    </div>

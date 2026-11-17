@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { getCategories, updateCategory } from "../apis/categories";
 import type { Category } from "../interfaces/interfaces";
 import { useNavigate, useParams } from "react-router-dom";
+import FormField from "../components/FormField";
+import { Card, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
 
 function UpdateCategory() {
     const { id } = useParams();
@@ -82,27 +85,28 @@ function UpdateCategory() {
             {error && <p>{error}</p>}
 
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Category Name</label>
+                  <Card.Root>
+                                            <Card.Body gap={4}>
+                                                <Heading size="md">Basic info</Heading>
+                                                <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+                <FormField label="Category Name" value={category.name} onChange={(val) =>
+                                                    handleChange(val)} />
+                                                    </SimpleGrid>
+                                                    </Card.Body>
+                                                    </Card.Root>
+                                                    
 
-                    <input
-                        value={category.name}
-                        onChange={(e) =>
-                            handleChange(e.target.value)
-                        }
-                    />
-                </div>
 
-                <button type="submit" disabled={saving}>
-                    {saving ? "Saving..." : "Save Changes"}
-                </button>
 
-                <button
-                    type="button"
-                    onClick={() => navigate("/categories")}
-                >
-                    Cancel
-                </button>
+
+          <Flex justify="flex-end" gap={3}>
+            <AppButton type="button" intent="secondary" onClick={() => navigate("/categories")}>
+                Cancel
+            </AppButton>
+            <AppButton type="submit" loading={saving} loadingText="Updating...">
+                Save Changes
+            </AppButton>
+        </Flex>
             </form>
         </div>
     );
