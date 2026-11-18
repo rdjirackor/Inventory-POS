@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { getDiscounts, updateDiscount } from "../apis/discounts";
 import type { Discount } from "../interfaces/interfaces";
 import { useNavigate, useParams } from "react-router-dom";
+import { Card, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
+import PageShell from "../components/PageShell";
+import FormField from "../components/FormField";
 
 function UpdateDiscount() {
     const { id } = useParams();
@@ -89,43 +93,40 @@ function UpdateDiscount() {
     return (
         <div>
 
+
             {error && <p>{error}</p>}
-
+            <PageShell title="Edit Product" maxW="860px">
+  
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Discount Name</label>
 
-                    <input
-                        value={discount.name}
-                        onChange={(e) =>
-                            handleNameChange(e.target.value)
-                        }
-                    />
-                </div>
+                <Card.Root>
+                    <Card.Body gap={4}>
+                        <Heading size="md">Basic info</Heading>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+                            <FormField label="Discount Name" value={discount.name} onChange={(e) => handleNameChange(e)} />
 
-                <div>
-                    <label>Discount Percentage</label>
+                            <FormField label="Discount Percentage" value={discount.discount} onChange={(e)=> handleDiscountChange(e)} />
 
-                    <input
-                        value={discount.discount}
-                        onChange={(e) =>
-                            handleDiscountChange(e.target.value)
-                        }
-                    />
-                </div>
+                  
 
-                <button type="submit" disabled={saving}>
-                    {saving ? "Saving..." : "Save Changes"}
-                </button>
+                </SimpleGrid>
+                </Card.Body>
+                </Card.Root>
+                
 
-                <button
-                    type="button"
-                    onClick={() => navigate("/discounts")}
-                >
-                    Cancel
-                </button>
+     <Flex justify="flex-end" gap={3}>
+    <AppButton type="button" intent="secondary" onClick={() => navigate("/discounts")}>
+        Cancel
+    </AppButton>
+    <AppButton type="submit" loading={saving} loadingText="Updating Discount...">
+        Save Changes
+    </AppButton>
+</Flex>
+               
             </form>
-        </div>
+            </PageShell>
+
+            </div>
     );
 }
 

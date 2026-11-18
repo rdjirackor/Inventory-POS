@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { getTaxes, updateTax } from "../apis/taxes";
 import type { TaxType } from "../interfaces/interfaces";
 import { useNavigate, useParams } from "react-router-dom";
+import { Card, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
+import AppButton from "../components/AppButton";
+import PageShell from "../components/PageShell";
+import FormField from "../components/FormField";
+import CheckboxInput from "../components/CheckboxInput";
 
 function UpdateTaxtype() {
     const { id } = useParams();
@@ -93,52 +98,49 @@ function handleActiveChange(value: boolean) {
     }
 
     return (
-        <div>
+       <div>
 
             {error && <p>{error}</p>}
-
+<PageShell title="Edit Product" maxW="860px">
+   
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Taxtype Name</label>
 
-                    <input
-                        value={taxtype.name}
-                        onChange={(e) =>
-                            handleNameChange(e.target.value)
-                        }
-                    />
-                </div>
+                <Card.Root>
+                    <Card.Body gap={4}>
+                        <Heading size="md">Basic info</Heading>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
 
-                <div>
-                    <label>Rate</label>
-                    <input
-                        type ="number"
-                        step="0.01"
-                        value={taxtype.rate}
-                        onChange={(e) => handleRateChange(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Status</label>
-                    <input
-                        type ="checkbox"
-                        checked={taxtype.active}
-                        onChange={(e) => handleActiveChange(e.target.checked)}
-                    />
-                </div>
+                            <FormField label="Taxtype" value= {taxtype.name} onChange={(e) => handleNameChange(e)} />
+                            <FormField label="Rate" type="number" value={String(taxtype.rate)} onChange={(e) => handleRateChange(e)} />
+                            <CheckboxInput
+                                label="Active"
+                                checked={taxtype.active}
+                                onChange={handleActiveChange}
+                            />      
+                             <FormField label="Taxtype" value= {taxtype.name} onChange={(e) => handleNameChange(e)} />
 
-                <button type="submit" disabled={saving}>
-                    {saving ? "Saving..." : "Save Changes"}
-                </button>
 
-                <button
-                    type="button"
-                    onClick={() => navigate("/taxtypes")}
-                >
-                    Cancel
-                </button>
-            </form>
-        </div>
+                          
+
+                                          
+                                     </SimpleGrid>
+                                 </Card.Body>
+                             </Card.Root>
+             
+             
+             <Flex justify="flex-end" gap={3}>
+                 <AppButton type="button" intent="secondary" onClick={() => navigate("/products")}>
+                     Cancel
+                 </AppButton>
+                 <AppButton type="submit" loading={saving} loadingText="Updating...">
+                     Save Changes
+                 </AppButton>
+             </Flex>
+                           
+             
+                         </form>
+                         </PageShell>
+                     </div>
     );
 }
 
